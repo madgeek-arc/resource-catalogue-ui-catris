@@ -11,44 +11,32 @@ import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.s
 import {NavigationService} from '../lib/services/navigation.service';
 import {ResourceService} from '../lib/services/resource.service';
 import {CanActivateViaPubGuard} from '../lib/services/can-activate-pub-guard.service';
-import {FooterComponent} from '../lib/shared/footer/footer.component';
-import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
 import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.component';
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
 import {AngularFontAwesomeModule} from 'angular-font-awesome';
-import {ServiceProviderFormComponent} from '../lib/pages/provider/service-provider-form.component';
-import {MyServiceProvidersComponent} from '../lib/pages/provider/my-service-providers.component';
-import {AddFirstServiceComponent} from '../lib/pages/provider/add-first-service.component';
-import {ServiceProviderInfoComponent} from '../lib/pages/provider/service-provider-info.component';
-import {UpdateServiceProviderComponent} from '../lib/pages/provider/update-service-provider.component';
 import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from '../lib/services/service-provider.service';
-import {ServiceProvidersListComponent} from '../lib/pages/admin/service-providers-list.component';
 import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
 import {ChartModule} from 'angular2-highcharts';
 import {SupportModule} from '../lib/pages/support/support.module';
-import {ServiceStatsComponent} from '../lib/pages/provider/dashboard/resource-dashboard/service-stats.component';
-import {MyFavouritesComponent} from '../lib/pages/user/favourites/my-favourites.component';
-import {DashboardComponent} from '../lib/pages/provider/dashboard/dashboard.component';
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
 import {UserModule} from '../lib/pages/user/user.module';
-import {StarRatingModule} from 'angular-star-rating';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {StatsComponent} from '../lib/pages/stats/stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
-import {ServiceFormComponent} from '../lib/pages/provider-resources/service-form.component';
-import {ServiceUploadComponent} from '../lib/pages/provider-resources/service-upload.component';
-import {CKEditorModule} from 'ng2-ckeditor';
-import {ServiceEditComponent} from '../lib/pages/provider-resources/service-edit.component';
 import {MeasurementsComponent} from '../lib/pages/indicators/measurements.component';
 import {IndicatorFromComponent} from '../lib/pages/indicators/indicator-from.component';
 import {AuthenticationInterceptor} from '../lib/services/authentication-interceptor';
 import {CookieLawModule} from '../lib/shared/reusablecomponents/cookie-law/cookie-law.module';
 import {EmailService} from '../lib/services/email.service';
 import {TreeviewModule} from 'ngx-treeview';
+import {CatRIsFooterComponent} from './shared/footer/footer.component';
+import {CatRIsTopmenuComponent} from './shared/topmenu/topmenu-catris.component';
+import {SideElementsComponent} from './shared/sideelements/side-elements.component';
+import {CatRIsHomeComponent} from './pages/home/home-catris.component';
 
 
 declare var require: any;
@@ -72,34 +60,19 @@ export function highchartsFactory() {
     AppComponent,
     BrowseCategoriesComponent,
     CompareServicesComponent,
-    HomeComponent,
+    // HomeComponent,
+    CatRIsHomeComponent,
     SearchComponent,
     StatsComponent,
     ServiceLandingPageComponent,
     // PERSISTENT
-    TopMenuComponent,
+    CatRIsTopmenuComponent,
     // BreadcrumbsComponent,
-    FooterComponent,
-    FeedbackComponent,
-    // USER
-    // DashboardComponent,
-    // MyFavouritesComponent,
-    // ServiceStatsComponent,
-    // // SERVICE PROVIDER ADMIN
-    // ServiceProviderFormComponent,
-    // ServiceProviderInfoComponent,
-    // UpdateServiceProviderComponent,
-    // AddFirstServiceComponent,
-    // MyServiceProvidersComponent,
-    // ADMIN
-    // ServiceProvidersListComponent,
+    CatRIsFooterComponent,
+    SideElementsComponent,
     // INDICATORS
     MeasurementsComponent,
     IndicatorFromComponent,
-    // FORMS
-    // ServiceEditComponent,
-    // ServiceFormComponent,
-    // ServiceUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -109,12 +82,8 @@ export function highchartsFactory() {
     ReusableComponentsModule,
     SharedModule,
     TreeviewModule.forRoot(),
-    // StarRatingModule.forRoot(),
     SupportModule,
     UserModule,
-    // ProviderModule,
-    // ProviderDashboardModule,
-    // CKEditorModule,
     ChartModule,
     AngularFontAwesomeModule,
     CookieLawModule,
@@ -142,10 +111,9 @@ export function highchartsFactory() {
     DatePipe
   ],
   exports: [
-    FooterComponent,
-    TopMenuComponent,
-    BreadcrumbsComponent,
-    FeedbackComponent
+    CatRIsFooterComponent,
+    CatRIsTopmenuComponent,
+    BreadcrumbsComponent
   ],
   bootstrap: [AppComponent]
 })

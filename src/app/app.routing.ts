@@ -2,13 +2,13 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
-import {HomeComponent} from '../lib/pages/home/home.component';
 import {CommonModule} from '@angular/common';
 import {SearchComponent} from '../lib/pages/search/search.component';
 import {CanActivateViaAuthGuard} from '../lib/services/can-activate-auth-guard.service';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 import {ForbiddenPageComponent} from '../lib/shared/forbidden-page/forbidden-page.component';
 import {NotFoundPageComponent} from '../lib/shared/not-found-page/not-found-page.component';
+import {CatRIsHomeComponent} from './pages/home/home-catris.component';
 // import {ProviderModule} from './pages/provider/provider.module';
 
 const appRoutes: Routes = [
@@ -19,7 +19,7 @@ const appRoutes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent,
+    component: CatRIsHomeComponent,
     data: {
       breadcrumb: 'Home'
     }
@@ -68,6 +68,11 @@ const appRoutes: Routes = [
     path: 'resource-dashboard',
     loadChildren: '../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module#ResourceDashboardModule',
     canActivate: [CanActivateViaAuthGuard]
+  },
+
+  {
+    path: 'support',
+    loadChildren: './pages/support/catris-support.module#CatrisSupportModule'
   },
 
   {
