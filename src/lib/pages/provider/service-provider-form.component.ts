@@ -304,9 +304,9 @@ export class ServiceProviderFormComponent implements OnInit {
         () => {
           this.showLoader = false;
           if (this.edit) {
-            this.router.navigate(['/myServiceProviders']);
+            this.router.navigate(['/provider/my']);
           } else {
-            this.authService.refreshLogin('/myServiceProviders');
+            this.authService.refreshLogin('/provider/my');
           }
         }
       );
