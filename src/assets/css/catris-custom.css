@@ -8,3 +8,8 @@
   --button-secondary-background-color: #fff;
   --button-secondary-hover-background-color: #9FCC52;
 }
+
+.uk-section-secondary {
+  background-color: #fafafa;
+  color: #424242 !important;
+}
