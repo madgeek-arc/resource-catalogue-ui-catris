@@ -278,7 +278,7 @@ export class ServiceProviderFormComponent implements OnInit {
         .subscribe(
           res => {
             this.showLoader = false;
-            this.router.navigate([`/add/${res.id}`]);
+            this.router.navigate([`/provider/add/${res.id}`]);
           },
           err => {
             this.showLoader = false;
@@ -315,7 +315,8 @@ export class ServiceProviderFormComponent implements OnInit {
       this.markFormAsDirty();
       window.scrollTo(0, 0);
       this.markTabs();
-      this.errorMessage = 'Please fill in all required fields (marked with an asterisk), and fix the data format in fields underlined with a red colour.';
+      this.errorMessage = 'Please fill in all required fields (marked with an asterisk), ' +
+        'and fix the data format in fields underlined with a red colour.';
     }
   }
 
