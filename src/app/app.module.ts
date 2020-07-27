@@ -37,6 +37,8 @@ import {CatRIsFooterComponent} from './shared/footer/footer.component';
 import {CatRIsTopmenuComponent} from './shared/topmenu/topmenu-catris.component';
 import {SideElementsComponent} from './shared/sideelements/side-elements.component';
 import {CatRIsHomeComponent} from './pages/home/home-catris.component';
+import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
+import {FooterComponent} from '../lib/shared/footer/footer.component';
 
 
 declare var require: any;
@@ -60,16 +62,19 @@ export function highchartsFactory() {
     AppComponent,
     BrowseCategoriesComponent,
     CompareServicesComponent,
-    // HomeComponent,
+    HomeComponent,
     CatRIsHomeComponent,
     SearchComponent,
     StatsComponent,
     ServiceLandingPageComponent,
     // PERSISTENT
+    TopMenuComponent,
     CatRIsTopmenuComponent,
     // BreadcrumbsComponent,
+    FooterComponent,
     CatRIsFooterComponent,
     SideElementsComponent,
+    FeedbackComponent,
     // INDICATORS
     MeasurementsComponent,
     IndicatorFromComponent,
