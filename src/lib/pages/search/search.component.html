@@ -7,6 +7,25 @@
                       [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">
     </app-help-content>
 
+    <div class="uk-grid">
+      <div class="uk-width-1-2@m">
+        <form class="uk-grid" [formGroup]="searchForm"
+              (ngSubmit)="onSubmit(searchForm.controls['query'].value)">
+          <div class="uk-width-1-2@m">
+            <select *ngIf="showSearchFieldDropDown" class="uk-select menuSearchFields"
+                    (change)="updateSearchField($event)" formControlName="searchFields">
+              <option value="">--Search field--</option>
+              <option *ngFor="let field of searchFields" value="{{field}}">{{field}}</option>
+            </select>
+          </div>
+          <div class="uk-width-1-2@m">
+            <input type="text" class="uk-input menuSearch" placeholder="" name="keyword"
+                   formControlName="query">
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div *ngIf="listViewActive" class="uk-grid" uk-grid="">
 
       <aside id="tm-sidebar" class="tm-sidebar uk-width-1-5@m">
