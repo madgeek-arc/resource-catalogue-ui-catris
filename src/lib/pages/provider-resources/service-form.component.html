@@ -199,10 +199,11 @@
                               <select id="resourceOrganisation" formControlName="resourceOrganisation" class="uk-input uk-select uk-width-9-10"
                                       (change)="handleBitSets(0, 1, 'resourceOrganisation'); unsavedChangesPrompt()"
                                       [ngClass]="{'uk-form-danger': checkFormValidity('resourceOrganisation')}">
-                                <ng-container *ngIf="providersPage">
-                                  <option *ngFor="let provider of providersPage.results"
-                                          value="{{provider.id}}">{{provider.name}}</option>
-                                </ng-container>
+<!--                                <ng-container *ngIf="providersPage">-->
+                                  <option value="{{this.providerId}}">{{this.providerId}}</option>
+<!--                                  <option *ngFor="let provider of providersPage.results"-->
+<!--                                          value="{{provider.id}}">{{provider.name}}</option>-->
+<!--                                </ng-container>-->
                               </select>
                               <!--<i><small>{{resourceOrganisationDesc.desc}}</small></i>-->
                             </div>
@@ -265,27 +266,39 @@
                         </li>
                         <!--MARKETING-->
                         <li>
+<!--                          <div class="uk-margin-large-bottom">-->
+<!--                            <label class="uk-form-label uk-text-right">-->
+<!--                              {{descriptionDesc.label + (descriptionDesc.mandatory ? ' (*)' : '')}}-->
+<!--                            </label>-->
+<!--                            <div class="uk-form-description uk-margin-top uk-width-9-10">{{descriptionDesc.desc}}</div>-->
+<!--                            &lt;!&ndash;<div class="uk-form-label uk-text-right">&ndash;&gt;-->
+<!--                              &lt;!&ndash;<label class="uk-form-label uk-text-right">&ndash;&gt;-->
+<!--                                &lt;!&ndash;{{descriptionDesc.label + (descriptionDesc.mandatory ? ' (*)' : '')}}&ndash;&gt;-->
+<!--                              &lt;!&ndash;</label>&ndash;&gt;-->
+<!--                            &lt;!&ndash;</div>&ndash;&gt;-->
+<!--                            <div class="uk-form-controls uk-margin-medium-top">-->
+<!--                              <div class="uk-wisth-9-10">-->
+<!--                                <ckeditor-->
+<!--                                  [readonly]="false"-->
+<!--                                  debounce="500"-->
+<!--                                  formControlName="description"-->
+<!--                                  (change)="handleBitSets(1, 3, 'description'); unsavedChangesPrompt()"-->
+<!--                                  [config]="{extraPlugins: 'divarea',allowedContent: true,extraAllowedContent : '*(*)'}">-->
+<!--                                </ckeditor>-->
+<!--                                &lt;!&ndash;<i><small>{{descriptionDesc.desc}}</small></i>&ndash;&gt;-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </div>-->
                           <div class="uk-margin-large-bottom">
-                            <label class="uk-form-label uk-text-right">
+                            <label class="uk-form-label uk-text-right" for="description">
                               {{descriptionDesc.label + (descriptionDesc.mandatory ? ' (*)' : '')}}
                             </label>
                             <div class="uk-form-description uk-margin-top uk-width-9-10">{{descriptionDesc.desc}}</div>
-                            <!--<div class="uk-form-label uk-text-right">-->
-                              <!--<label class="uk-form-label uk-text-right">-->
-                                <!--{{descriptionDesc.label + (descriptionDesc.mandatory ? ' (*)' : '')}}-->
-                              <!--</label>-->
-                            <!--</div>-->
                             <div class="uk-form-controls uk-margin-medium-top">
-                              <div class="uk-wisth-9-10">
-                                <ckeditor
-                                  [readonly]="false"
-                                  debounce="500"
-                                  formControlName="description"
-                                  (change)="handleBitSets(1, 3, 'description'); unsavedChangesPrompt()"
-                                  [config]="{extraPlugins: 'divarea',allowedContent: true,extraAllowedContent : '*(*)'}">
-                                </ckeditor>
-                                <!--<i><small>{{descriptionDesc.desc}}</small></i>-->
-                              </div>
+                              <textarea id="description" class="uk-textarea uk-width-9-10" rows="4" formControlName="description"
+                                        (input)="handleBitSets(1, 3, 'description'); unsavedChangesPrompt()"
+                                        [ngClass]="{'uk-form-danger': checkFormValidity('description')}"></textarea>
+<!--                              <i><small>{{descriptionDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div class="uk-margin-large-bottom">
@@ -363,7 +376,7 @@
                         <li>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">
-                              Scientific Categorization (*)
+                              Scientific Categorisation (*)
                             </label>
                             <div class="uk-form-controls uk-margin-top">
                               <div formArrayName="scientificCategorization" *ngFor="let category of scientificDomainArray.controls; let i = index">
@@ -430,7 +443,7 @@
 
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">
-                              Categorization (*)
+                              Categorisation (*)
                             </label>
                             <div class="uk-form-controls uk-margin-top">
                               <div formArrayName="categorize" *ngFor="let category of categoryArray.controls; let i = index">

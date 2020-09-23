@@ -186,7 +186,7 @@
                               <label>
                                 <input class="uk-checkbox" type="checkbox" id="legalEntityYes" formControlName="legalEntity" value="true"
                                        [checked]="this.newProviderForm.get('legalEntity').value == true && edit">
-                                <span class="uk-margin-small-left">Is the Provider of this Service a Legal Entity?</span>
+                                <span class="uk-margin-small-left">The organisation I am registering is an independent legal entity</span>
                               </label>
                             </div>
                           </div>
@@ -198,11 +198,13 @@
                             <div class="uk-form-controls uk-margin-medium-top">
                               <select id="legalStatus" class="uk-input uk-select uk-width-9-10" formControlName="legalStatus"
                                       [ngClass]="{'uk-form-danger': checkFormValidity('legalStatus')}">
-                                <option value=""></option>
-                                <option *ngFor="let entry of sortVocabulariesByName(legalStatusVocabulary)"
-                                        value="{{entry.id}}">
-                                  {{entry.name}}
-                                </option>
+                                <ng-container *ngIf="this.newProviderForm.get('legalEntity').value == true">
+<!--                                  <option value=""></option>-->
+                                  <option *ngFor="let entry of sortVocabulariesByName(legalStatusVocabulary)"
+                                          value="{{entry.id}}">
+                                    {{entry.name}}
+                                  </option>
+                                </ng-container>
                               </select>
                               <!--<i><small>{{legalStatusDesc.desc}}</small></i>-->
                             </div>
@@ -262,7 +264,7 @@
                         <!--CLASSIFICATION-->
                         <li>
                           <div class="uk-margin-large-bottom">
-                            <label class="uk-form-label uk-text-right">Scientific Categorization</label>
+                            <label class="uk-form-label uk-text-right">Scientific Categorisation</label>
                             <div class="uk-form-controls uk-margin-top">
                               <div formArrayName="categorization"
                                    *ngFor="let category of domainArray.controls; let i = index">
@@ -322,7 +324,7 @@
                             </div>
                             <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-top">
                               <a class="add-new-element" (click)="pushDomain()">
-                                <i class="fa fa-plus" aria-hidden="true"></i> Add scientific categorization
+                                <i class="fa fa-plus" aria-hidden="true"></i> Add scientific categorisation
                               </a>
                             </div>
                           </div>
@@ -795,7 +797,7 @@
                             </div>
                           </div>
                           <div class="uk-margin-large-bottom">
-                            <label class="uk-form-label uk-text-right">MERIL Scientific Categorization</label>
+                            <label class="uk-form-label uk-text-right">MERIL Scientific Categorisation</label>
                             <div class="uk-form-controls uk-margin-top">
                               <div formArrayName="merilCategorization"
                                    *ngFor="let category of merilDomainArray.controls; let i = index">
@@ -945,7 +947,7 @@
                         <li>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">Administrators (*)</label>
-                            <div><i>An administrator will be added using your user information</i></div>
+                            <div *ngIf="!edit"><i>An administrator for managing the RP information in {{projectName}} will be added using your user information</i></div>
                             <div *ngIf="newProviderForm.get('users').value" class="uk-form-controls uk-margin-top">
                               <div formArrayName="users" *ngFor="let user of usersArray.controls; let i = index">
                                 <div [formGroupName]="i" class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
