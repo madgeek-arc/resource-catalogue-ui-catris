@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
-  FAQ_ENDPOINT: '/faq/api',
   projectName: 'CatRIS',
+  projectMail: 'registration@catris.eu',
+  FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
   hasUserConsent: false
 };
