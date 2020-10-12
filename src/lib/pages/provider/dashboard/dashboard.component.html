@@ -17,13 +17,13 @@
           <li [routerLinkActive]="['current_section']" #services="routerLinkActive">
             <a [routerLink]="['/dashboard/' + providerId + '/resources']">
               <img src="{{services.isActive ? 'lib/assets/images/new-icons/services-active.svg' : 'lib/assets/images/new-icons/services.svg'}}" class="uk-margin-small-right">
-              Services
+              Resources
             </a>
           </li>
           <li [routerLinkActive]="['current_section']" #draftServices="routerLinkActive">
             <a [routerLink]="['/dashboard/' + providerId + '/draft-resources']">
               <img src="{{draftServices.isActive ? 'lib/assets/images/new-icons/draft-services-active.svg' : 'lib/assets/images/new-icons/draft-services.svg'}}" class="uk-margin-small-right">
-              Draft services
+              Draft resources
             </a>
           </li>
           <li [routerLinkActive]="['current_section']" #messages="routerLinkActive">
@@ -44,13 +44,12 @@
           <li>
             <a [routerLink]="['/provider/' + providerId + '/resource/add/']">
               <img src="lib/assets/images/new-icons/add-service.svg" class="uk-margin-small-right">
-              Add new service
+              Add new resource
             </a>
           </li>
           <li>
             <a [routerLink]="['/provider/update/' + providerId]">
-              <img src="lib/assets/images/new-icons/update-provider.svg" class="uk-margin-small-right">
-              Update Provider
+              <img src="lib/assets/images/new-icons/update-provider.svg" class="uk-margin-small-right">Update Provider
             </a>
           </li>
 

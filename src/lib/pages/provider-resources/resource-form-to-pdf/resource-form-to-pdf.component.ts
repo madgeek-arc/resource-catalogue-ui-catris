@@ -1,26 +1,27 @@
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Component, Injector, OnInit} from '@angular/core';
-import {AuthenticationService} from '../../services/authentication.service';
-import {NavigationService} from '../../services/navigation.service';
-import {ResourceService} from '../../services/resource.service';
-import {UserService} from '../../services/user.service';
-import * as sd from './services.description';
-import {Provider, RichService, Service, Type, Vocabulary} from '../../domain/eic-model';
-import {Paging} from '../../domain/paging';
-import {URLValidator} from '../../shared/validators/generic.validator';
+import {AuthenticationService} from '../../../services/authentication.service';
+import {NavigationService} from '../../../services/navigation.service';
+import {ResourceService} from '../../../services/resource.service';
+import {UserService} from '../../../services/user.service';
+import * as sd from '../services.description';
+import {Provider, RichService, Service, Type, Vocabulary} from '../../../domain/eic-model';
+import {Paging} from '../../../domain/paging';
+import {URLValidator} from '../../../shared/validators/generic.validator';
 import {zip} from 'rxjs/internal/observable/zip';
-import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
-import {environment} from '../../../environments/environment';
+import {PremiumSortPipe} from '../../../shared/pipes/premium-sort.pipe';
+import {environment} from '../../../../environments/environment';
 import BitSet from 'bitset/bitset';
 import {ActivatedRoute} from '@angular/router';
-import {ServiceProviderService} from '../../services/service-provider.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'app-service-form',
-  templateUrl: './service-form.component.html',
-  styleUrls: ['../provider/service-provider-form.component.css']
+  selector: 'app-resource-form-to-pdf',
+  templateUrl: './resource-form-to-pdf.component.html',
+  styleUrls: ['./resource-form-to-pdf.component.css']
 })
-export class ServiceFormComponent implements OnInit {
+export class ResourceFormToPdfComponent implements OnInit {
   protected _marketplaceBaseURL = environment.marketplaceBaseURL;
   projectName = environment.projectName;
   projectMail = environment.projectMail;
@@ -253,7 +254,6 @@ export class ServiceFormComponent implements OnInit {
 
   constructor(protected injector: Injector,
               protected authenticationService: AuthenticationService,
-              protected serviceProviderService: ServiceProviderService,
               protected route: ActivatedRoute
   ) {
     this.resourceService = this.injector.get(ResourceService);
@@ -274,32 +274,39 @@ export class ServiceFormComponent implements OnInit {
     this.errorMessage = '';
 
     /** Fill subcategory string array**/
-    if (!tempSave) {
-      this.getFieldAsFormArray('categories').controls = [];
-    }
+    this.getFieldAsFormArray('categories').controls = [];
+    // this.getFieldAsFormArray('subcategories').controls = [];
 
     for (const category of this.categoryArray.controls) {
+
+      console.log('this.fb.control(category.get(\'category\').value) --> ', this.fb.control(category.get('category').value));
+      console.log('this.fb.control(category.get(\'subcategory\').value) --> ', this.fb.control(category.get('subcategory').value));
+
       if (category.get('subcategory').value) {
+        // this.getFieldAsFormArray('category').push(this.fb.control(this.categoryArray.controls[category].get('category').value));
+        // console.log('this.fb.control(category.get(\'category\').value) --> ', this.fb.control(category.get('category').value));
         this.getFieldAsFormArray('category').push(this.fb.control(category.get('category').value));
+        // this.getFieldAsFormArray('subcategories').push(this.fb.control(category.get('subcategory').value));
+        // console.log('this.fb.control(category.get(\'subcategory\').value) --> ', this.fb.control(category.get('subcategory').value));
         this.getFieldAsFormArray('subcategory').push(this.fb.control(category.get('subcategory').value));
       }
     }
     /** Fill scientific subdomain string array**/
-    if (!tempSave) {
     this.getFieldAsFormArray('scientificDomains').controls = [];
-    }
+    // this.getFieldAsFormArray('scientificSubdomains').controls = [];
 
     for (const scientificDomain of this.scientificDomainArray.controls) {
       if (scientificDomain.get('scientificSubdomain').value) {
         this.getFieldAsFormArray('scientificDomain').push(this.fb.control(scientificDomain.get('scientificDomain').value));
+        // this.getFieldAsFormArray('scientificSubdomains').push(this.fb.control(scientificDomain.get('scientificSubdomain').value));
         this.getFieldAsFormArray('scientificSubdomain').push(this.fb.control(scientificDomain.get('scientificSubdomain').value));
       }
     }
     // this.scientificDomainArray.disable();
     this.showLoader = true;
-    // console.log('this.serviceForm.valid ', this.serviceForm.valid);
+    console.log('this.serviceForm.valid ', this.serviceForm.valid);
     // console.log('Submitted service --> ', service);
-    // console.log('Submitted service value--> ', this.serviceForm.value);
+    console.log('Submitted service value--> ', this.serviceForm.value);
     if (tempSave) {
       // todo add fix hear
       this.resourceService[(pendingService || !this.editMode) ? 'uploadTempPendingService' : 'uploadTempService']
@@ -307,7 +314,8 @@ export class ServiceFormComponent implements OnInit {
         _service => {
           // console.log(_service);
           this.showLoader = false;
-          // return this.router.dashboardDraftResources(this.providerId); // redirect to draft list
+          // fixme fix this router url
+          // return this.router.go('/editPendingService/' + _service.id);
           return this.router.go('/provider/' + _service.resourceOrganisation + '/draft-resource/update/' + _service.id);
         },
         err => {
@@ -325,10 +333,8 @@ export class ServiceFormComponent implements OnInit {
         _service => {
           // console.log(_service);
           this.showLoader = false;
-          return this.router.dashboardResources(this.providerId);
-          // return this.router.dashboard(this.providerId);                          // redirect to provider dashboard
-          // return this.router.service(_service.id);                               // redirect to old service info page
-          // return window.location.href = this._marketplaceBaseURL + _service.id; // redirect to marketplace
+          // return this.router.service(_service.id); // change to redirect to marketplace
+          return window.location.href = this._marketplaceBaseURL + _service.id;
         },
         err => {
           this.showLoader = false;
@@ -397,7 +403,6 @@ export class ServiceFormComponent implements OnInit {
         this.providersPage.results.sort((a, b) => 0 - (a.name > b.name ? -1 : 1));
         this.providerId = this.route.snapshot.paramMap.get('providerId');
         this.serviceForm.get('resourceOrganisation').setValue(this.providerId);
-        this.handleBitSets(0, 1, 'resourceOrganisation');
       }
     );
 
@@ -874,222 +879,39 @@ export class ServiceFormComponent implements OnInit {
     this.hasChanges = true;
   }
 
-  /** BitSets -->**/
-  handleBitSets(tabNum: number, bitIndex: number, formControlName: string): void {
-    if (bitIndex === 0) {
-      this.serviceName = this.serviceForm.get(formControlName).value;
-    }
-      if (this.serviceForm.get(formControlName).valid) {
-        this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-        this.loaderBitSet.set(bitIndex, 1);
-      } else if (this.serviceForm.get(formControlName).invalid) {
-        this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-        this.loaderBitSet.set(bitIndex, 0);
-      }
-    this.updateLoaderPercentage();
+  // htmlToPDF() {
+  //   const options = {
+  //     background: '#fff',
+  //     pagesplit: true
+  //   };
+  //
+  //   // parentdiv is the html element which has to be converted to PDF
+  //   html2canvas(document.getElementById('resource-sample-form')).then(canvas => {
+  //
+  //     const pdf = new jsPDF('p', 'pt', [canvas.width, canvas.height]);
+  //
+  //     // pdf.addHTML(pdf, 0, 0, options, function () {
+  //     //
+  //     // });
+  //
+  //     const imgData = canvas.toDataURL('image/jpeg', 1.0);
+  //     pdf.addHTML(imgData, 0, 0, options, function () {
+  //       pdf.save('resourceForm.pdf');
+  //     });
+  //   });
+  //
+  // }
+
+  htmlToPDF() {
+    // parentdiv is the html element which has to be converted to PDF
+    html2canvas(document.getElementById('resource-sample-form')).then(canvas => {
+
+      const pdf = new jsPDF('p', 'pt', [canvas.width, canvas.height]);
+
+      const imgData  = canvas.toDataURL('image/jpeg', 1.0);
+      pdf.addImage(imgData, 0, 0, canvas.width, canvas.height);
+      pdf.save('resourceForm.pdf');
+    });
   }
-
-  handleBitSetsOfGroups(tabNum: number, bitIndex: number, formControlName: string, group: string): void {
-    if (group === 'scientificDomains') {
-      for (const scientificDomain of this.scientificDomainArray.controls) {
-        if (scientificDomain.get('scientificSubdomain').value) {
-          this.decreaseRemainingFieldsPerTab(tabNum, bitIndex - 1);
-          this.loaderBitSet.set(bitIndex - 1, 1);
-          this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-          this.loaderBitSet.set(bitIndex, 1);
-        } else {
-          this.increaseRemainingFieldsPerTab(tabNum, bitIndex - 1);
-          this.loaderBitSet.set(bitIndex - 1, 0);
-          this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-          this.loaderBitSet.set(bitIndex, 0);
-        }
-      }
-    } else if (group === 'categories') {
-      for (const category in this.categoryArray.controls) {
-        if (this.categoryArray.controls[category].get('subcategory').value) {
-          this.decreaseRemainingFieldsPerTab(tabNum, bitIndex - 1);
-          this.loaderBitSet.set(bitIndex - 1, 1);
-          this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-          this.loaderBitSet.set(bitIndex, 1);
-        } else {
-          this.increaseRemainingFieldsPerTab(tabNum, bitIndex - 1);
-          this.loaderBitSet.set(bitIndex - 1, 0);
-          this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-          this.loaderBitSet.set(bitIndex, 0);
-        }
-      }
-    } else {
-      if (this.serviceForm.controls[group].get(formControlName).valid) {
-        this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-        this.loaderBitSet.set(bitIndex, 1);
-      } else if (this.serviceForm.controls[group].get(formControlName).invalid) {
-        this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-        this.loaderBitSet.set(bitIndex, 0);
-      }
-    }
-    this.updateLoaderPercentage();
-  }
-
-  handleBitSetsOfPublicContact(tabNum: number, bitIndex: number, formControlName: string, group?: string): void {
-    if (this.publicContactArray.value[0][formControlName] !== '' && this.serviceForm.controls[group].valid) {
-      this.decreaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 1);
-    } else {
-      this.increaseRemainingFieldsPerTab(tabNum, bitIndex);
-      this.loaderBitSet.set(bitIndex, 0);
-    }
-    this.updateLoaderPercentage();
-  }
-
-  updateLoaderPercentage() {
-    // console.log(this.loaderBitSet.toString(2));
-    // console.log('cardinality: ', this.loaderBitSet.cardinality());
-    this.loaderPercentage = Math.round((this.loaderBitSet.cardinality() / this.allRequiredFields) * 100);
-    // console.log(this.loaderPercentage, '%');
-  }
-
-  decreaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 1);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.remainingOnTab0 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 1);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.remainingOnTab1 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 2) {  // Classification
-      this.BitSetTab2.set(bitIndex, 1);
-      this.remainingOnTab2 = this.requiredOnTab2 - this.BitSetTab2.get(7) - this.BitSetTab2.get(9) - this.BitSetTab2.get(10);
-      if (this.remainingOnTab2 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 3) {
-      this.BitSetTab3.set(bitIndex, 1);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.remainingOnTab3 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 5) { // Contact
-      this.BitSetTab5.set(bitIndex, 1);
-      const mainContactCardinality = this.BitSetTab5.slice(13, 15).cardinality();
-      this.remainingOnTab5 = this.requiredOnTab5 - +(mainContactCardinality === 3) - this.BitSetTab5.get(16) - this.BitSetTab5.get(17) - this.BitSetTab5.get(20);
-      if (this.remainingOnTab5 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 6) {
-      this.BitSetTab6.set(bitIndex, 1);
-      this.remainingOnTab6 = this.requiredOnTab6 - this.BitSetTab6.cardinality();
-      if (this.remainingOnTab6 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    } else if (tabNum === 10) {
-      this.BitSetTab10.set(bitIndex, 1);
-      this.remainingOnTab10 = this.requiredOnTab10 - this.BitSetTab10.cardinality();
-      if (this.remainingOnTab10 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
-        this.calcCompletedTabs(tabNum, 1);
-      }
-    }
-  }
-
-  increaseRemainingFieldsPerTab(tabNum: number, bitIndex: number) {
-    if (tabNum === 0) {
-      this.BitSetTab0.set(bitIndex, 0);
-      this.remainingOnTab0 = this.requiredOnTab0 - this.BitSetTab0.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 1) {
-      this.BitSetTab1.set(bitIndex, 0);
-      this.remainingOnTab1 = this.requiredOnTab1 - this.BitSetTab1.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 2) {  // Classification
-      this.BitSetTab2.set(bitIndex, 0);
-      this.remainingOnTab2 = this.requiredOnTab2 - this.BitSetTab2.get(7) - this.BitSetTab2.get(9) - this.BitSetTab2.get(10);
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 3) {
-      this.BitSetTab3.set(bitIndex, 0);
-      this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 5) { // Contact
-      this.BitSetTab5.set(bitIndex, 0);
-      const mainContactCardinality = this.BitSetTab5.slice(13, 15).cardinality();
-      this.remainingOnTab5 = this.requiredOnTab5 - +(mainContactCardinality === 3) - this.BitSetTab5.get(16) - this.BitSetTab5.get(17) - this.BitSetTab5.get(20);
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 6) {
-      this.BitSetTab6.set(bitIndex, 0);
-      this.remainingOnTab6 = this.requiredOnTab6 - this.BitSetTab6.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    } else if (tabNum === 10) {
-      this.BitSetTab10.set(bitIndex, 0);
-      this.remainingOnTab10 = this.requiredOnTab10 - this.BitSetTab10.cardinality();
-      if (this.completedTabsBitSet.get(tabNum) !== 0) {
-        this.calcCompletedTabs(tabNum, 0);
-      }
-    }
-  }
-
-  calcCompletedTabs(tabNum: number, setValue: number) {
-    this.completedTabsBitSet.set(tabNum, setValue);
-    this.completedTabs = this.completedTabsBitSet.cardinality();
-  }
-
-  /** <--BitSets **/
-
-  /** URL Validation--> **/
-  checkUrlValidity(formControlName: string) {
-    let urlValidity;
-    if (this.serviceForm.get(formControlName).valid && this.serviceForm.get(formControlName).value !== '') {
-      // if (this.newProviderForm.get(formControlName).value !== '') {
-      const url = this.serviceForm.get(formControlName).value;
-      console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  checkUrlValidityForArrays(formArrayName: string, position: number) {
-    let urlValidity;
-    console.log(this.serviceForm.get(formArrayName).value[position]);
-    if (this.serviceForm.get(formArrayName).value[position] !== '') {
-      const url = this.serviceForm.get(formArrayName).value[position];
-      console.log(url);
-      this.serviceProviderService.validateUrl(url).subscribe(
-        boolean => { urlValidity = boolean; },
-        error => { console.log(error); },
-        () => {
-          if (!urlValidity) {
-            console.log('invalid');
-            window.scrollTo(0, 0);
-            this.errorMessage = url + ' is not a valid ' + formArrayName + ' URL. Please enter a valid URL.';
-          }
-        }
-      );
-    }
-  }
-
-  /** <--URL Validation **/
 
 }

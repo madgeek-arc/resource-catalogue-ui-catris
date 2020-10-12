@@ -29,6 +29,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
 
   ngOnInit() {
     this.edit = true;
+    this.providerId = this.route.snapshot.paramMap.get('providerId');
     const path = this.route.snapshot.routeConfig.path;
     if (path === 'info/:providerId') {
       this.disable = true;
@@ -69,10 +70,9 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
   }
 
   getProvider() {
-    const id = this.route.snapshot.paramMap.get('providerId');
     this.errorMessage = '';
     const path = this.route.snapshot.routeConfig.path;
-    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getServiceProviderById')](id)
+    this.serviceProviderService[(path === 'add/:providerId' ? 'getPendingProviderById' : 'getServiceProviderById')](this.providerId)
       .subscribe(
       provider => this.provider = provider,
       err => {
@@ -119,32 +119,32 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
           }
         }
 
-        if (this.provider.scientificSubdomains) {
+        if (this.provider.scientificDomains) {
           // this.removeDomain(0);
-          for (let i = 0; i < this.provider.scientificSubdomains.length; i++) {
+          for (let i = 0; i < this.provider.scientificDomains.length; i++) {
             this.domainArray.push(this.newScientificDomain());
 
-            for (let j = 0; j < this.categoriesVocabulary.length; j++) {
-              if (this.categoriesVocabulary[j].id === this.provider.scientificSubdomains[i]) {
-                this.domainArray.controls[this.domainArray.length - 1].get('domain').setValue(this.categoriesVocabulary[j].parentId);
-                this.domainArray.controls[this.domainArray.length - 1].get('scientificSubdomain').setValue(this.categoriesVocabulary[j].id);
-              }
-            }
+            // for (let j = 0; j < this.categoriesVocabulary.length; j++) {
+            //   if (this.categoriesVocabulary[j].id === this.provider.scientificDomains[i]) {
+            //     this.domainArray.controls[this.domainArray.length - 1].get('domain').setValue(this.categoriesVocabulary[j].parentId);
+            //     this.domainArray.controls[this.domainArray.length - 1].get('scientificSubdomain').setValue(this.categoriesVocabulary[j].id);
+            //   }
+            // }
           }
         } else {
           this.domainArray.push(this.newScientificDomain());
         }
-        if (this.provider.merilScientificSubdomains) {
+        if (this.provider.merilScientificDomains) {
           // this.removeDomain(0);
-          for (let i = 0; i < this.provider.merilScientificSubdomains.length; i++) {
+          for (let i = 0; i < this.provider.merilScientificDomains.length; i++) {
             this.merilDomainArray.push(this.newMerilScientificDomain());
 
-            for (let j = 0; j < this.merilCategoriesVocabulary.length; j++) {
-              if (this.merilCategoriesVocabulary[j].id === this.provider.merilScientificSubdomains[i]) {
-                this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilDomain').setValue(this.merilCategoriesVocabulary[j].parentId);
-                this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilScientificSubdomain').setValue(this.merilCategoriesVocabulary[j].id);
-              }
-            }
+            // for (let j = 0; j < this.merilCategoriesVocabulary.length; j++) {
+            //   if (this.merilCategoriesVocabulary[j].id === this.provider.merilScientificDomains[i]) {
+            //     this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilDomain').setValue(this.merilCategoriesVocabulary[j].parentId);
+            //     this.merilDomainArray.controls[this.merilDomainArray.length - 1].get('merilScientificSubdomain').setValue(this.merilCategoriesVocabulary[j].id);
+            //   }
+            // }
           }
         } else {
           this.merilDomainArray.push(this.newMerilScientificDomain());
@@ -155,9 +155,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
             this.push('esfriDomains', this.ESFRIDomainDesc.mandatory);
           }
         }
-        if (!this.provider.publicContacts) {
-          this.removePublicContact(0);
-        } else if (this.provider.publicContacts && this.provider.publicContacts.length > 1) {
+        if (this.provider.publicContacts && this.provider.publicContacts.length > 1) {
           for (let i = 0; i < this.provider.publicContacts.length - 1; i++) {
             this.pushPublicContact();
           }
@@ -210,6 +208,7 @@ export class UpdateServiceProviderComponent extends ServiceProviderFormComponent
     this.handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact');
     this.handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact');
     this.handleBitSetsOfGroups(4, 11, 'email', 'mainContact');
+    this.handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts');
     this.initUserBitSets();
   }
 

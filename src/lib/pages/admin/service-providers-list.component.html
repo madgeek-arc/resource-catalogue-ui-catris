@@ -104,6 +104,7 @@
                             <option value="name" selected>Name</option>
                             <option value="registeredAt">Creation Date</option>
                             <option value="modifiedAt">Modification Date</option>
+                            <option value="abbreviation">Abbreviation</option>
                           </select>
                         </div>
                       </div>
@@ -135,7 +136,7 @@
                     <div class="uk-flex uk-flex-middle uk-flex-between">
 
                       <div class="resultsInfo">
-                        <span class="number">{{total}}</span> SERVICE PROVIDERS, PAGE <span class="number">{{currentPage}}</span> OF <span class="number">{{pageTotal}}</span>
+                        <span class="number">{{total}}</span> RESOURCE PROVIDERS, PAGE <span class="number">{{currentPage}}</span> OF <span class="number">{{pageTotal}}</span>
                       </div>
 
                       <ul class="uk-pagination" uk-margin>
@@ -158,11 +159,11 @@
                           <div class="uk-card-badge uk-label">Approved</div>
                         </div>
                         <div *ngIf="(providerBundle.status === 'pending initial approval')
-                                || (providerBundle.status === 'pending service template submission')
-                                || (providerBundle.status === 'pending service template approval')" class="pending">
+                                || (providerBundle.status === 'pending template submission')
+                                || (providerBundle.status === 'pending template approval')" class="pending">
                           <div class="uk-card-badge uk-label">Pending</div>
                         </div>
-                        <div *ngIf="(providerBundle.status === 'rejected service template')
+                        <div *ngIf="(providerBundle.status === 'rejected template')
                                 || (providerBundle.status === 'rejected')" class="rejected">
                           <div class="uk-card-badge uk-label">Rejected</div>
                         </div>
@@ -180,7 +181,7 @@
                               <div class="providerName">
                                 <span *ngIf="providerBundle.status!=='approved'" class="uk-margin-auto-vertical">
                                   <h5 class="uk-display-inline-block" data-uk-tooltip
-                                      title="'Your service provider is not yet active, therefore you cannot access its monitoring dashboard'">
+                                      title="'Your resource provider is not yet active, therefore you cannot access its monitoring dashboard'">
                                     {{ providerBundle.provider.name }}
                                   </h5>
                                   <a [routerLink]="['/provider/info',providerBundle.id]" class="uk-display-inline-block">
@@ -188,7 +189,7 @@
                                   </a>
                                 </span>
                                 <span *ngIf="providerBundle.status==='approved'" class="uk-margin-auto-vertical">
-                                  <a [routerLink]="['/dashboard', providerBundle.id]" data-uk-tooltip title="'Go to the service provider monitoring dashboard'">
+                                  <a [routerLink]="['/dashboard', providerBundle.id]" data-uk-tooltip title="'Go to the resource provider monitoring dashboard'">
                                       {{ providerBundle.provider.name }}
                                   </a>
                                   <a [routerLink]="['/provider/info',providerBundle.id]" class="uk-display-inline-block">
@@ -197,7 +198,7 @@
                                 </span>
                               </div>
                               <div class="uk-margin-small-top">
-                                <span class="statusLabel">Acronym: </span>
+                                <span class="statusLabel">Abbreviation: </span>
                                 <ng-container *ngIf="providerBundle.provider.abbreviation && (providerBundle.provider.abbreviation!==null)">{{ providerBundle.provider.abbreviation }}</ng-container>
                                 <ng-container *ngIf="!providerBundle.provider.abbreviation || (providerBundle.provider.abbreviation===null)">not available</ng-container>
                               </div>
@@ -209,8 +210,8 @@
                             <div class="uk-width-1-5">
                               <div class="action-buttons">
 
-                                <ng-container *ngIf="((providerBundle.status !== 'pending service template approval') &&
-                                                                 (providerBundle.status !== 'rejected service template')) ||
+                                <ng-container *ngIf="((providerBundle.status !== 'pending template approval') &&
+                                                                 (providerBundle.status !== 'rejected template')) ||
                                                                  (hasCreatedFirstService(providerBundle.id))">
                                   <button *ngIf="adminActionsMap[providerBundle.status] && adminActionsMap[providerBundle.status].appButtonTitle"
                                      (click)="showActionModal(providerBundle, adminActionsMap[providerBundle.status].onApprove, true)"
@@ -242,11 +243,11 @@
                           <div *ngIf="hasCreatedFirstService(providerBundle.id)">
                             <button routerLink="{{ getLinkToFirstService(providerBundle.id) }}"
                                     class="uk-button uk-button-link" style="padding-right: 40px; border-right: 1px solid #ccc">
-                              <i class="fa fa-eye"></i> View service template
+                              <i class="fa fa-eye"></i> View resource template
                             </button>
                             <button routerLink="{{ getLinkToEditFirstService(providerBundle.id) }}"
                                     class="uk-button uk-button-link uk-margin-medium-left">
-                              <i class="fa fa-pencil"></i> Edit service template
+                              <i class="fa fa-pencil"></i> Edit resource template
                             </button>
                           </div>
                         </ng-container>
@@ -301,9 +302,9 @@
       <p *ngIf="selectedProvider.status !== newStatus">The status will change from "{{ selectedProvider.status }}" to
         "{{ newStatus }}"</p>
       <p *ngIf="selectedProvider.status === newStatus">
-        {{ ((selectedProvider.status === 'approved') && !pushedApprove) ? 'The service provider will be deactivated.' :
-        (((selectedProvider.status === 'approved') && pushedApprove) ? 'The service provider will be activated.' :
-          'The sp will be prompted to update the service template.')}}
+        {{ ((selectedProvider.status === 'approved') && !pushedApprove) ? 'The resource provider will be deactivated.' :
+        (((selectedProvider.status === 'approved') && pushedApprove) ? 'The resource provider will be activated.' :
+          'The RP will be prompted to update the resource template.')}}
       </p>
     </div>
     <button class="uk-button uk-button-primary" type="button" (click)="statusChangeAction()">Proceed</button>

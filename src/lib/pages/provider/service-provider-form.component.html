@@ -7,7 +7,7 @@
         <div class="titleAndActionsBar">
           <div class="">
             <div class="pageTitle">
-              {{disable ? ' ' : edit ? ' Update' : ' Add New'}} Service Provider {{disable ? 'Info' : ''}}
+              {{disable ? ' ' : edit ? ' Update' : ' Add New'}} Resource Provider {{disable ? 'Info' : ''}}
             </div>
             <div class="providerName uk-margin-small-top">
               <strong>{{providerName!='' ? providerName : 'Provider Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
@@ -23,18 +23,18 @@
 
         <!--TODO where to put logoURL and modal to add id-->
         <!--<h1 class="uk-h3">-->
-          <!--<a (click)="showLogoUrlModal()" title="Click to add the url with the Service Provider Logo">-->
+          <!--<a (click)="showLogoUrlModal()" title="Click to add the url with the Resource Provider Logo">-->
             <!--<img class="el-image uk-border-rounded"-->
                  <!--src="{{(newProviderForm && newProviderForm.get('logo').value) ? newProviderForm.get('logo').value-->
                  <!--: 'src/lib/assets/images/broken_image-black-48dp.svg'}}"-->
                  <!--width="70">-->
-          <!--</a>{{disable ? ' ' : edit ? ' Update' : ' Add New'}} Service Provider {{disable ? 'Info' : ''}}-->
+          <!--</a>{{disable ? ' ' : edit ? ' Update' : ' Add New'}} Resource Provider {{disable ? 'Info' : ''}}-->
         <!--</h1>-->
 
-        <!-- TOP HELP CONTENT -->
-        <app-help-content #topHelperContent [position]="'top'"
-                          [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">
-        </app-help-content>
+<!--        &lt;!&ndash; TOP HELP CONTENT &ndash;&gt;-->
+<!--        <app-help-content #topHelperContent [position]="'top'"-->
+<!--                          [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">-->
+<!--        </app-help-content>-->
 
         <div class="uk-margin-medium-bottom">
           <div class="uk-grid">
@@ -54,19 +54,43 @@
 
               <div [ngClass]="{'blur-filter': showLoader}">
 
+                <div class="uk-margin-bottom uk-flex uk-flex-right">
+                  <div>
+                    <button class="uk-button uk-button-link" type="button">Do you need help?</button>
+                    <div uk-drop="pos: bottom-left">
+                      <div class="uk-card uk-card-body uk-card-default">
+
+                        <p>For questions related to the information that needs to be filled in and suggestions on the portal, please contact us in <a href="mailto:onboarding@eosc-portal.eu">onboarding@eosc-portal.eu</a>.</p>
+                        <p>For technical issues and questions, please contact us in <a href="mailto:providers@eosc-portal.eu">providers@eosc-portal.eu</a>.</p>
+
+                        <!-- TOP HELP CONTENT -->
+                        <app-help-content #topHelperContent [position]="'top'"
+                                          [ngClass]="topHelperContent.isPresent()?'uk-margin-medium-top uk-margin-medium-bottom':'clear-style'">
+                        </app-help-content>
+                      </div>
+                    </div>
+                  </div>
+                  <!--<div class="uk-margin-medium-left">-->
+                  <!--<a>-->
+                  <!--<i class="fa fa-file-pdf-o uk-margin-small-right"></i><span style="color: #292929">Download as PDF</span>-->
+                  <!--</a>-->
+                  <!--</div>-->
+
+                </div>
+
                 <div *ngIf="errorMessage" class="uk-alert uk-alert-danger">{{errorMessage}}</div>
 
                 <div class="uk-grid">
 
                   <div class="uk-width-1-4">
-                    <div class="tabsTitle uk-margin-bottom">Service provider steps</div>
+                    <div class="tabsTitle uk-margin-bottom">Resource Provider steps</div>
                     <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs" uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
                       <li class="uk-active">
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[0]}" href="#">
                           <span>1. Basic *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab0==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab0!=0 ? remainingOnTab0 : ''}}
+                            {{remainingOnTab0!=0 ? remainingOnTab0 +'*' : ''}}
                           </span>
                         </a>
                       </li>
@@ -75,14 +99,13 @@
                           <span>2. Marketing *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab1==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab1!=0 ? remainingOnTab1 : ''}}
+                            {{remainingOnTab1!=0 ? remainingOnTab1 +'*' : ''}}
                           </span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[2]}" href="#">
                           <span>3. Classification</span>
-                          <span class="circle-number">-</span>
                         </a>
                       </li>
                       <li>
@@ -90,7 +113,7 @@
                           <span>4. Location *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab3==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab3!=0 ? remainingOnTab3 : ''}}
+                            {{remainingOnTab3!=0 ? remainingOnTab3 +'*' : ''}}
                           </span>
                         </a>
                       </li>
@@ -99,20 +122,18 @@
                           <span>5. Contact *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab4==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab4!=0 ? remainingOnTab4 : ''}}
+                            {{remainingOnTab4!=0 ? remainingOnTab4 +'*' : ''}}
                           </span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[5]}" href="#">
                           <span>6. Maturity</span>
-                          <span class="circle-number">-</span>
                         </a>
                       </li>
                       <li>
                         <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[6]}" href="#">
                           <span>7. Other</span>
-                          <span class="circle-number">-</span>
                         </a>
                       </li>
                       <li>
@@ -120,12 +141,14 @@
                           <span>8. Admins *</span>
                           <span class="circle-number">
                             <i *ngIf="remainingOnTab7==0" aria-hidden="true" class="fa fa-check"></i>
-                            {{remainingOnTab7!=0 ? remainingOnTab7 : ''}}
+                            {{remainingOnTab7!=0 ? remainingOnTab7 +'*' : ''}}
                           </span>
                           <!--                          <span class="circle-number"><i aria-hidden="true" class="fa fa-check"></i></span>-->
                         </a>
                       </li>
                     </ul>
+
+                    <div class="requiredFields uk-text-right">*Required fields</div>
                     <div class="stepsCompleted uk-margin-top uk-text-center">{{completedTabs}} of {{requiredTabs}}</div>
                     <div class="progress uk-margin-small-top">
                       <progress id="js-progressbar" class="uk-progress uk-margin-remove-bottom" value="{{loaderPercentage}}" max="100"></progress>
@@ -149,8 +172,8 @@
                               <input id="providerName" class="uk-input uk-width-9-10" type="text" formControlName="name"
                                      (input)="handleBitSets(0, 0, 'name'); unsavedChangesPrompt()"
                                      [ngClass]="{'uk-form-danger': checkFormValidity('name')}">
-                              <!--<i><small>{{fullNameDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>Suggested length is 100 characters</small></i>
                           </div>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label" for="abbreviation">
@@ -161,8 +184,8 @@
                               <input id="abbreviation" class="uk-input uk-width-9-10" type="text" formControlName="abbreviation"
                                      (input)="handleBitSets(0, 1, 'abbreviation'); unsavedChangesPrompt()"
                                      [ngClass]="{'uk-form-danger': checkFormValidity('abbreviation')}">
-                              <!--<i><small>{{abbreviationDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>Suggested length is 30 characters</small></i>
                           </div>
 
                           <div class="uk-margin-large-bottom">
@@ -171,8 +194,9 @@
                             </label>
                             <div class="uk-form-description uk-margin-top uk-width-9-10">{{websiteDesc.desc}}</div>
                             <div class="uk-form-controls uk-margin-medium-top">
-                              <input id="website" class="uk-input uk-width-9-10" type="text" formControlName="website"
+                              <input id="website" class="uk-input uk-width-9-10" type="text" formControlName="website" placeholder="use http:// or https://"
                                      (input)="handleBitSets(0, 2, 'website'); unsavedChangesPrompt()"
+                                     (focusout)="checkUrlValidity('website')"
                                      [ngClass]="{'uk-form-danger': checkFormValidity('website')}">
                               <!--<i><small>{{websiteDesc.desc}}</small></i>-->
                             </div>
@@ -185,6 +209,7 @@
                             <div class="uk-form-controls uk-margin-medium-top">
                               <label>
                                 <input class="uk-checkbox" type="checkbox" id="legalEntityYes" formControlName="legalEntity" value="true"
+                                       (input)="this.newProviderForm.get('legalStatus').setValue('')"
                                        [checked]="this.newProviderForm.get('legalEntity').value == true && edit">
                                 <span class="uk-margin-small-left">The organisation I am registering is an independent legal entity</span>
                               </label>
@@ -197,7 +222,7 @@
                             <div class="uk-form-description uk-margin-top uk-width-9-10">{{legalStatusDesc.desc}}</div>
                             <div class="uk-form-controls uk-margin-medium-top">
                               <select id="legalStatus" class="uk-input uk-select uk-width-9-10" formControlName="legalStatus"
-                                      [ngClass]="{'uk-form-danger': checkFormValidity('legalStatus')}">
+                                      [ngClass]="{'uk-disabled': this.newProviderForm.get('legalEntity').value == false, 'uk-form-danger': checkFormValidity('legalStatus')}">
                                 <ng-container *ngIf="this.newProviderForm.get('legalEntity').value == true">
 <!--                                  <option value=""></option>-->
                                   <option *ngFor="let entry of sortVocabulariesByName(legalStatusVocabulary)"
@@ -206,8 +231,8 @@
                                   </option>
                                 </ng-container>
                               </select>
-                              <!--<i><small>{{legalStatusDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>For suggestions in amending the "{{legalStatusDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                           </div>
                         </li>
                         <!--MARKETING-->
@@ -221,8 +246,8 @@
                               <textarea id="description" class="uk-textarea uk-width-9-10" rows="4" formControlName="description"
                                     (input)="handleBitSets(1, 3, 'description'); unsavedChangesPrompt()"
                                     [ngClass]="{'uk-form-danger': checkFormValidity('description')}"></textarea>
-                              <!--<i><small>{{providerDescriptionDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>Suggested length is 1000 characters</small></i>
                           </div>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right" for="logo">
@@ -230,8 +255,9 @@
                             </label>
                             <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerLogoDesc.desc}}</div>
                             <div class="uk-form-controls uk-margin-medium-top">
-                              <input id="logo" class="uk-input uk-width-9-10" type="text" formControlName="logo"
+                              <input id="logo" class="uk-input uk-width-9-10" type="text" formControlName="logo" placeholder="use http:// or https://"
                                      (input)="handleBitSets(1, 4, 'logo'); unsavedChangesPrompt()"
+                                     (focusout)="checkUrlValidity('logo')"
                                      [ngClass]="{'uk-form-danger': checkFormValidity('logo')}">
                               <!--<i><small>{{providerLogoDesc.desc}}</small></i>-->
                             </div>
@@ -243,8 +269,9 @@
                             <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerMultimediaDesc.desc}}</div>
                             <div class="uk-form-controls uk-margin-medium-top">
                               <div *ngFor="let media of getFieldAsFormArray('multimedia').controls; let i=index" class="uk-margin-bottom">
-                                <input id="multimedia" class="uk-input uk-width-9-10" type="text" [formControlName]="i"
+                                <input id="multimedia" class="uk-input uk-width-9-10" type="text" [formControlName]="i" placeholder="use http:// or https://"
                                        (input)="unsavedChangesPrompt()"
+                                       (focusout)="checkUrlValidityForArrays('multimedia', i)"
                                        [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i)}">
                                        <!--[ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i), 'uk-width-5-6': (getFieldAsFormArray('multimedia').length > 1)}">-->
                                 <a *ngIf="getFieldAsFormArray('multimedia').length > 1 && !disable"
@@ -266,7 +293,7 @@
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">Scientific Categorisation</label>
                             <div class="uk-form-controls uk-margin-top">
-                              <div formArrayName="categorization"
+                              <div formArrayName="scientificDomains"
                                    *ngFor="let category of domainArray.controls; let i = index">
                                 <div [formGroupName]="i" class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
                                   <!--<a *ngIf="domainArray.length > 1 && !disable" class="remove-element uk-padding-small"-->
@@ -275,21 +302,21 @@
                                   <!--</a>-->
 
                                   <div *ngIf="domainsVocabulary" class="uk-margin-bottom">
-                                    <label class="uk-form-label uk-text-right" for="{{'domain ' + i}}">
+                                    <label class="uk-form-label uk-text-right" for="{{'scientificDomain ' + i}}">
                                       {{providerScientificDomainDesc.label + (providerScientificDomainDesc.mandatory ? ' (*)' : '')}}
                                     </label>
                                     <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerScientificDomainDesc.desc}}</div>
                                     <div class="uk-form-controls uk-margin-medium-top">
-                                      <select id="{{'domain ' + i}}" formControlName="domain" class="uk-input uk-select"
+                                      <select id="{{'scientificDomain ' + i}}" formControlName="scientificDomain" class="uk-input uk-select"
                                               (change)="onDomainChange(i); unsavedChangesPrompt()"
-                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('categorization', i, 'domain')}">
+                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificDomain')}">
                                         <option value=""></option>
                                         <option *ngFor="let entry of sortVocabulariesByName(domainsVocabulary)"
                                                 value="{{entry.id}}">
                                           {{entry.name}}
                                         </option>
                                       </select>
-                                      <!--<i><small>{{providerScientificDomainDesc.desc}}</small></i>-->
+                                      <i><small>For suggestions in amending the "{{providerScientificDomainDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                     </div>
                                   </div>
 
@@ -301,17 +328,17 @@
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <select id="{{'scientificSubdomain ' + i}}" formControlName="scientificSubdomain" class="uk-input uk-select"
                                               (change)="unsavedChangesPrompt()"
-                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('categorization', i, 'scientificSubdomain')}">
-                                        <ng-container *ngIf="domainArray.controls[i].get('domain').value">
+                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificSubdomain')}">
+                                        <ng-container *ngIf="domainArray.controls[i].get('scientificDomain').value">
                                           <option value="">--Select Scientific Subdomain--</option>
                                           <option
-                                            *ngFor="let entry of getSortedChildrenCategories(categoriesVocabulary, domainArray.controls[i].get('domain').value)"
+                                            *ngFor="let entry of getSortedChildrenCategories(categoriesVocabulary, domainArray.controls[i].get('scientificDomain').value)"
                                             value="{{entry.id}}">
                                             {{entry.name}}
                                           </option>
                                         </ng-container>
                                       </select>
-                                      <!--<i><small>{{providerScientificSubdomainsDesc.desc}}</small></i>-->
+                                      <i><small>For suggestions in amending the "{{providerScientificSubdomainsDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                     </div>
                                   </div>
 
@@ -344,12 +371,12 @@
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
+                              <i><small>Suggested length is 20 characters</small></i>
                               <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                 <a class="add-new-element" (click)="push('tags', false)">
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{providerTagsDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{providerTagsDesc.desc}}</small></i>-->
                             </div>
                           </div>
                         </li>
@@ -365,8 +392,8 @@
                                 <input id="streetNameAndNumber" class="uk-input uk-width-9-10" type="text" formControlName="streetNameAndNumber"
                                        (input)="handleBitSetsOfGroups(3, 5, 'streetNameAndNumber', 'location'); unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('location.streetNameAndNumber')}">
-                                <!--<i><small>{{streetNameAndNumberDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>Suggested length is 50 characters</small></i>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="postalCode">
@@ -377,8 +404,8 @@
                                 <input id="postalCode" class="uk-input uk-width-9-10" type="text" formControlName="postalCode"
                                        (input)="handleBitSetsOfGroups(3, 6, 'postalCode', 'location'); unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('location.postalCode')}">
-                                <!--<i><small>{{postalCodeDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>Suggested length is 20 characters</small></i>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="city">
@@ -389,8 +416,8 @@
                                 <input id="city" class="uk-input uk-width-9-10" type="text" formControlName="city"
                                        (input)="handleBitSetsOfGroups(3, 7, 'city', 'location'); unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('location.city')}">
-                                <!--<i><small>{{cityDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>Suggested length is 20 characters</small></i>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="region">
@@ -401,8 +428,8 @@
                                 <input id="region" class="uk-input uk-width-9-10" type="text" formControlName="region"
                                        (input)="unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('location.region')}">
-                                <!--<i><small>{{regionDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>Suggested length is 50 characters</small></i>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="country">
@@ -414,12 +441,12 @@
                                         (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
                                         [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">
                                   <option value=""></option>
-                                  <option *ngFor="let entry of sortVocabulariesByName(placesVocabulary)" value="{{entry.id}}">
+                                  <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">
                                     {{entry.name}}
                                   </option>
                                 </select>
-                                <!--<i><small>{{countryDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>For suggestions in amending the "{{countryDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                             </div>
                           </div>
                         </li>
@@ -438,8 +465,8 @@
                                     <input id="mainContactFirstName" class="uk-input" type="text" formControlName="firstName"
                                            (input)="handleBitSetsOfGroups(4, 9, 'firstName', 'mainContact'); unsavedChangesPrompt()"
                                            [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.firstName')}">
-                                    <!--<i><small>{{ providerMainContactFirstNameDesc.desc }}</small></i>-->
                                   </div>
+                                  <i><small>Suggested length is 50 characters</small></i>
                                 </div>
                                 <div class="uk-margin-bottom">
                                   <label class="uk-form-label uk-text-right" for="mainContactLastName">
@@ -450,8 +477,8 @@
                                     <input id="mainContactLastName" class="uk-input" type="text" formControlName="lastName"
                                            (input)="handleBitSetsOfGroups(4, 10, 'lastName', 'mainContact'); unsavedChangesPrompt()"
                                            [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.lastName')}">
-                                    <!--<i><small>{{ providerMainContactLastNameDesc.desc }}</small></i>-->
                                   </div>
+                                  <i><small>Suggested length is 50 characters</small></i>
                                 </div>
                                 <div class="uk-margin-bottom">
                                   <label class="uk-form-label uk-text-right" for="mainContactEmail">
@@ -474,8 +501,8 @@
                                     <input id="mainContactPhone" class="uk-input" type="text" formControlName="phone"
                                            (input)="unsavedChangesPrompt()"
                                            [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.phone')}">
-                                    <!--<i><small>{{ providerMainContactPhoneDesc.desc }}</small></i>-->
                                   </div>
+                                  <i><small>Suggested length is 20 characters</small></i>
                                 </div>
                                 <div class="uk-margin-bottom">
                                   <label class="uk-form-label uk-text-right" for="mainContactPosition">
@@ -486,8 +513,8 @@
                                     <input id="mainContactPosition" class="uk-input" type="text" formControlName="position"
                                            (input)="unsavedChangesPrompt()"
                                            [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.position')}">
-                                    <!--<i><small>{{ providerMainContactPositionDesc.desc }}</small></i>-->
                                   </div>
+                                  <i><small>Suggested length is 50 characters</small></i>
                                 </div>
 
 
@@ -514,8 +541,8 @@
                                       <input id="firstName" class="uk-input" type="text" formControlName="firstName"
                                              (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'firstName')}">
-                                      <!--<i><small>{{ providerPublicContactFirstNameDesc.desc }}</small></i>-->
                                     </div>
+                                    <i><small>Suggested length is 20 characters</small></i>
                                   </div>
                                   <div class="uk-margin-bottom">
                                     <label class="uk-form-label uk-text-right" for="lastName">
@@ -526,8 +553,8 @@
                                       <input id="lastName" class="uk-input" type="text" formControlName="lastName"
                                              (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'lastName')}">
-                                      <!--<i><small>{{ providerPublicContactLastNameDesc.desc }}</small></i>-->
                                     </div>
+                                    <i><small>Suggested length is 20 characters</small></i>
                                   </div>
                                   <div class="uk-margin-bottom">
                                     <label class="uk-form-label uk-text-right" for="email">
@@ -536,7 +563,7 @@
                                     <div class="uk-form-description uk-margin-top uk-width-9-10">{{providerPublicContactEmailDesc.desc}}</div>
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <input id="email" class="uk-input" type="text" formControlName="email"
-                                             (input)="unsavedChangesPrompt()"
+                                             (input)="handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts'); unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'email')}">
                                       <!--<i><small>{{ providerPublicContactEmailDesc.desc }}</small></i>-->
                                     </div>
@@ -550,8 +577,8 @@
                                       <input id="phone" class="uk-input" type="text" formControlName="phone"
                                              (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'phone')}">
-                                      <!--<i><small>{{ providerPublicContactPhoneDesc.desc }}</small></i>-->
                                     </div>
+                                    <i><small>Suggested length is 20 characters</small></i>
                                   </div>
                                   <div class="uk-margin-bottom">
                                     <label class="uk-form-label uk-text-right" for="position">
@@ -562,13 +589,13 @@
                                       <input id="position" class="uk-input" type="text" formControlName="position"
                                              (input)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'position')}">
-                                      <!--<i><small>{{ providerPublicContactPositionDesc.desc }}</small></i>-->
                                     </div>
+                                    <i><small>Suggested length is 50 characters</small></i>
                                   </div>
 
                                 </div>
                                 <a *ngIf="!disable" class="remove-element uk-padding-small uk-display-inline-block"
-                                   (click)="removePublicContact(i); unsavedChangesPrompt()">
+                                   (click)="removePublicContact(i); unsavedChangesPrompt(); handleBitSetsOfPublicContact(4, 15, 'email', 'publicContacts')">
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
@@ -597,8 +624,8 @@
                                   {{entry.name}}
                                 </option>
                               </select>
-                              <!--<i><small>{{lifeCycleStatusDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>For suggestions in amending the "{{lifeCycleStatusDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                           </div>
                           <div formArrayName="certifications" class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right" for="certifications">
@@ -616,15 +643,16 @@
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
+                              <i><small>Suggested length is 250 characters</small></i>
                               <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                 <a class="add-new-element" (click)="push('certifications', false)">
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{providerCertificationsDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{providerCertificationsDesc.desc}}</small></i>-->
                             </div>
                           </div>
                         </li>
+                        <!--OTHER-->
                         <li>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right" for="hostingLegalEntity">
@@ -635,8 +663,8 @@
                               <input id="hostingLegalEntity" class="uk-input uk-width-9-10" type="text" formControlName="hostingLegalEntity"
                                      (input)="unsavedChangesPrompt()"
                                      [ngClass]="{'uk-form-danger': checkFormValidity('hostingLegalEntity')}">
-                              <!--<i><small>{{hostingLegalEntityDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>Suggested length is 80 characters</small></i>
                           </div>
                           <div formArrayName="participatingCountries" class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right" for="participatingCountries">
@@ -649,7 +677,7 @@
                                         (change)="unsavedChangesPrompt()"
                                         [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}">
                                   <option value=""></option>
-                                  <option *ngFor="let entry of sortVocabulariesByName(placesVocabulary)"
+                                  <option *ngFor="let entry of placesVocabulary"
                                           value="{{entry.id}}">
                                     {{entry.name}}
                                   </option>
@@ -664,7 +692,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{participatingCountriesDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{participatingCountriesDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="affiliations" class="uk-margin-large-bottom">
@@ -682,12 +709,12 @@
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
+                              <i><small>Suggested length is 30 characters</small></i>
                               <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                 <a class="add-new-element" (click)="push('affiliations', false)">
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{affiliationDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{affiliationDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="networks" class="uk-margin-large-bottom">
@@ -716,7 +743,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{networksDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{networksDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="structureTypes" class="uk-margin-large-bottom">
@@ -747,7 +773,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{structureTypesDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="esfriDomains" class="uk-margin-large-bottom">
@@ -776,7 +801,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{ESFRIDomainDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{ESFRIDomainDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div class="uk-margin-large-bottom">
@@ -793,13 +817,13 @@
                                   {{entry.name}}
                                 </option>
                               </select>
-                              <!--<i><small>{{ESFRITypeDesc.desc}}</small></i>-->
                             </div>
+                            <i><small>For suggestions in amending the "{{ESFRITypeDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                           </div>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">MERIL Scientific Categorisation</label>
                             <div class="uk-form-controls uk-margin-top">
-                              <div formArrayName="merilCategorization"
+                              <div formArrayName="merilScientificDomains"
                                    *ngFor="let category of merilDomainArray.controls; let i = index">
                                 <div [formGroupName]="i" class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
                                   <!--<a *ngIf="merilDomainArray.length > 1 && !disable" class="remove-element uk-padding-small"-->
@@ -808,21 +832,21 @@
                                   <!--</a>-->
 
                                   <div *ngIf="merilDomainsVocabulary" class="uk-margin-bottom">
-                                    <label class="uk-form-label uk-text-right" for="{{'merilDomain ' + i}}">
+                                    <label class="uk-form-label uk-text-right" for="{{'merilScientificDomain ' + i}}">
                                       {{merilScientificDomainsDesc.label + (merilScientificDomainsDesc.mandatory ? ' (*)' : '')}}
                                     </label>
                                     <div class="uk-form-description uk-margin-top uk-width-9-10">{{merilScientificDomainsDesc.desc}}</div>
                                     <div class="uk-form-controls uk-margin-medium-top">
-                                      <select id="{{'merilDomain ' + i}}" formControlName="merilDomain" class="uk-input uk-select"
+                                      <select id="{{'merilScientificDomain ' + i}}" formControlName="merilScientificDomain" class="uk-input uk-select"
                                               (change)="onMerilDomainChange(i); unsavedChangesPrompt()"
-                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('merilCategorization', i, 'merilDomain')}">
+                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('merilScientificDomains', i, 'merilScientificDomain')}">
                                         <option value=""></option>
                                         <option *ngFor="let entry of sortVocabulariesByName(merilDomainsVocabulary)"
                                                 value="{{entry.id}}">
                                           {{entry.name}}
                                         </option>
                                       </select>
-                                      <!--<i><small>{{merilScientificDomainsDesc.desc}}</small></i>-->
+                                      <i><small>For suggestions in amending the "{{merilScientificDomainsDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                     </div>
                                   </div>
 
@@ -834,17 +858,17 @@
                                     <div class="uk-form-controls uk-margin-medium-top">
                                       <select id="{{'merilScientificSubdomain ' + i}}" formControlName="merilScientificSubdomain" class="uk-input uk-select"
                                               (change)="unsavedChangesPrompt()"
-                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('merilCategorization', i, 'merilScientificSubdomain')}">
-                                        <ng-container *ngIf="merilDomainArray.controls[i].get('merilDomain').value">
+                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('merilScientificDomains', i, 'merilScientificSubdomain')}">
+                                        <ng-container *ngIf="merilDomainArray.controls[i].get('merilScientificDomain').value">
                                           <option value="">--Select MERIL Scientific Subdomain--</option>
                                           <option
-                                            *ngFor="let entry of getSortedChildrenCategories(merilCategoriesVocabulary, merilDomainArray.controls[i].get('merilDomain').value)"
+                                            *ngFor="let entry of getSortedChildrenCategories(merilCategoriesVocabulary, merilDomainArray.controls[i].get('merilScientificDomain').value)"
                                             value="{{entry.id}}">
                                             {{entry.name}}
                                           </option>
                                         </ng-container>
                                       </select>
-                                      <!--<i><small>{{merilScientificSubdomainsDesc.desc}}</small></i>-->
+                                      <i><small>For suggestions in amending the "{{merilScientificSubdomainsDesc.label}}" list, please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                     </div>
                                   </div>
 
@@ -887,7 +911,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{areasOfActivityDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{areasOfActivityDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="societalGrandChallenges" class="uk-margin-large-bottom">
@@ -916,7 +939,6 @@
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{societalGrandChallengesDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{societalGrandChallengesDesc.desc}}</small></i>-->
                             </div>
                           </div>
                           <div formArrayName="nationalRoadmaps" class="uk-margin-large-bottom">
@@ -934,12 +956,12 @@
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
+                              <i><small>Suggested length is 80 characters</small></i>
                               <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                 <a class="add-new-element" (click)="push('nationalRoadmaps', false)">
                                   <i class="fa fa-plus" aria-hidden="true"></i> Add {{nationalRoadmapsDesc.label}}
                                 </a>
                               </div>
-                              <!--<i><small>{{nationalRoadmapsDesc.desc}}</small></i>-->
                             </div>
                           </div>
                         </li>
@@ -947,7 +969,9 @@
                         <li>
                           <div class="uk-margin-large-bottom">
                             <label class="uk-form-label uk-text-right">Administrators (*)</label>
-                            <div *ngIf="!edit"><i>An administrator for managing the RP information in {{projectName}} will be added using your user information</i></div>
+                            <div *ngIf="!edit" class="uk-width-9-10"><i>An administrator for managing the RP information in {{projectName}} will be added using your user information.</i></div>
+                            <div class="uk-width-9-10"><i>An administrator has full edit privileges for the provider’s information via the web and the API (add a new resource,
+                              update information regarding the provider’s organization and resources, activate or delete a resource, add or remove administrators and issue tokens for API use).</i></div>
                             <div *ngIf="newProviderForm.get('users').value" class="uk-form-controls uk-margin-top">
                               <div formArrayName="users" *ngFor="let user of usersArray.controls; let i = index">
                                 <div [formGroupName]="i" class="uk-margin-bottom formGroupElement uk-width-9-10 uk-display-inline-block">
@@ -986,11 +1010,12 @@
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('users', i, 'email')}">
                                       <!--<i><small>{{ providerPublicContactEmailDesc.desc }}</small></i>-->
                                     </div>
+                                    <b><i><small>Use this email when you login in AAI for gaining administrator privileges for your provider.</small></i></b>
                                   </div>
 
                                 </div>
                                 <a *ngIf="usersArray.length > 1 && !disable" class="remove-element uk-padding-small uk-display-inline-block"
-                                   (click)="deleteUser(i)">
+                                   (click)="deleteUser(i); initUserBitSets()">
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
                               </div>
@@ -1042,32 +1067,37 @@
 <div id="modal-consent" class="uk-flex-top" uk-modal="bg-close: false; esc-close: false;">
   <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
 
-    <div class="uk-margin-medium-bottom">In order to be able to register a service provider to EOSC you need to agree to the following: </div>
+    <div class="uk-margin-medium-bottom">In order to be able to register a resource provider to EOSC you need to agree to the following: </div>
 
     <div class="uk-margin-medium-bottom">
+<!--      <div class="uk-form-controls uk-margin-bottom">-->
+<!--        <label>-->
+<!--          <input class="uk-checkbox" type="checkbox" id="codeOfConduct"  value="true"-->
+<!--                 (change)="toggleTerm('codeOfConduct')">-->
+<!--          <span class="uk-margin-small-left">I agree with the <a>EOSC Code of Conduct</a></span>-->
+<!--        </label>-->
+<!--      </div>-->
       <div class="uk-form-controls uk-margin-bottom">
         <label>
-          <input class="uk-checkbox" type="checkbox" id="codeOfConduct"  value="true">
-          <span class="uk-margin-small-left">I agree with the <a>EOSC Code of Conduct</a></span>
+          <input class="uk-checkbox" type="checkbox" id="privacyPolicy"  value="true"
+                 (change)="toggleTerm('privacyPolicy')">
+          <span class="uk-margin-small-left">I agree to the <a href="https://www.eosc-portal.eu/privacy-policy-summary" target="_blank">Privacy Policy</a></span>
         </label>
       </div>
       <div class="uk-form-controls uk-margin-bottom">
         <label>
-          <input class="uk-checkbox" type="checkbox" id="privacyPolicy"  value="true">
-          <span class="uk-margin-small-left">I agree to the <a>Privacy Policy</a></span>
-        </label>
-      </div>
-      <div class="uk-form-controls uk-margin-bottom">
-        <label>
-          <input class="uk-checkbox" type="checkbox" id="authorizedRepresentative"  value="true">
-          <span class="uk-margin-small-left">I assert that I am an authorized representative of this Service Provider</span>
+          <input class="uk-checkbox" type="checkbox" id="authorizedRepresentative"  value="true"
+                 (change)="toggleTerm('authorizedRepresentative')">
+          <span class="uk-margin-small-left">I assert that I am an authorized representative of this Resource Provider</span>
         </label>
       </div>
     </div>
 
     <div class="uk-text-right">
-      <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-      <button class="uk-button uk-button-primary uk-modal-close" type="button">Apply</button>
+      <button class="uk-button uk-button-default uk-modal-close" type="button" routerLink="/home">Cancel</button>
+      <button class="uk-button  uk-modal-close" type="button" (click)="acceptTerms()"
+              [ngClass]="{'uk-disabled' : !agreedToTerms, 'uk-button-secondary' : !agreedToTerms, 'uk-button-primary': agreedToTerms}">
+        Apply</button>
     </div>
   </div>
 </div>

@@ -57,7 +57,7 @@
                           </div>
                           <div class="uk-card-body">
                             <div class="providerName">
-                              <span class="uk-margin-auto-vertical" data-uk-tooltip title="'Go to the service provider monitoring dashboard'">
+                              <span class="uk-margin-auto-vertical" data-uk-tooltip title="'Go to the resource provider monitoring dashboard'">
                                 <a [routerLink]="['/dashboard', providerBundle.id]">
                                     {{ providerBundle.provider.name }}
                                 </a>
@@ -94,7 +94,7 @@
                           <div class="uk-card-body">
                             <div class="providerName">
                               <span class="uk-margin-auto-vertical" data-uk-tooltip
-                                    title="'Your service provider is not yet active, therefore you cannot access its monitoring dashboard'">
+                                    title="'Your resource provider is not yet active, therefore you cannot access its monitoring dashboard'">
                                 <h5>{{ providerBundle.provider.name }}</h5>
                               </span>
                               <!--{{ providerBundle.provider.name }}-->
@@ -106,32 +106,32 @@
                               <button class="uk-button uk-button-action" routerLink="/provider/update/{{providerBundle.id}}">
                                 <i class="fa fa-lg fa-pencil uk-margin-small-right"></i>Update provider
                               </button>
-                              <ng-container *ngIf="(providerBundle.status === 'pending service template submission')
-                                        || (providerBundle.status === 'pending service template approval')">
+                              <ng-container *ngIf="(providerBundle.status === 'pending template submission')
+                                        || (providerBundle.status === 'pending template approval')">
                                 <ng-container *ngIf="hasCreatedFirstService(providerBundle.id)">
                                   <button class="uk-button uk-button-action uk-margin-small-left"
                                           routerLink="{{ getLinkToFirstService(providerBundle.id) }}">
                                     <i class="fa fa-pencil"></i>
-                                    Update service template
+                                    Update resource template
                                   </button>
                                 </ng-container>
                                 <ng-container *ngIf="!hasCreatedFirstService(providerBundle.id)">
                                   <button class="uk-button uk-button-action uk-margin-small-left">
                                     <i class="fa fa-plus"></i>
-                                    Add service template
+                                    Add resource template
                                   </button>
                                   <div uk-dropdown>
                                     <ul class="uk-nav uk-dropdown-nav">
                                       <li class="uk-active">
-                                        <a routerLink="{{ getLinkToFirstService(providerBundle.id) }}">Create service template</a>
+                                        <a routerLink="{{ getLinkToFirstService(providerBundle.id) }}">Create resource template</a>
                                       </li>
                                       <li *ngIf="checkForPendingServices(providerBundle.id)" class="uk-active">
                                         <a [routerLink]="['/provider/draft-resources/' + providerBundle.id] ">
-                                          Select from pending services
+                                          Select from pending resources
                                         </a>
                                       </li>
                                       <li class="uk-nav-divider"></li>
-                                      <li class="uk-active"><a href="#">Use API</a></li>
+                                      <li class="uk-active"><a routerLink="/developers">Use API</a></li>
                                     </ul>
                                   </div>
                                 </ng-container>
@@ -161,7 +161,7 @@
                           <div class="uk-card-body">
                             <div class="providerName">
                               <span class="uk-margin-auto-vertical" data-uk-tooltip
-                                    title="'Your service provider is not yet active, therefore you cannot access its monitoring dashboard'">
+                                    title="'Your resource provider is not yet active, therefore you cannot access its monitoring dashboard'">
                                 <h5>{{ providerBundle.provider.name }}</h5>
                               </span>
                             </div>
@@ -171,10 +171,10 @@
                             <div class="uk-margin-top cardActionButtons">
                               <button class="uk-button uk-button-action" routerLink="/provider/update/{{providerBundle.id}}">
                                 <i class="fa fa-lg fa-pencil uk-margin-small-right"></i>Update provider</button>
-                              <button class="uk-button uk-button-action" *ngIf="providerBundle.status === 'rejected service template'"
+                              <button class="uk-button uk-button-action" *ngIf="providerBundle.status === 'rejected template'"
                                  routerLink="{{ getLinkToFirstService(providerBundle.id) }}">
                                 <i class="fa fa-pencil"></i>
-                                Update service template
+                                Update resource template
                               </button>
                             </div>
                           </div>
@@ -200,7 +200,7 @@
                           <div class="uk-card-body">
                             <div class="providerName">
                               <span class="uk-margin-auto-vertical" data-uk-tooltip
-                                    title="'Your service provider is not yet active, therefore you cannot access its monitoring dashboard'">
+                                    title="'Your resource provider is not yet active, therefore you cannot access its monitoring dashboard'">
                                 <h5>{{ providerBundle.provider.name }}</h5>
                               </span>
                             </div>

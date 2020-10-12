@@ -6,6 +6,7 @@ import {AuthenticationService} from '../../services/authentication.service';
 import {Subscription} from 'rxjs';
 import {Service} from '../../domain/eic-model';
 import {ResourceService} from '../../services/resource.service';
+import {ServiceProviderService} from '../../services/service-provider.service';
 
 @Component({
   selector: 'app-service-edit',
@@ -17,9 +18,12 @@ export class ServiceEditComponent extends ServiceFormComponent implements OnInit
 
   // private serviceID: string;
 
-  constructor(public route: ActivatedRoute, public authenticationService: AuthenticationService,
-              protected injector: Injector, public datePipe: DatePipe) {
-    super(injector, authenticationService, route);
+  constructor(public route: ActivatedRoute,
+              public authenticationService: AuthenticationService,
+              protected serviceProviderService: ServiceProviderService,
+              protected injector: Injector,
+              public datePipe: DatePipe) {
+    super(injector, authenticationService, serviceProviderService, route);
     this.editMode = true;
   }
 
@@ -67,8 +71,8 @@ export class ServiceEditComponent extends ServiceFormComponent implements OnInit
     this.handleBitSets(1, 3, 'description');
     this.handleBitSets(1, 4, 'tagline');
     this.handleBitSets(1, 5, 'logo');
-    this.handleBitSetsOfGroups(2, 7, 'scientificSubDomain', 'scientificCategorization');
-    this.handleBitSetsOfGroups(2, 9, 'subcategory', 'categorize');
+    this.handleBitSetsOfGroups(2, 7, 'scientificSubdomain', 'scientificDomains');
+    this.handleBitSetsOfGroups(2, 9, 'subcategory', 'categories');
     this.handleBitSets(2, 10, 'targetUsers');
     this.handleBitSets(3, 11, 'geographicalAvailabilities');
     this.handleBitSets(3, 12, 'languageAvailabilities');
@@ -79,12 +83,7 @@ export class ServiceEditComponent extends ServiceFormComponent implements OnInit
     this.handleBitSets(5, 17, 'securityContactEmail');
     this.handleBitSets(6, 18, 'trl');
     this.handleBitSets(10, 19, 'orderType');
-    this.handlePublicContactBitSet(0, 'firstName');
-    this.handlePublicContactBitSet(1, 'lastName');
-    this.handlePublicContactBitSet(2, 'email');
-    this.handlePublicContactBitSet(3, 'phone');
-    this.handlePublicContactBitSet(4, 'position');
-    this.handlePublicContactBitSet(5, 'organisation');
+    this.handleBitSetsOfPublicContact(5, 20, 'email', 'publicContacts');
   }
 
 }
