@@ -1,8 +1,11 @@
 export const environment = {
   production: true,
-  projectName: 'CatRIS',
-  projectMail: 'registration@catris.eu',
+  beta: false,
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
-  hasUserConsent: false
+  projectName: 'CatRIS',
+  projectMail: 'support@catris.eu',
+  hasUserConsent: true,
+  privacyPolicyURL: 'https://www.portal.catris.eu/support/privacy-policy',
+  marketplaceBaseURL: ''
 };

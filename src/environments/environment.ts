@@ -4,11 +4,14 @@
 
 export const environment = {
   production: false,
-  projectName: 'CatRIS',
-  projectMail: 'registration@catris.eu',
+  beta: false,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
-  hasUserConsent: true
+  projectName: 'CatRIS',
+  projectMail: 'support@catris.eu',
+  hasUserConsent: true,
+  privacyPolicyURL: 'https://www.portal.catris.eu/support/privacy-policy',
+  marketplaceBaseURL: ''
 };
 
 /*
