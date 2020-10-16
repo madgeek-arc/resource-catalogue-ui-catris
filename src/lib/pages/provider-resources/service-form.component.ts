@@ -15,6 +15,8 @@ import BitSet from 'bitset/bitset';
 import {ActivatedRoute} from '@angular/router';
 import {ServiceProviderService} from '../../services/service-provider.service';
 
+declare var UIkit: any;
+
 @Component({
   selector: 'app-service-form',
   templateUrl: './service-form.component.html',
@@ -22,6 +24,7 @@ import {ServiceProviderService} from '../../services/service-provider.service';
 })
 export class ServiceFormComponent implements OnInit {
   protected _marketplaceBaseURL = environment.marketplaceBaseURL;
+  serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
   projectMail = environment.projectMail;
   serviceName = '';
@@ -866,10 +869,6 @@ export class ServiceFormComponent implements OnInit {
     }
   }
 
-  downloadServiceFormPDF() {
-    window.open('../../../lib/files/serviceForm.pdf', '_blank');
-  }
-
   unsavedChangesPrompt() {
     this.hasChanges = true;
   }
@@ -1092,4 +1091,8 @@ export class ServiceFormComponent implements OnInit {
 
   /** <--URL Validation **/
 
+  openPreviewModal() {
+    console.log('Resource ==>', this.serviceForm.value);
+    UIkit.modal('#modal-preview').show();
+  }
 }

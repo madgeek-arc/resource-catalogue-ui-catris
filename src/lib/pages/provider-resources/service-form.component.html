@@ -6,14 +6,15 @@
         <div class="titleAndActionsBar">
           <div class="">
             <div class="pageTitle">
-              {{editMode ? "Update" : "Add New"}} Resource
+              {{editMode ? "Update" : "Add New"}} {{serviceORresource}}
             </div>
             <div class="providerName uk-margin-small-top">
-              <strong>{{serviceName!='' ? serviceName : 'Resource Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
+              <strong>{{serviceName!='' ? serviceName : serviceORresource + 'Resource Name'}}</strong> {{hasChanges ? '(unsaved changes)' : ''}}
             </div>
           </div>
           <div class="">
             <!--<button class="uk-button uk-button-primary">Discard</button>-->
+            <button class="uk-button uk-button-primary uk-margin-left" (click)="openPreviewModal()">Preview</button>
             <button *ngIf="!editMode || pendingService" class="uk-button uk-button-primary uk-margin-left" (click)="this.onSubmit(this.service, true)">Save as draft</button>
             <button *ngIf="loaderPercentage==100" class="uk-button uk-button-secondary uk-margin-left" (click)="onSubmit(serviceForm.value, false)" type="submit">Submit</button>
           </div>
@@ -63,11 +64,11 @@
                         </div>
                       </div>
                     </div>
-                    <!--<div class="uk-margin-medium-left">-->
-                    <!--<a>-->
-                    <!--<i class="fa fa-file-pdf-o uk-margin-small-right"></i><span style="color: #292929">Download as PDF</span>-->
-                    <!--</a>-->
-                    <!--</div>-->
+                    <div class="uk-margin-medium-left">
+                      <a href="../../../assets/files/Resource-Form.pdf" target="_blank">
+                        <i class="fa fa-file-pdf-o uk-margin-small-right"></i><span style="color: #292929">Download as PDF</span>
+                      </a>
+                    </div>
 
                   </div>
 
@@ -81,7 +82,7 @@
                   <div class="uk-grid">
 
                     <div class="uk-width-1-4">
-                      <div class="tabsTitle uk-margin-bottom">Resource steps</div>
+                      <div class="tabsTitle uk-margin-bottom">{{serviceORresource}} Profile Information Blocks</div>
                       <ul class="uk-width-1-1 uk-margin-remove uk-tab uk-tab-left form-tabs" uk-tab="connect: #top-navigation-tabs; animation: uk-animation-fade">
                         <li class="uk-active">
                           <a class="remove-text-decoration uk-flex uk-flex-between" [ngClass]="{'form-error': tabs[0]}" href="#">
@@ -922,7 +923,7 @@
                                     <i><small>Suggested length is 50 characters</small></i>
                                   </div>
                                 </div>
-                                <a *ngIf="!disable" class="remove-element uk-padding-small uk-display-inline-block"
+                                <a *ngIf="getFieldAsFormArray('publicContacts').length > 1 && !disable" class="remove-element uk-padding-small uk-display-inline-block"
                                    (click)="removePublicContact(i); unsavedChangesPrompt(); handleBitSetsOfPublicContact(5, 20, 'email', 'publicContacts')">
                                   <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
@@ -1502,5 +1503,14 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div id="modal-preview" class="uk-flex-top uk-modal-container" uk-modal="bg-close: true; esc-close: true;">
+  <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+    <app-preview-resource [resource]="serviceForm.value" [vocabularies]="vocabularies"></app-preview-resource>
+
   </div>
 </div>
