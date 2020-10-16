@@ -5,6 +5,7 @@ export const environment = {
   API_ENDPOINT: '/api',
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
+  serviceORresource: 'Service',
   hasUserConsent: true,
   privacyPolicyURL: 'https://www.portal.catris.eu/support/privacy-policy',
   marketplaceBaseURL: ''

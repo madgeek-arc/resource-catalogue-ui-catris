@@ -9,6 +9,7 @@ export const environment = {
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
+  serviceORresource: 'Service',
   hasUserConsent: true,
   privacyPolicyURL: 'https://www.portal.catris.eu/support/privacy-policy',
   marketplaceBaseURL: ''
