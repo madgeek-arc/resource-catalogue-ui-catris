@@ -5,6 +5,62 @@ export class Description {
     recommended?: boolean;
 }
 
+/** Provider Description Template **/
+
+export const providerDescMap = new Map()
+  // Basic Information //
+  .set('fullNameDesc', {mandatory: true, label: 'Name', placeholder: 'Write full name...', desc: 'Full Name of the Provider/Organisation offering Resources and acting as main contact point for the Resources.'})
+  .set('abbreviationDesc', {mandatory: true, label: 'Abbreviation', placeholder: 'Write abbreviation...', desc: 'Abbreviation or short name of the Provider.'})
+  .set('websiteDesc', {mandatory: true, label: 'Website', placeholder: 'webpage URL', desc: 'Webpage of the Provider.'})
+  .set('legalEntityDesc', {mandatory: true, label: 'Legal Entity', desc: 'Is the Provider a Legal Entity?'})
+  .set('legalStatusDesc', {mandatory: false, label: 'Legal Status', placeholder: 'Write legal status...', desc: 'Legal status of the Provider. The legal status is usually noted in the registration act/statutes. For independent legal entities this should be the legal status of the Provider. For embedded Providers this should be the legal status of the hosting legal entity. It is also possible to select "Not a Legal Entity".'})
+  // Marketing Information //
+  .set('providerDescriptionDesc', {mandatory: true, label: 'Description', placeholder: 'Write a description...', desc: 'A high-level description of the Provider in fairly non-technical terms, with the vision, mission, objectives, background, experience.'})
+  .set('providerLogoDesc', {mandatory: true, label: 'Logo', placeholder: 'logo URL', desc: 'Link to the logo/visual identity of the Provider. Go to the Provider\'s website --> Right Click on the Provider\'s logo on the website --> Select "Copy Image Link" --> Paste it in the field below.'})
+  .set('providerMultimediaDesc', {mandatory: false, label: 'Multimedia', addTitle: 'Multimedia', placeholder: 'Write link to multimedia...', desc: 'Links to video, slideshow, photos, screenshots with details of the Provider.'})
+  // Classification Information //
+  .set('providerScientificDomainDesc', {mandatory: false, label: 'Scientific Domain', placeholder: 'Select scientific domain...', desc: 'A named group of Providers that offer access to the same type of Resources.'})
+  .set('providerScientificSubdomainsDesc', {mandatory: false, label: 'Scientific Subdomain', placeholder: 'Select scientific subdomain after selecting scientific domain...', desc: 'A named group of Providers that offer access to the same type of Resources, within the defined domain.'})
+  .set('providerTagsDesc', {mandatory: false, label: 'Tags', addTitle: 'Tag', placeholder: 'Write tag...', desc: 'Keywords associated to the Provider to simplify search by relevant keywords.'})
+  // Location Information //
+  .set('streetNameAndNumberDesc', {mandatory: true, label: 'Street Name and Number', placeholder: 'Write street name and number...', desc: 'Street and Number of incorporation or Physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
+  .set('postalCodeDesc', {mandatory: true, label: 'Postal Code', placeholder: 'Write postal code...', desc: 'Postal code of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
+  .set('cityDesc', {mandatory: true, label: 'City', placeholder: 'Write city...', desc: 'City of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
+  .set('regionDesc', {mandatory: false, label: 'Region', placeholder: 'Write region...', desc: 'Region of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
+  .set('countryDesc', {mandatory: true, label: 'Country', placeholder: 'Write country...', desc: 'Country of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
+  // Contact Information --> //
+  // Main Contact/Provider Manager
+  .set('providerMainContactFirstNameDesc', {mandatory: true, label: 'First Name', placeholder: 'Write first name...', desc: 'First Name of the Provider\'s main contact person/Provider manager.'})
+  .set('providerMainContactLastNameDesc', {mandatory: true, label: 'Last Name', placeholder: 'Write last name...', desc: 'Last Name of the Provider\'s main contact person/Provider manager.'})
+  .set('providerMainContactEmailDesc', {mandatory: true, label: 'Email', placeholder: 'Write email...', desc: 'Email of the Provider\'s main contact person/Provider manager.'})
+  .set('providerMainContactPhoneDesc', {mandatory: false, label: 'Phone', placeholder: 'Write phone...', desc: 'Phone of the Provider\'s main contact person/Provider manager.'})
+  .set('providerMainContactPositionDesc', {mandatory: false, label: 'Position', placeholder: 'Write position...', desc: 'Position of the Provider\'s main contact person/Provider manager.'})
+  // Public Contact
+  .set('providerPublicContactFirstNameDesc', {mandatory: false, label: 'First Name', placeholder: 'Write first name...', desc: 'First Name of the Provider\'s contact person to be displayed publicly at the Portal.'})
+  .set('providerPublicContactLastNameDesc', {mandatory: false, label: 'Last Name', placeholder: 'Write last name...', desc: 'Last Name of the Provider\'s contact person to be displayed publicly at the Portal.'})
+  .set('providerPublicContactEmailDesc', {mandatory: true, label: 'Email', placeholder: 'Write email...', desc: 'Email of the Provider\'s contact person to be displayed publicly at the Portal or general email to contact the Provider.'})
+  .set('providerPublicContactPhoneDesc', {mandatory: false, label: 'Phone', placeholder: 'Write phone...', desc: 'Phone of the provider\'s contact person to be displayed publicly at the Portal or general phone to contact the Provider.'})
+  .set('providerPublicContactPositionDesc', {mandatory: false, label: 'Position', placeholder: 'Write position...', desc: 'Position of the Provider\'s contact person to be displayed publicly at the Portal.'})
+  // <-- Contact Information //
+  // Maturity Information //
+  .set('lifeCycleStatusDesc', {mandatory: false, label: 'Life Cycle Status', placeholder: 'Write life cycle status...', desc: 'Current status of the Provider life-cycle.'})
+  .set('providerCertificationsDesc', {mandatory: false, label: 'Certifications', addTitle: 'Certification', placeholder: 'Write certifications...', desc: 'List of certifications obtained for the Provider (including the certification body, the certificate number or URL if available).'})
+  // Other //
+  .set('hostingLegalEntityDesc', {mandatory: false, label: 'Hosting Legal Entity', placeholder: 'Write hosting legal entity...', desc: 'Name of the organisation/institution legally hosting (housing) the Provider or its coordinating centre. A distinction is made between: (1) research infrastructures that are self-standing and have a defined and distinct legal entity, (2) research infrastructures that are embedded into another institution which is a legal entity (such as a university, a research organisation, etc.). If (1) - name of the research infrastructure, If (2) - name of the hosting organisation.'})
+  .set('participatingCountriesDesc', {mandatory: false, label: 'Participating Countries', addTitle: 'Participating Country', placeholder: 'Select participating countries...', desc: 'Providers that are funded by several countries should list here all supporting countries (including the coordinating country first).'})
+  .set('affiliationDesc', {mandatory: false, label: 'Affiliations', addTitle: 'Affiliation', placeholder: 'Write affiliations...', desc: 'Providers that are members or affiliated or associated with other organisations should list those organisations here.'})
+  .set('networksDesc', {mandatory: false, label: 'Networks', addTitle: 'Network', placeholder: 'Select network...', desc: 'Providers that are members of networks should list those networks here.'})
+  .set('structureTypesDesc', {mandatory: false, label: 'Structure Type', addTitle: 'Structure Type', placeholder: 'Select structure type...', desc: 'Structure Type of the Provider (single-sited, distributed, mobile, virtual, etc.).'})
+  .set('ESFRIDomainDesc', {mandatory: false, label: 'ESFRI Domain', addTitle: 'ESFRI Domain', placeholder: 'Select ESFRI domain...', desc: 'ESFRI domain classification. '})
+  .set('ESFRITypeDesc', {mandatory: false, label: 'ESFRI Type', placeholder: 'Select ESFRI type...', desc: 'If the RI is (part of) an ESFRI project indicate how the RI participates: a) RI is node of an ESFRI project, b) RI is an ESFRI project, c) RI is an ESFRI landmark.'})
+  .set('merilScientificDomainsDesc', {mandatory: false, label: 'MERIL Scientific Domain', placeholder: 'Select MERIL scientific domain...', desc: 'MERIL scientific domain classification.'})
+  .set('merilScientificSubdomainsDesc', {mandatory: false, label: 'MERIL Scientific Subdomain', placeholder: 'Select MERIL scientific subdomain after selecting MERIL scientific domain...', desc: 'MERIL scientific subdomain classification.'})
+  .set('areasOfActivityDesc', {mandatory: false, label: 'Area of Activity', addTitle: 'Area of Activity', placeholder: 'Write areas of activity...', desc: 'Basic research, Applied research or Technological development'})
+  .set('societalGrandChallengesDesc', {mandatory: false, label: 'Societal Grand Challenges', addTitle: 'Societal Grand Challenge', placeholder: 'Write societal grand challenges...', desc: 'Provider’s participation in the Grand Societal Challenges defined by the European Commission.'})
+  .set('nationalRoadmapsDesc', {mandatory: false, label: 'National Roadmaps', addTitle: 'National Roadmap', placeholder: 'Write national roadmaps...', desc: 'Provider\'s participation in a national roadmap.'})
+;
+
+
 /** Service Description Template **/
 
 export const serviceDescMap = new Map()
@@ -85,62 +141,5 @@ export const serviceDescMap = new Map()
 // Financial Information //
   .set('paymentModelDesc', {mandatory: false, label: 'Payment Model', placeholder: 'payment model URL', desc: 'Webpage with the supported payment models for the Resource and restrictions that apply to each of them.'})
   .set('pricingDesc', {mandatory: false, label: 'Pricing', placeholder: 'pricing URL', desc: 'Webpage with the information on the price scheme for the Resource in case the customer is charged for.'})
-;
-
-
-/** Service Provider form fields **/
-
-export const providerDescMap = new Map()
-// Basic Information //
-  .set('nameDesc', {mandatory: true, label: 'Name', placeholder: 'Write full name...', desc: 'Brief and descriptive name of the Resource as assigned by the Provider.'})
-  .set('fullNameDesc', {mandatory: true, label: 'Name', placeholder: 'Write full name...', desc: 'Full Name of the Provider/Organisation offering Resources and acting as main contact point for the Resources.'})
-  .set('abbreviationDesc', {mandatory: true, label: 'Abbreviation', placeholder: 'Write abbreviation...', desc: 'Abbreviation or short name of the Provider.'})
-  .set('websiteDesc', {mandatory: true, label: 'Website', placeholder: 'webpage URL', desc: 'Webpage of the Provider.'})
-  .set('legalEntityDesc', {mandatory: true, label: 'Legal Entity', desc: 'A Y/N question to define whether the Provider is a Legal Entity or not.'})
-  .set('legalStatusDesc', {mandatory: false, label: 'Legal Status', placeholder: 'Write legal status...', desc: 'Legal status of the Provider. The legal status is usually noted in the registration act/statutes. For independent legal entities this should be the legal status of the Provider. For embedded Providers this should be the legal status of the hosting legal entity. It is also possible to select "Not a Legal Entity".'})
-// Marketing Information //
-  .set('providerDescriptionDesc', {mandatory: true, label: 'Description', placeholder: 'Write a description...', desc: 'A high-level description of the Provider in fairly non-technical terms, with the vision, mission, objectives, background, experience.'})
-  .set('providerLogoDesc', {mandatory: true, label: 'Logo', placeholder: 'logo URL', desc: 'Link to the logo/visual identity of the Provider. Go to the Provider\'s website --> Right Click on the Provider\'s logo on the website --> Select "Copy Image Link" --> Paste it in the field below.'})
-  .set('providerMultimediaDesc', {mandatory: false, label: 'Multimedia', addTitle: 'Multimedia', placeholder: 'Write link to multimedia...', desc: 'Links to video, slideshow, photos, screenshots with details of the Provider.'})
-// Classification Information //
-  .set('providerScientificDomainDesc', {mandatory: false, label: 'Scientific Domain', placeholder: 'Select scientific domain...', desc: 'A named group of Providers that offer access to the same type of Resources.'})
-  .set('providerScientificSubdomainsDesc', {mandatory: false, label: 'Scientific Subdomain', placeholder: 'Select scientific subdomain after selecting scientific domain...', desc: 'A named group of Providers that offer access to the same type of Resources, within the defined domain.'})
-  .set('providerTagsDesc', {mandatory: false, label: 'Tags', addTitle: 'Tag', placeholder: 'Write tag...', desc: 'Keywords associated to the Provider to simplify search by relevant keywords.'})
-// Location Information //
-  .set('streetNameAndNumberDesc', {mandatory: true, label: 'Street Name and Number', placeholder: 'Write street name and number...', desc: 'Street and Number of incorporation or Physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
-  .set('postalCodeDesc', {mandatory: true, label: 'Postal Code', placeholder: 'Write postal code...', desc: 'Postal code of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
-  .set('cityDesc', {mandatory: true, label: 'City', placeholder: 'Write city...', desc: 'City of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
-  .set('regionDesc', {mandatory: false, label: 'Region', placeholder: 'Write region...', desc: 'Region of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
-  .set('countryDesc', {mandatory: true, label: 'Country', placeholder: 'Write country...', desc: 'Country of incorporation or physical location of the Provider or its coordinating centre in the case of distributed, virtual, and mobile Providers.'})
-// Contact Information --> //
-// Main Contact/Provider Manager
-  .set('providerMainContactFirstNameDesc', {mandatory: true, label: 'First Name', placeholder: 'Write first name...', desc: 'First Name of the Provider\'s main contact person/Provider manager.'})
-  .set('providerMainContactLastNameDesc', {mandatory: true, label: 'Last Name', placeholder: 'Write last name...', desc: 'Last Name of the Provider\'s main contact person/Provider manager.'})
-  .set('providerMainContactEmailDesc', {mandatory: true, label: 'Email', placeholder: 'Write email...', desc: 'Email of the Provider\'s main contact person/Provider manager.'})
-  .set('providerMainContactPhoneDesc', {mandatory: false, label: 'Phone', placeholder: 'Write phone...', desc: 'Phone of the Provider\'s main contact person/Provider manager.'})
-  .set('providerMainContactPositionDesc', {mandatory: false, label: 'Position', placeholder: 'Write position...', desc: 'Position of the Provider\'s main contact person/Provider manager.'})
-// Public Contact
-  .set('providerPublicContactFirstNameDesc', {mandatory: false, label: 'First Name', placeholder: 'Write first name...', desc: 'First Name of the Provider\'s contact person to be displayed publicly at the Portal.'})
-  .set('providerPublicContactLastNameDesc', {mandatory: false, label: 'Last Name', placeholder: 'Write last name...', desc: 'Last Name of the Provider\'s contact person to be displayed publicly at the Portal.'})
-  .set('providerPublicContactEmailDesc', {mandatory: true, label: 'Email', placeholder: 'Write email...', desc: 'Email of the Provider\'s contact person to be displayed publicly at the Portal or general email to contact the Provider.'})
-  .set('providerPublicContactPhoneDesc', {mandatory: false, label: 'Phone', placeholder: 'Write phone...', desc: 'Phone of the provider\'s contact person to be displayed publicly at the Portal or general phone to contact the Provider.'})
-  .set('providerPublicContactPositionDesc', {mandatory: false, label: 'Position', placeholder: 'Write position...', desc: 'Position of the Provider\'s contact person to be displayed publicly at the Portal.'})
-// <-- Contact Information //
-// Maturity Information //
-  .set('lifeCycleStatusDesc', {mandatory: false, label: 'Life Cycle Status', placeholder: 'Write life cycle status...', desc: 'Current status of the Provider life-cycle.'})
-  .set('providerCertificationsDesc', {mandatory: false, label: 'Certifications', addTitle: 'Certification', placeholder: 'Write certifications...', desc: 'List of certifications obtained for the Provider (including the certification body, the certificate number or URL if available).'})
-// Other //
-  .set('hostingLegalEntityDesc', {mandatory: false, label: 'Hosting Legal Entity', placeholder: 'Write hosting legal entity...', desc: 'Name of the organisation/institution legally hosting (housing) the Provider or its coordinating centre. A distinction is made between: (1) research infrastructures that are self-standing and have a defined and distinct legal entity, (2) research infrastructures that are embedded into another institution which is a legal entity (such as a university, a research organisation, etc.). If (1) - name of the research infrastructure, If (2) - name of the hosting organisation.'})
-  .set('participatingCountriesDesc', {mandatory: false, label: 'Participating Countries', addTitle: 'Participating Country', placeholder: 'Select participating countries...', desc: 'Providers that are funded by several countries should list here all supporting countries (including the coordinating country first).'})
-  .set('affiliationDesc', {mandatory: false, label: 'Affiliations', addTitle: 'Affiliation', placeholder: 'Write affiliations...', desc: 'Providers that are members or affiliated or associated with other organisations should list those organisations here.'})
-  .set('networksDesc', {mandatory: false, label: 'Networks', addTitle: 'Network', placeholder: 'Select network...', desc: 'Providers that are members of networks should list those networks here.'})
-  .set('structureTypesDesc', {mandatory: false, label: 'Structure Type', addTitle: 'Structure Type', placeholder: 'Select structure type...', desc: 'Structure Type of the Provider (single-sited, distributed, mobile, virtual, etc.).'})
-  .set('ESFRIDomainDesc', {mandatory: false, label: 'ESFRI Domain', addTitle: 'ESFRI Domain', placeholder: 'Select ESFRI domain...', desc: 'ESFRI domain classification. '})
-  .set('ESFRITypeDesc', {mandatory: false, label: 'ESFRI Type', placeholder: 'Select ESFRI type...', desc: 'If the RI is (part of) an ESFRI project indicate how the RI participates: a) RI is node of an ESFRI project, b) RI is an ESFRI project, c) RI is an ESFRI landmark.'})
-  .set('merilScientificDomainsDesc', {mandatory: false, label: 'MERIL Scientific Domain', placeholder: 'Select MERIL scientific domain...', desc: 'MERIL scientific domain classification.'})
-  .set('merilScientificSubdomainsDesc', {mandatory: false, label: 'MERIL Scientific Subdomain', placeholder: 'Select MERIL scientific subdomain after selecting MERIL scientific domain...', desc: 'MERIL scientific subdomain classification.'})
-  .set('areasOfActivityDesc', {mandatory: false, label: 'Area of Activity', addTitle: 'Area of Activity', placeholder: 'Write areas of activity...', desc: 'Basic research, Applied research or Technological development'})
-  .set('societalGrandChallengesDesc', {mandatory: false, label: 'Societal Grand Challenges', addTitle: 'Societal Grand Challenge', placeholder: 'Write societal grand challenges...', desc: 'Provider’s participation in the Grand Societal Challenges defined by the European Commission.'})
-  .set('nationalRoadmapsDesc', {mandatory: false, label: 'National Roadmaps', addTitle: 'National Roadmap', placeholder: 'Write national roadmaps...', desc: 'Provider\'s participation in a national roadmap.'})
 ;
 
