@@ -42,6 +42,7 @@ export class AppComponent implements OnInit {
   overrideDescMaps() {
     // Catris specific desc -->
     providerDescMap
+    .set('legalEntityDesc', {mandatory: true, label: 'Legal Entity', desc: 'Is the Service Provider an independent Legal Entity?'})
     .set('providerScientificDomainDesc', {mandatory: false, label: 'Scientific Domain', placeholder: 'Select scientific domain...', desc: 'Scientific discipline(s) that relate to the Provider’s field of activities.'})
     .set('providerScientificSubdomainsDesc', {mandatory: false, label: 'Scientific Subdomain', placeholder: 'Select scientific subdomain after selecting scientific domain...', desc: 'Scientific sub-discipline(s) that relate to the Provider’s field of activities.'})
     .set('hostingLegalEntityDesc', {mandatory: false, label: 'Hosting Legal Entity', placeholder: 'Write hosting legal entity...', desc: 'For Service Providers embedded in an organisation/institution legally hosting it (University, Research Performing Organisation, Research Institute, etc.) enter the name of the legal hosting entity full name in English without abbreviations.'})
