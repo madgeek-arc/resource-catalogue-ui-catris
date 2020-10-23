@@ -54,8 +54,8 @@
 
               <div [ngClass]="{'blur-filter': showLoader}">
 
-                <div *ngIf="!edit" class="uk-alert uk-alert-primary">You are about to register a new Service Provider (SP).
-                  You will be able to register new service(s) when this process is completed and your SP is onboarded. For further information you may visit items under the ‘support’ menu.</div>
+                <div *ngIf="!edit" class="uk-alert uk-alert-primary">You are about to register a new {{serviceORresource}} Provider ({{projectName=='CatRIS' ? 'SP' : 'RP'}}).
+                  You will be able to register new service(s) when this process is completed and your {{projectName=='CatRIS' ? 'SP' : 'RP'}} is onboarded. For further information you may visit items under the ‘support’ menu.</div>
 
                 <div class="uk-margin-bottom uk-flex uk-flex-right">
                   <div>
