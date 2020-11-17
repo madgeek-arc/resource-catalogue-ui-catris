@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription, timer} from 'rxjs';
-import {RichService, Service} from '../../domain/eic-model';
+import {Provider, RichService, Service} from '../../domain/eic-model';
 import {Paging} from '../../domain/paging';
 import {URLParameter} from '../../domain/url-parameter';
 import {SearchQuery} from '../../domain/search-query';
@@ -16,6 +16,7 @@ import {flatMap} from 'rxjs/operators';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
 import {OrderDownlineTreeviewEventParser, TreeviewConfig, TreeviewEventParser, TreeviewItem} from 'ngx-treeview';
 import {EmailService} from '../../services/email.service';
+import {environment} from '../../../environments/environment';
 
 declare var UIkit: any;
 
@@ -29,6 +30,7 @@ declare var UIkit: any;
 })
 
 export class SearchComponent implements OnInit, OnDestroy {
+  public projectName = environment.projectName;
   public serviceIdsArray: string[] = [];
 
   config = TreeviewConfig.create({
@@ -59,8 +61,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   foundResults = true;
   advanced = false;
   providers: any;
+  myProviders:  Provider[] = [];
   loading = false;
-
+  canAddOrEditService = false;
   listViewActive = true;
 
   constructor(public fb: FormBuilder, public router: NavigationService, public route: ActivatedRoute,
@@ -191,7 +194,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       );
 
     });
-    // });
+
+    if (this.projectName === 'OpenAIRE Catalogue') {
+      this.resourceService.getMyServiceProviders().subscribe(
+        res => this.myProviders = res,
+        er => console.log(er),
+        () => this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire')
+      );
+    }
   }
 
   ngOnDestroy(): void {
