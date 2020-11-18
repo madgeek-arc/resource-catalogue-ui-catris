@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-import {Subscription, timer} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {Provider, RichService, Service} from '../../domain/eic-model';
 import {Paging} from '../../domain/paging';
 import {URLParameter} from '../../domain/url-parameter';
-import {SearchQuery} from '../../domain/search-query';
 import {AuthenticationService} from '../../services/authentication.service';
 import {ComparisonService} from '../../services/comparison.service';
 import {NavigationService} from '../../services/navigation.service';
@@ -320,7 +319,10 @@ export class SearchComponent implements OnInit, OnDestroy {
                 }
               }
               subCategories.push(new TreeviewItem({
-                text: subCategory.label + ` (${subCategory.count})`, value: subCategory.value, collapsed: true, checked: checked
+                text: subCategory.label + ` (${subCategory.count})`,
+                value: subCategory.value,
+                collapsed: true,
+                checked: checked
               }));
             }
           }
@@ -356,7 +358,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.scientificDomain = [];
     for (const domainValue of searchResults.facets[2].values) {
       const domainId = domainValue.value.split('-')[1];
-      // console.log(domainId);
       const subDomain: TreeviewItem[] = [];
       for (const subDomainValue of searchResults.facets[5].values) {
         const subDomainId = subDomainValue.value.split('-')[1];
@@ -367,7 +368,6 @@ export class SearchComponent implements OnInit, OnDestroy {
             break;
           }
         }
-        // console.log(subDomainId);
         if (domainId === subDomainId) {
           subDomain.push(new TreeviewItem({
             text: subDomainValue.label + ` (${subDomainValue.count})`,
@@ -377,12 +377,20 @@ export class SearchComponent implements OnInit, OnDestroy {
           }));
         }
       }
+      let found = false;
+      for (let i = 0; i <= subDomain.length; i++) {
+        found = false;
+        if ( subDomain[i] && subDomain[i].checked) {
+          found = true;
+          break;
+        }
+      }
       this.scientificDomain.push(new TreeviewItem({
         text: domainValue.label /*+ ` (${domainValue.count})`*/,
         value: domainValue.value,
         children: subDomain,
         checked: false,
-        collapsed: true
+        collapsed: !found
       }));
     }
     /** <--Checkbox Scientific Domain structure!!!**/
