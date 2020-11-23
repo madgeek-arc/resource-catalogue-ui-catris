@@ -10,7 +10,6 @@ import {ResourceService} from '../../services/resource.service';
 import BitSet from 'bitset/bitset';
 import {environment} from '../../../environments/environment';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 declare var UIkit: any;
 
@@ -72,8 +71,6 @@ export class ServiceProviderFormComponent implements OnInit {
   privacyPolicy = false;
   authorizedRepresentative = false;
   agreedToTerms: boolean;
-
-  keyword = 'name';
 
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
@@ -948,21 +945,5 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--URL Validation **/
-
-/** ng-autocomplete--> **/
-  selectEvent(item) {
-    // console.log(item.id);
-    if (item) {
-      this.newProviderForm.get('location.country').setValue(item.id);
-    } else {
-      this.newProviderForm.get('location.country').setValue('');
-    }
-  }
-
-  selectParticipatingCountries(item, position) {
-    console.log(item.id);
-    this.newProviderForm.get('location.country').setValue(item.id);
-  }
-
 
 }

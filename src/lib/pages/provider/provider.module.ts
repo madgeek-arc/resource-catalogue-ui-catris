@@ -16,7 +16,6 @@ import {ServiceUploadComponent} from '../provider-resources/service-upload.compo
 import {ServiceFormComponent} from '../provider-resources/service-form.component';
 import { ProviderFormToPdfComponent } from './provider-form-to-pdf/provider-form-to-pdf.component';
 import { ResourceFormToPdfComponent } from '../provider-resources/resource-form-to-pdf/resource-form-to-pdf.component';
-import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 
 @NgModule({
@@ -28,7 +27,6 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
     ProviderRouting,
     ReusableComponentsModule,
     ChartModule,
-    AutocompleteLibModule,
 
   ],
   declarations: [
