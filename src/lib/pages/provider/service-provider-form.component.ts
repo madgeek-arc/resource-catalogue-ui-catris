@@ -10,6 +10,7 @@ import {ResourceService} from '../../services/resource.service';
 import BitSet from 'bitset/bitset';
 import {environment} from '../../../environments/environment';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 declare var UIkit: any;
 
@@ -71,6 +72,8 @@ export class ServiceProviderFormComponent implements OnInit {
   privacyPolicy = false;
   authorizedRepresentative = false;
   agreedToTerms: boolean;
+
+  keyword = 'name';
 
 
   readonly fullNameDesc: sd.Description = sd.providerDescMap.get('fullNameDesc');
@@ -446,7 +449,8 @@ export class ServiceProviderFormComponent implements OnInit {
       || this.checkEveryArrayFieldValidity('areasOfActivity')
       || this.checkEveryArrayFieldValidity('societalGrandChallenges')
       || this.checkEveryArrayFieldValidity('nationalRoadmaps'));
-    this.tabs[6] = (this.checkEveryArrayFieldValidity('users', 'name') || this.checkEveryArrayFieldValidity('users', 'surname')
+    this.tabs[6] = (this.checkEveryArrayFieldValidity('users', 'name')
+      || this.checkEveryArrayFieldValidity('users', 'surname')
       || this.checkEveryArrayFieldValidity('users', 'email'));
   }
 
@@ -811,7 +815,7 @@ export class ServiceProviderFormComponent implements OnInit {
       if (this.remainingOnTab1 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
         this.calcCompletedTabs(tabNum, 1);
       }
-    } else if (tabNum === 3) {
+    } else if (tabNum === 3) { // Location
       this.BitSetTab3.set(bitIndex, 1);
       this.remainingOnTab3 = this.requiredOnTab3 - this.BitSetTab3.cardinality();
       if (this.remainingOnTab3 === 0 && this.completedTabsBitSet.get(tabNum) !== 1) {
@@ -944,5 +948,21 @@ export class ServiceProviderFormComponent implements OnInit {
   }
 
   /** <--URL Validation **/
+
+/** ng-autocomplete--> **/
+  selectEvent(item) {
+    // console.log(item.id);
+    if (item) {
+      this.newProviderForm.get('location.country').setValue(item.id);
+    } else {
+      this.newProviderForm.get('location.country').setValue('');
+    }
+  }
+
+  selectParticipatingCountries(item, position) {
+    console.log(item.id);
+    this.newProviderForm.get('location.country').setValue(item.id);
+  }
+
 
 }

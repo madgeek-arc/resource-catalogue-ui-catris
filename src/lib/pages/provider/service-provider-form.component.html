@@ -497,15 +497,33 @@
                                 </label>
                                 <div class="uk-form-description uk-margin-top uk-width-9-10">{{countryDesc.desc}}</div>
                                 <div class="uk-form-controls uk-margin-medium-top">
-                                  <select id="country" class="uk-input uk-select uk-width-9-10"
-                                          formControlName="country"
-                                          (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">
-                                    <option value=""></option>
-                                    <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </select>
+<!--                                  <select id="country" class="uk-input uk-select uk-width-9-10"-->
+<!--                                          formControlName="country" autocomplete="on"-->
+<!--                                          (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"-->
+<!--                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">-->
+<!--                                    <option value=""></option>-->
+<!--                                    <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">-->
+<!--                                      {{entry.name}}-->
+<!--                                    </option>-->
+<!--                                  </select>-->
+                                  <div id="country" class="uk-width-9-10">
+                                    <ng-autocomplete
+                                      [data]="placesVocabulary"
+                                      [searchKeyword]="keyword"
+                                      (selected)=" selectEvent($event); handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt();"
+                                      (inputCleared)="selectEvent($event); handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt();"
+                                      [itemTemplate]="itemTemplate"
+                                      [notFoundTemplate]="notFoundTemplate">
+                                    </ng-autocomplete>
+
+                                    <ng-template #itemTemplate let-item>
+                                      <a [innerHTML]="item.name"></a>
+                                    </ng-template>
+
+                                    <ng-template #notFoundTemplate let-notFound>
+                                      <div [innerHTML]="notFound"></div>
+                                    </ng-template>
+                                  </div>
                                 </div>
                                 <i><small>For suggestions in amending the "{{countryDesc.label}}" list, please send an
                                   email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
@@ -776,6 +794,25 @@
                                       {{entry.name}}
                                     </option>
                                   </select>
+
+                                  <div id="coparticipatingCountries" class="ng-autocomplete uk-input uk-select uk-width-9-10">
+                                    <ng-autocomplete
+                                      [data]="placesVocabulary"
+                                      [searchKeyword]="keyword"
+                                      (selected)='selectParticipatingCountries($event, i)'
+                                      [itemTemplate]="itemTemplate"
+                                      [notFoundTemplate]="notFoundTemplate">
+                                    </ng-autocomplete>
+
+                                    <ng-template #itemTemplate let-item>
+                                      <a [innerHTML]="item.name"></a>
+                                    </ng-template>
+
+                                    <ng-template #notFoundTemplate let-notFound>
+                                      <div [innerHTML]="notFound"></div>
+                                    </ng-template>
+                                  </div>
+
                                   <a *ngIf="getFieldAsFormArray('participatingCountries').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('participatingCountries', i); unsavedChangesPrompt()">

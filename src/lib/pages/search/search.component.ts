@@ -219,7 +219,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       return this.navigateUsingParameters();
     } else if (show === 'grid') {
       this.listViewActive = false;
-      this.pageSize = 9;
+      this.pageSize = 12;
       this.updatePagingURLParametersQuantity(this.pageSize);
       this.updatePagingURLParameters(0);
       return this.navigateUsingParameters();
@@ -548,7 +548,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   goToFirstPage() {
     const from = 0;
-    // let to: number = 9;
+    // let to: number = 12;
     this.updatePagingURLParameters(from);
     return this.navigateUsingParameters();
   }
