@@ -313,7 +313,6 @@
                                          (input)="unsavedChangesPrompt()"
                                          (focusout)="checkUrlValidityForArrays('multimedia', i)"
                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i)}">
-                                  <!--[ngClass]="{'uk-form-danger': checkFormArrayValidity('multimedia', i), 'uk-width-5-6': (getFieldAsFormArray('multimedia').length > 1)}">-->
                                   <a *ngIf="getFieldAsFormArray('multimedia').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('multimedia', i); unsavedChangesPrompt()">
@@ -417,8 +416,7 @@
                                      class="uk-margin-bottom">
                                   <input id="tags" class="uk-input" type="text" [formControlName]="i"
                                          (input)="unsavedChangesPrompt()"
-                                         [ngClass]="{'uk-form-danger': checkFormValidity('tags'),
-                               'uk-width-5-6': (getFieldAsFormArray('tags').length > 1)}">
+                                         [ngClass]="{'uk-form-danger': checkFormValidity('tags')}">
                                   <a *ngIf="getFieldAsFormArray('tags').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('tags', i); unsavedChangesPrompt()">
@@ -732,8 +730,7 @@
                                   <input id="certifications" class="uk-input uk-width-9-10" type="text"
                                          [formControlName]="i"
                                          (input)="unsavedChangesPrompt()"
-                                         [ngClass]="{'uk-form-danger': checkFormValidity('certifications'),
-                               'uk-width-5-6': (getFieldAsFormArray('certifications').length > 1)}">
+                                         [ngClass]="{'uk-form-danger': checkFormValidity('certifications')}">
                                   <a *ngIf="getFieldAsFormArray('certifications').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('certifications', i); unsavedChangesPrompt()">

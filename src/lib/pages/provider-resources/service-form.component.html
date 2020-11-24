@@ -236,13 +236,12 @@
                                 <input id="name" class="uk-input uk-width-9-10" type="text" formControlName="name"
                                        (input)="handleBitSets(0, 0, 'name'); unsavedChangesPrompt()"
                                        [ngClass]="{'uk-form-danger': checkFormValidity('name') }">
-                                <!--                                   [ngClass]="{'uk-form-danger': !serviceForm.get('name').valid && serviceForm.get('name').dirty}">-->
                               </div>
                               <i><small>Suggested length is 80 characters</small></i>
                             </div>
 
                             <div class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right">
+                              <label class="uk-form-label uk-text-right" for="resourceOrganisation">
                                 {{resourceOrganisationDesc.label + (resourceOrganisationDesc.mandatory ? ' (*)' : '')}}
                               </label>
                               <div
@@ -257,14 +256,13 @@
                                             value="{{provider.id}}">{{provider.name}}</option>
                                   </ng-container>
                                 </select>
-                                <!--<i><small>{{resourceOrganisationDesc.desc}}</small></i>-->
                               </div>
                             </div>
 
                             <!--                        &lt;!&ndash;IF NOT IN THE AddFirstService PAGE - SHOW THE LIST OF PROVIDERS&ndash;&gt;-->
                             <!--                        <div *ngIf="!firstServiceForm" formArrayName="resourceProviders" class="uk-margin-bottom">-->
                             <div formArrayName="resourceProviders" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right">
+                              <label class="uk-form-label uk-text-right" for="serviceProviders">
                                 {{resourceProvidersDesc.label + (resourceProvidersDesc.mandatory ? ' (*)' : '')}}
                               </label>
                               <div
@@ -273,16 +271,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('resourceProviders').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select class="uk-input uk-select uk-width-9-10 uk-animation-slide-top-small"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceProviders', i),
-                                      'uk-width-5-6': getFieldAsFormArray('resourceProviders').length > 1}">
-                                    <ng-container *ngIf="providersPage">
-                                      <option *ngFor="let provider of providersPage.results"
-                                              value="{{provider.id}}">{{provider.name}}</option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="providersPage" class="uk-width-9-10 uk-animation-slide-top-small" id="serviceProviders"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceProviders', i)}"
+                                             [items]="providersPage.results"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('resourceProviders').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('resourceProviders', i); unsavedChangesPrompt()">
@@ -298,17 +295,6 @@
                                 <!--<i><small>{{resourceProvidersDesc.desc}}</small></i>-->
                               </div>
                             </div>
-                            <!--                        &lt;!&ndash;IF IN THE AddFirstService PAGE - SHOW THE CURRENT PROVIDER&ndash;&gt;-->
-                            <!--                        <div *ngIf="firstServiceForm" class="uk-margin-bottom">-->
-                            <!--                          <label class="uk-form-label uk-text-right">-->
-                            <!--                            {{resourceProvidersDesc.label + (resourceProvidersDesc.mandatory ? ' (*)' : '')}}-->
-                            <!--                          </label>-->
-                            <!--                          <div class="uk-form-controls">-->
-                            <!--                            <span class="uk-input">{{ getFieldAsFormArray('resourceProviders').get([0]).value }}</span>-->
-                            <!--                            <i><small>{{resourceProvidersDesc.desc}}</small></i>-->
-                            <!--                          </div>-->
-                            <!--                        </div>-->
-
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="webpage">
                                 {{webpageDesc.label + (webpageDesc.mandatory ? ' (*)' : '')}}
@@ -622,18 +608,26 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('targetUsers').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <select id="targetUsers"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="handleBitSets(2, 10, 'targetUsers'); unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}">
-                                    <ng-container *ngIf="targetUsersVocabulary">
-                                      <option *ngFor="let entry of sortVocabulariesByName(targetUsersVocabulary)"
-                                              value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+<!--                                  <select id="targetUsers"-->
+<!--                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"-->
+<!--                                          [formControlName]="i"-->
+<!--                                          (change)="handleBitSets(2, 10, 'targetUsers'); unsavedChangesPrompt()"-->
+<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}">-->
+<!--                                    <ng-container *ngIf="targetUsersVocabulary">-->
+<!--                                      <option *ngFor="let entry of sortVocabulariesByName(targetUsersVocabulary)" value="{{entry.id}}">-->
+<!--                                        {{entry.name}}-->
+<!--                                      </option>-->
+<!--                                    </ng-container>-->
+<!--                                  </select>-->
+                                  <ng-select *ngIf="targetUsersVocabulary" class="uk-width-9-10" id="targetUsers"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}"
+                                             [items]="sortVocabulariesByName(targetUsersVocabulary)"
+                                             (change)="handleBitSets(2, 10, 'targetUsers');unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('targetUsers').length > 1"
                                      class="remove-element uk-padding-small" (click)="remove('targetUsers', i); unsavedChangesPrompt();
                                    handleBitSets(2, 10, 'targetUsers')">
@@ -756,21 +750,18 @@
                                 <div
                                   *ngFor="let place of getFieldAsFormArray('geographicalAvailabilities').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="geographicalAvailabilities"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="handleBitSets(3, 11, 'geographicalAvailabilities'); unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('geographicalAvailabilities', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="geographicalVocabulary">
-                                      <option *ngFor="let entry of geographicalVocabulary" value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="geographicalVocabulary" class="uk-width-9-10" id="geographicalAvailabilities"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('geographicalAvailabilities', i)}"
+                                             [items]="geographicalVocabulary"
+                                             (change)="handleBitSets(3, 11, 'geographicalAvailabilities'); unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('geographicalAvailabilities').length > 1"
-                                     class="remove-element uk-padding-small" (click)="remove('geographicalAvailabilities', i); unsavedChangesPrompt();
-                                   handleBitSets(3, 11, 'geographicalAvailabilities')">
+                                     class="remove-element uk-padding-small" (click)="remove('geographicalAvailabilities', i);
+                                     unsavedChangesPrompt();handleBitSets(3, 11, 'geographicalAvailabilities')">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
@@ -793,17 +784,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('languageAvailabilities').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="languageAvailabilities"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="handleBitSets(3, 12, 'languageAvailabilities'); unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('languageAvailabilities', i)}">
-                                    <ng-container *ngIf="languagesVocabulary">
-                                      <option *ngFor="let entry of languagesVocabulary" value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="languagesVocabulary" class="uk-width-9-10" id="languageAvailabilities"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('languageAvailabilities', i)}"
+                                             [items]="languagesVocabulary"
+                                             (change)="handleBitSets(3, 12, 'languageAvailabilities'); unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('languageAvailabilities').length > 1"
                                      class="remove-element uk-padding-small" (click)="remove('languageAvailabilities', i); unsavedChangesPrompt();
                                    handleBitSets(3, 12, 'languageAvailabilities')">
@@ -823,7 +812,7 @@
                           <!--LOCATION-->
                           <li>
                             <div formArrayName="resourceGeographicLocations" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right">
+                              <label class="uk-form-label uk-text-right" for="resourceOrganisation">
                                 {{resourceGeographicLocationsDesc.label + (resourceGeographicLocationsDesc.mandatory ? ' (*)' : '')}}
                               </label>
                               <div
@@ -832,17 +821,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('resourceGeographicLocations').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceGeographicLocations', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="geographicalVocabulary">
-                                      <option *ngFor="let entry of geographicalVocabulary" value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="geographicalVocabulary" class="uk-width-9-10" id="resourceGeographicLocations"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceGeographicLocations', i)}"
+                                             [items]="geographicalVocabulary"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('resourceGeographicLocations').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('resourceGeographicLocations', i); unsavedChangesPrompt()">
@@ -1295,19 +1282,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('requiredResources').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="requiredResources"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('requiredResources', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="requiredResources">
-                                      <option *ngFor="let reqService of requiredResources | keys"
-                                              value="{{reqService}}">
-                                        {{requiredResources[reqService]}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="requiredResources" class="uk-width-9-10" id="requiredResources"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('requiredResources', i)}"
+                                             [items]="requiredResources"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('requiredResources').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('requiredResources', i); unsavedChangesPrompt()">
@@ -1332,18 +1315,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('relatedResources').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="relatedResources"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('relatedResources', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="relatedResources">
-                                      <option *ngFor="let reqService of relatedResources | keys" value="{{reqService}}">
-                                        {{relatedResources[reqService]}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="relatedResources" class="uk-width-9-10" id="relatedResources"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('relatedResources', i)}"
+                                             [items]="relatedResources"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('relatedResources').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('relatedResources', i); unsavedChangesPrompt()">
@@ -1400,19 +1380,15 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('fundingBody').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <select id="fundingBody"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingBody', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="fundingBodyVocabulary">
-                                      <option *ngFor="let entry of sortVocabulariesByName(fundingBodyVocabulary)"
-                                              value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="fundingBodyVocabulary" class="uk-width-9-10" id="fundingBody"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingBody', i)}"
+                                             [items]="sortVocabulariesByName(fundingBodyVocabulary)"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('fundingBody').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('fundingBody', i); unsavedChangesPrompt()">
@@ -1437,19 +1413,15 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('fundingPrograms').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="fundingPrograms"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingPrograms', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="fundingProgramVocabulary">
-                                      <option *ngFor="let entry of sortVocabulariesByName(fundingProgramVocabulary)"
-                                              value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="fundingProgramVocabulary" class="uk-width-9-10" id="fundingPrograms"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingPrograms', i)}"
+                                             [items]="sortVocabulariesByName(fundingProgramVocabulary)"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('fundingPrograms').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('fundingPrograms', i); unsavedChangesPrompt()">
