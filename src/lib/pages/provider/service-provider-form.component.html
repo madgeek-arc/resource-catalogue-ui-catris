@@ -507,13 +507,12 @@
 <!--                                    </option>-->
 <!--                                  </select>-->
 
-                                  <ng-select class="uk-width-9-10"
+                                  <ng-select class="uk-width-9-10" id="country"
                                              [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}"
                                              [items]="placesVocabulary"
                                              (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
                                              bindLabel="name"
                                              bindValue="id"
-                                             labelForId="country"
                                              clearAllText="Clear"
                                              formControlName="country">
                                   </ng-select>
@@ -777,16 +776,25 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('participatingCountries').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <select id="participatingCountries" class="uk-input uk-select uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}">
-                                    <option value=""></option>
-                                    <option *ngFor="let entry of placesVocabulary"
-                                            value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </select>
+<!--                                  <select id="participatingCountries" class="uk-input uk-select uk-width-9-10"-->
+<!--                                          [formControlName]="i"-->
+<!--                                          (change)="unsavedChangesPrompt()"-->
+<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}">-->
+<!--                                    <option value=""></option>-->
+<!--                                    <option *ngFor="let entry of placesVocabulary"-->
+<!--                                            value="{{entry.id}}">-->
+<!--                                      {{entry.name}}-->
+<!--                                    </option>-->
+<!--                                  </select>-->
+                                  <ng-select class="uk-width-4-5" id="participatingCountries"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}"
+                                             [items]="placesVocabulary"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('participatingCountries').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('participatingCountries', i); unsavedChangesPrompt()">
@@ -836,15 +844,24 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('networks').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">
-                                    <option value=""></option>
-                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"
-                                            value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </select>
+<!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
+<!--                                          (change)="unsavedChangesPrompt()"-->
+<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
+<!--                                    <option value=""></option>-->
+<!--                                    <option *ngFor="let entry of sortVocabulariesByName(networksVocabulary)"-->
+<!--                                            value="{{entry.id}}">-->
+<!--                                      {{entry.name}}-->
+<!--                                    </option>-->
+<!--                                  </select>-->
+                                  <ng-select class="uk-width-9-10" id="networks"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}"
+                                             [items]="sortVocabulariesByName(networksVocabulary)"
+                                             (change)="unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('networks').length > 1 && !disable"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('networks', i); unsavedChangesPrompt()">
