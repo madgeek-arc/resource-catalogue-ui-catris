@@ -213,15 +213,15 @@ export class SearchComponent implements OnInit, OnDestroy {
   toggleListGrid(show: string) {
     if (show === 'list') {
       this.listViewActive = true;
-      this.pageSize = 10;
-      this.updatePagingURLParametersQuantity(this.pageSize);
-      this.updatePagingURLParameters(0);
+      // this.pageSize = 10;
+      // this.updatePagingURLParametersQuantity(this.pageSize);
+      // this.updatePagingURLParameters(0);
       return this.navigateUsingParameters();
     } else if (show === 'grid') {
       this.listViewActive = false;
-      this.pageSize = 12;
-      this.updatePagingURLParametersQuantity(this.pageSize);
-      this.updatePagingURLParameters(0);
+      // this.pageSize = 10;
+      // this.updatePagingURLParametersQuantity(this.pageSize);
+      // this.updatePagingURLParameters(0);
       return this.navigateUsingParameters();
     } else {
       this.listViewActive = true;
@@ -548,7 +548,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   goToFirstPage() {
     const from = 0;
-    // let to: number = 12;
+    // let to: number = 10;
     this.updatePagingURLParameters(from);
     return this.navigateUsingParameters();
   }
