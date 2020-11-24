@@ -497,15 +497,26 @@
                                 </label>
                                 <div class="uk-form-description uk-margin-top uk-width-9-10">{{countryDesc.desc}}</div>
                                 <div class="uk-form-controls uk-margin-medium-top">
-                                  <select id="country" class="uk-input uk-select uk-width-9-10"
-                                          formControlName="country"
-                                          (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">
-                                    <option value=""></option>
-                                    <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </select>
+<!--                                  <select id="country" class="uk-input uk-select uk-width-9-10"-->
+<!--                                          formControlName="country"-->
+<!--                                          (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"-->
+<!--                                          [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}">-->
+<!--                                    <option value=""></option>-->
+<!--                                    <option *ngFor="let entry of placesVocabulary" value="{{entry.id}}">-->
+<!--                                      {{entry.name}}-->
+<!--                                    </option>-->
+<!--                                  </select>-->
+
+                                  <ng-select class="uk-width-9-10"
+                                             [ngClass]="{'uk-form-danger': checkFormValidity('location.country')}"
+                                             [items]="placesVocabulary"
+                                             (change)="handleBitSetsOfGroups(3, 8, 'country', 'location'); unsavedChangesPrompt()"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             labelForId="country"
+                                             clearAllText="Clear"
+                                             formControlName="country">
+                                  </ng-select>
                                 </div>
                                 <i><small>For suggestions in amending the "{{countryDesc.label}}" list, please send an
                                   email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
