@@ -327,6 +327,8 @@ a.remove-element i {
 }
 
 .ng-select {
+  display: inline-block !important;
+  vertical-align: middle;
   height: 56px;
   background: #FAFAFA 0% 0% no-repeat padding-box;
   border: 1px solid #D1D1D1;
