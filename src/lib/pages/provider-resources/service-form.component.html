@@ -247,15 +247,15 @@
                               <div
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{resourceOrganisationDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
-                                <select id="resourceOrganisation" formControlName="resourceOrganisation"
-                                        class="uk-input uk-select uk-width-9-10 uk-disabled"
-                                        (change)="handleBitSets(0, 1, 'resourceOrganisation'); unsavedChangesPrompt()"
-                                        [ngClass]="{'uk-form-danger': checkFormValidity('resourceOrganisation')}">
-                                  <ng-container *ngIf="providersPage">
-                                    <option *ngFor="let provider of providersPage.results"
-                                            value="{{provider.id}}">{{provider.name}}</option>
-                                  </ng-container>
-                                </select>
+                                <ng-select *ngIf="providersPage" class="uk-width-9-10 uk-disabled" id="resourceOrganisation"
+                                           [ngClass]="{'uk-form-danger': checkFormValidity('resourceOrganisation')}"
+                                           [items]="providersPage.results"
+                                           (change)="handleBitSets(0, 1, 'resourceOrganisation'); unsavedChangesPrompt()"
+                                           bindLabel="name"
+                                           bindValue="id"
+                                           clearAllText="Clear"
+                                           formControlName="resourceOrganisation">
+                                </ng-select>
                               </div>
                             </div>
 
@@ -454,17 +454,15 @@
                                       <div
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{scientificDomainDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
-                                        <select id="{{'scientificDomain ' + i}}" formControlName="scientificDomain"
-                                                class="uk-input uk-select"
-                                                (change)="onScientificDomainChange(i); unsavedChangesPrompt()"
-                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificDomain')}">
-                                          <ng-container *ngIf="scientificDomainVocabulary">
-                                            <option
-                                              *ngFor="let entry of sortVocabulariesByName(scientificDomainVocabulary)"
-                                              value="{{entry.id}}">{{entry.name}}
-                                            </option>
-                                          </ng-container>
-                                        </select>
+                                        <ng-select *ngIf="scientificDomainVocabulary" class="uk-width-1-1" id="{{'scientificDomain ' + i}}"
+                                                   [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificDomain')}"
+                                                   (change)="onScientificDomainChange(i); unsavedChangesPrompt()"
+                                                   [items]="sortVocabulariesByName(scientificDomainVocabulary)"
+                                                   bindLabel="name"
+                                                   bindValue="id"
+                                                   clearAllText="Clear"
+                                                   formControlName="scientificDomain">
+                                        </ng-select>
                                         <i><small>For suggestions in amending the "{{scientificDomainDesc.label}}" list,
                                           please send an email to <a
                                             href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
@@ -478,21 +476,16 @@
                                       <div
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{scientificSubDomainDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
-                                        <select id="{{'scientificSubdomain ' + i}}"
-                                                formControlName="scientificSubdomain" class="uk-input uk-select"
-                                                (change)="handleBitSetsOfGroups(2, 7, 'scientificSubdomain', 'scientificDomains'); unsavedChangesPrompt()"
-                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificSubdomain')}">
-                                          <ng-container
-                                            *ngIf="scientificDomainArray.controls[i].get('scientificDomain').value">
-                                            <option value="">--Choose Scientific Subdomain--</option>
-                                            <ng-container *ngIf="scientificSubDomainVocabulary">
-                                              <option
-                                                *ngFor="let entry of getSortedChildrenCategories(scientificSubDomainVocabulary, scientificDomainArray.controls[i].get('scientificDomain').value)"
-                                                value="{{entry.id}}">{{entry.name}}
-                                              </option>
-                                            </ng-container>
-                                          </ng-container>
-                                        </select>
+                                        <ng-select *ngIf="scientificSubDomainVocabulary" id="{{'scientificSubdomain ' + i}}"
+                                                   class="uk-width-1-1"
+                                                   [ngClass]="{'uk-form-danger': checkFormArrayValidity('scientificDomains', i, 'scientificSubdomain')}"
+                                                   (change)="handleBitSetsOfGroups(2, 7, 'scientificSubdomain', 'scientificDomains'); unsavedChangesPrompt()"
+                                                   [items]="getSortedChildrenCategories(scientificSubDomainVocabulary, scientificDomainArray.controls[i].get('scientificDomain').value)"
+                                                   bindLabel="name"
+                                                   bindValue="id"
+                                                   clearAllText="Clear"
+                                                   formControlName="scientificSubdomain">
+                                        </ng-select>
                                         <i><small>For suggestions in amending the "{{scientificSubDomainDesc.label}}"
                                           list, please send an email to <a
                                             href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
@@ -536,20 +529,16 @@
                                       <div
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{categoryDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
-                                        <select id="{{'category ' + i}}" formControlName="category"
-                                                class="uk-input uk-select"
-                                                (change)="onCategoryChange(i); unsavedChangesPrompt()"
-                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('categories', i, 'category')}">
-                                          <!--                                      <ng-container *ngIf="categoryArray.controls[i].get('supercategory').value">-->
-                                          <ng-container *ngIf="categoriesVocabulary">
-                                            <!--                                        <option value="">&#45;&#45;Choose Category&#45;&#45;</option>-->
-                                            <option
-                                              *ngFor="let entry of sortVocabulariesByName(categoriesVocabulary)"
-                                              value="{{entry.id}}">
-                                              {{entry.name}}
-                                            </option>
-                                          </ng-container>
-                                        </select>
+                                        <ng-select *ngIf="categoriesVocabulary" id="{{'category ' + i}}"
+                                                   class="uk-width-1-1"
+                                                   (change)="onCategoryChange(i); unsavedChangesPrompt()"
+                                                   [ngClass]="{'uk-form-danger': checkFormArrayValidity('categories', i, 'category')}"
+                                                   [items]="sortVocabulariesByName(categoriesVocabulary)"
+                                                   bindLabel="name"
+                                                   bindValue="id"
+                                                   clearAllText="Clear"
+                                                   formControlName="category">
+                                        </ng-select>
                                         <i><small>For suggestions in amending the "{{categoryDesc.label}}" list, please
                                           send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                       </div>
@@ -562,21 +551,16 @@
                                       <div
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{subcategoryDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
-                                        <select id="{{'subcategory ' + i}}" formControlName="subcategory"
-                                                class="uk-input uk-select"
-                                                (change)="handleBitSetsOfGroups(2, 9, 'subcategory', 'categories'); unsavedChangesPrompt()"
-                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('categories', i, 'subcategory')}">
-                                          <ng-container *ngIf="categoryArray.controls[i].get('category').value">
-                                            <option value="">--Choose subcategory--</option>
-                                            <ng-container *ngIf="subCategoriesVocabulary">
-                                              <option
-                                                *ngFor="let entry of getSortedChildrenCategories(subCategoriesVocabulary, categoryArray.controls[i].get('category').value)"
-                                                value="{{entry.id}}">
-                                                {{entry.name}}
-                                              </option>
-                                            </ng-container>
-                                          </ng-container>
-                                        </select>
+                                        <ng-select *ngIf="subCategoriesVocabulary" id="{{'subcategory ' + i}}"
+                                                   class="uk-width-1-1"
+                                                   (change)="handleBitSetsOfGroups(2, 9, 'subcategory', 'categories'); unsavedChangesPrompt()"
+                                                   [ngClass]="{'uk-form-danger': checkFormArrayValidity('categories', i, 'subcategory')}"
+                                                   [items]="getSortedChildrenCategories(subCategoriesVocabulary, categoryArray.controls[i].get('category').value)"
+                                                   bindLabel="name"
+                                                   bindValue="id"
+                                                   clearAllText="Clear"
+                                                   formControlName="subcategory">
+                                        </ng-select>
                                         <i><small>For suggestions in amending the "{{subcategoryDesc.label}}" list,
                                           please send an email to <a
                                             href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
@@ -608,17 +592,6 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('targetUsers').controls; let i=index"
                                      class="uk-margin-bottom">
-<!--                                  <select id="targetUsers"-->
-<!--                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"-->
-<!--                                          [formControlName]="i"-->
-<!--                                          (change)="handleBitSets(2, 10, 'targetUsers'); unsavedChangesPrompt()"-->
-<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}">-->
-<!--                                    <ng-container *ngIf="targetUsersVocabulary">-->
-<!--                                      <option *ngFor="let entry of sortVocabulariesByName(targetUsersVocabulary)" value="{{entry.id}}">-->
-<!--                                        {{entry.name}}-->
-<!--                                      </option>-->
-<!--                                    </ng-container>-->
-<!--                                  </select>-->
                                   <ng-select *ngIf="targetUsersVocabulary" class="uk-width-9-10" id="targetUsers"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}"
                                              [items]="sortVocabulariesByName(targetUsersVocabulary)"
@@ -649,19 +622,15 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('accessTypes').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <select id="accessTypes"
-                                          class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessTypes', i)}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="accessTypesVocabulary">
-                                      <option *ngFor="let entry of sortVocabulariesByName(accessTypesVocabulary)"
-                                              value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="accessTypesVocabulary" class="uk-width-9-10" id="accessTypes"
+                                             (change)="unsavedChangesPrompt()"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessTypes', i)}"
+                                             [items]="sortVocabulariesByName(accessTypesVocabulary)"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('accessTypes').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('accessTypes', i); unsavedChangesPrompt()">
@@ -676,26 +645,22 @@
                               </div>
                             </div>
                             <div formArrayName="accessModes" class="uk-margin-large-bottom">
-                              <label class="uk-form-label uk-text-right">
+                              <label class="uk-form-label uk-text-right" for="accessModes">
                                 {{accessModeDesc.label + (accessModeDesc.mandatory ? ' (*)' : '')}}
                               </label>
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{accessModeDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('accessModes').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <select class="uk-input uk-select uk-animation-slide-top-small uk-width-9-10"
-                                          [formControlName]="i"
-                                          (change)="unsavedChangesPrompt()"
-                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessModes', i),
-                                      'uk-width-5-6': getFieldAsFormArray('accessModes').length > 1}">
-                                    <option value=""></option>
-                                    <ng-container *ngIf="accessModesVocabulary">
-                                      <option *ngFor="let entry of sortVocabulariesByName(accessModesVocabulary)"
-                                              value="{{entry.id}}">
-                                        {{entry.name}}
-                                      </option>
-                                    </ng-container>
-                                  </select>
+                                  <ng-select *ngIf="accessTypesVocabulary" class="uk-width-9-10" id="accessModes"
+                                             (change)="unsavedChangesPrompt()"
+                                             [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessModes', i)}"
+                                             [items]="sortVocabulariesByName(accessModesVocabulary)"
+                                             bindLabel="name"
+                                             bindValue="id"
+                                             clearAllText="Clear"
+                                             [formControlName]="i">
+                                  </ng-select>
                                   <a *ngIf="getFieldAsFormArray('accessModes').length > 1"
                                      class="remove-element uk-padding-small"
                                      (click)="remove('accessModes', i); unsavedChangesPrompt()">
@@ -928,15 +893,15 @@
                                     <div
                                       class="uk-form-description uk-margin-top uk-width-9-10">{{mainContactOrganisationDesc.desc}}</div>
                                     <div class="uk-form-controls uk-margin-medium-top">
-                                      <select id="mainContactOrganisation" formControlName="organisation"
-                                              class="uk-input uk-select"
-
-                                              [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.organisation')}">
-                                        <ng-container *ngIf="providersPage">
-                                          <option *ngFor="let provider of providersPage.results"
-                                                  value="{{provider.id}}">{{provider.name}}</option>
-                                        </ng-container>
-                                      </select>
+                                      <ng-select *ngIf="providersPage" class="uk-width-1-1" id="mainContactOrganisation"
+                                                 [ngClass]="{'uk-form-danger': checkFormValidity('mainContact.organisation')}"
+                                                 [items]="providersPage.results"
+                                                 (change)="unsavedChangesPrompt()"
+                                                 bindLabel="name"
+                                                 bindValue="id"
+                                                 clearAllText="Clear"
+                                                 formControlName="organisation">
+                                      </ng-select>
                                     </div>
                                     <i><small>Suggested length is 50 characters</small></i>
                                   </div>
@@ -1029,15 +994,15 @@
                                       <div
                                         class="uk-form-description uk-margin-top uk-width-9-10">{{publicContactOrganisationDesc.desc}}</div>
                                       <div class="uk-form-controls uk-margin-medium-top">
-                                        <select id="organisation" formControlName="organisation"
-                                                class="uk-input uk-select"
-                                                (change)="unsavedChangesPrompt()"
-                                                [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'organisation')}">
-                                          <ng-container *ngIf="providersPage">
-                                            <option *ngFor="let provider of providersPage.results"
-                                                    value="{{provider.id}}">{{provider.name}}</option>
-                                          </ng-container>
-                                        </select>
+                                        <ng-select *ngIf="providersPage" class="uk-width-1-1" id="organisation"
+                                                   (change)="unsavedChangesPrompt()"
+                                                   [ngClass]="{'uk-form-danger': checkFormArrayValidity('publicContacts', i, 'organisation')}"
+                                                   [items]="providersPage.results"
+                                                   bindLabel="name"
+                                                   bindValue="id"
+                                                   clearAllText="Clear"
+                                                   formControlName="organisation">
+                                        </ng-select>
                                       </div>
                                       <i><small>Suggested length is 50 characters</small></i>
                                     </div>
@@ -1093,17 +1058,15 @@
                               <div
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{technologyReadinessLevelDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-top">
-                                <select id="trl" formControlName="trl" class="uk-input uk-select uk-width-9-10"
-                                        (change)="handleBitSets(6, 18, 'trl'); unsavedChangesPrompt()"
-                                        [ngClass]="{'uk-form-danger': checkFormValidity('trl')}">
-                                  <option value=""></option>
-                                  <ng-container *ngIf="trlVocabulary">
-                                    <option *ngFor="let entry of sortVocabulariesByName(trlVocabulary)"
-                                            value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </ng-container>
-                                </select>
+                                <ng-select *ngIf="trlVocabulary" class="uk-width-9-10" id="trl"
+                                           (change)="handleBitSets(6, 18, 'trl'); unsavedChangesPrompt()"
+                                           [ngClass]="{'uk-form-danger': checkFormValidity('trl')}"
+                                           [items]="sortVocabulariesByName(trlVocabulary)"
+                                           bindLabel="name"
+                                           bindValue="id"
+                                           clearAllText="Clear"
+                                           formControlName="trl">
+                                </ng-select>
                                 <!--<i><small>{{technologyReadinessLevelDesc.desc}}</small></i>-->
                               </div>
                             </div>
@@ -1113,18 +1076,15 @@
                               </label>
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{phaseDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-top">
-                                <select id="lifeCycleStatus" formControlName="lifeCycleStatus"
-                                        class="uk-input uk-select uk-width-9-10"
-
-                                        [ngClass]="{'uk-form-danger': checkFormValidity('lifeCycleStatus')}">
-                                  <option value=""></option>
-                                  <ng-container *ngIf="phaseVocabulary">
-                                    <option *ngFor="let entry of sortVocabulariesByName(phaseVocabulary)"
-                                            value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </ng-container>
-                                </select>
+                                <ng-select *ngIf="phaseVocabulary" class="uk-width-9-10" id="lifeCycleStatus"
+                                           (change)="handleBitSets(6, 18, 'trl'); unsavedChangesPrompt()"
+                                           [ngClass]="{'uk-form-danger': checkFormValidity('lifeCycleStatus')}"
+                                           [items]="sortVocabulariesByName(phaseVocabulary)"
+                                           bindLabel="name"
+                                           bindValue="id"
+                                           clearAllText="Clear"
+                                           formControlName="lifeCycleStatus">
+                                </ng-select>
                               </div>
                               <i><small>For suggestions in amending the "{{phaseDesc.label}}" list, please send an email
                                 to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
@@ -1613,17 +1573,15 @@
                               </label>
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{orderTypeDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
-                                <select id="orderType" formControlName="orderType"
-                                        class="uk-input uk-select uk-width-9-10"
-                                        (change)="handleBitSets(10, 19, 'orderType'); unsavedChangesPrompt()"
-                                        [ngClass]="{'uk-form-danger': checkFormValidity('orderType')}">
-                                  <ng-container *ngIf="orderTypeVocabulary">
-                                    <option *ngFor="let entry of sortVocabulariesByName(orderTypeVocabulary)"
-                                            value="{{entry.id}}">
-                                      {{entry.name}}
-                                    </option>
-                                  </ng-container>
-                                </select>
+                                <ng-select *ngIf="orderTypeVocabulary" class="uk-width-9-10" id="orderType"
+                                           (change)="handleBitSets(10, 19, 'orderType'); unsavedChangesPrompt()"
+                                           [ngClass]="{'uk-form-danger': checkFormValidity('orderType')}"
+                                           [items]="sortVocabulariesByName(orderTypeVocabulary)"
+                                           bindLabel="name"
+                                           bindValue="id"
+                                           clearAllText="Clear"
+                                           formControlName="orderType">
+                                </ng-select>
                               </div>
                               <i><small>For suggestions in amending the "{{orderTypeDesc.label}}" list, please send an
                                 email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
