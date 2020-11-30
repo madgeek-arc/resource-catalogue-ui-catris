@@ -271,7 +271,7 @@
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('resourceProviders').controls; let i=index"
                                   class="uk-margin-bottom">
-                                  <ng-select *ngIf="providersPage" class="uk-width-9-10 uk-animation-slide-top-small" id="serviceProviders"
+                                  <ng-select *ngIf="providersPage" class="uk-width-9-10" id="serviceProviders"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceProviders', i)}"
                                              [items]="providersPage.results"
                                              (change)="unsavedChangesPrompt()"
