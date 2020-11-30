@@ -194,7 +194,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     });
 
-    if (this.projectName === 'OpenAIRE Catalogue') {
+    if (this.authenticationService.isLoggedIn() && this.projectName === 'OpenAIRE Catalogue') {
       this.resourceService.getMyServiceProviders().subscribe(
         res => this.myProviders = res,
         er => console.log(er),
