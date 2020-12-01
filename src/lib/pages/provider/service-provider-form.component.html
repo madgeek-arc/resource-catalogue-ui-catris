@@ -404,7 +404,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('tags').controls; let i=index"
                                      class="uk-margin-bottom">
-                                  <input id="tags" class="uk-input" type="text" [formControlName]="i"
+                                  <input id="tags" class="uk-input uk-width-9-10" type="text" [formControlName]="i"
                                          (input)="unsavedChangesPrompt()"
                                          [ngClass]="{'uk-form-danger': checkFormValidity('tags')}">
                                   <a *ngIf="getFieldAsFormArray('tags').length > 1 && !disable"
