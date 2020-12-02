@@ -3,7 +3,7 @@ export const environment = {
   beta: false,
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
-  API_TOKEN_ENDPOINT: 'https://aai.eosc-portal.eu/eic-api/token.php',
+  API_TOKEN_ENDPOINT: 'https://aai.eosc-portal.eu/catris-api/',
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
   serviceORresource: 'Service',
