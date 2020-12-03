@@ -233,8 +233,12 @@
                                   <i class="fa fa-thumbs-down " aria-hidden="true"></i>
                                   {{ adminActionsMap[providerBundle.status].rejButtonTitle }}
                                 </button>
-                                <button (click)="showDeletionModal(providerBundle)"
+                                <button [routerLink]="['/provider/update/', providerBundle.id]"
                                         class="uk-button uk-button-action uk-display-block uk-margin-medium-top">
+                                  <i class="fa fa-edit" aria-hidden="true"></i> Edit Provider
+                                </button>
+                                <button (click)="showDeletionModal(providerBundle)"
+                                        class="uk-button uk-button-action uk-display-block uk-margin-small-top">
                                   <i class="fa fa-recycle" aria-hidden="true"></i> Delete Provider
                                 </button>
                               </div>

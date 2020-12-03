@@ -58,8 +58,9 @@ export class ServiceProvidersListComponent implements OnInit {
   ];
 
   public labels: Array<string> = [
-    'Provider Info: Approved by EPOT', 'Provider Info: Pending Approval by EPOT', 'Provider Info: Rejected by EPOT',
-    'Resource Info: Pending Submission by Provider', 'Resource Info: Pending Approval by EPOT', 'Resource Info: Rejected by EPOT'
+    `Provider Info: Approved by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `Provider Info: Pending Approval by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`,
+    `Provider Info: Rejected by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `${this.serviceORresource} Info: Pending Submission by Provider`,
+    `${this.serviceORresource} Info: Pending Approval by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `${this.serviceORresource} Info: Rejected by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`
   ];
 
   constructor(private resourceService: ResourceService,
