@@ -761,17 +761,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('participatingCountries').controls; let i=index"
-                                  class="uk-margin-bottom">
-<!--                                  <select id="participatingCountries" class="uk-input uk-select uk-width-9-10"-->
-<!--                                          [formControlName]="i"-->
-<!--                                          (change)="unsavedChangesPrompt()"-->
-<!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}">-->
-<!--                                    <option value=""></option>-->
-<!--                                    <option *ngFor="let entry of placesVocabulary"-->
-<!--                                            value="{{entry.id}}">-->
-<!--                                      {{entry.name}}-->
-<!--                                    </option>-->
-<!--                                  </select>-->
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('participatingCountries').controls.length-1 !== i}">
                                   <ng-select class="uk-width-9-10" id="participatingCountries"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('participatingCountries', i)}"
                                              [items]="placesVocabulary"
@@ -787,6 +777,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{participatingCountriesDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('participatingCountries', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
@@ -829,7 +821,7 @@
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{networksDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('networks').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
 <!--                                  <select id="networks" class="uk-input uk-select uk-width-9-10" [formControlName]="i"-->
 <!--                                          (change)="unsavedChangesPrompt()"-->
 <!--                                          [ngClass]="{'uk-form-danger': checkFormArrayValidity('networks', i)}">-->
@@ -854,6 +846,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{networksDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('networks', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{networksDesc.label}}
@@ -869,7 +863,7 @@
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{structureTypesDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('structureTypes').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('networks').controls.length-1 !== i}">
                                   <ng-select class="uk-width-9-10" id="structureTypes"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('structureTypes', i)}"
                                              *ngIf="providerTypeVocabulary"
@@ -886,6 +880,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{structureTypesDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('structureTypes', true)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{structureTypesDesc.label}}
@@ -901,7 +897,7 @@
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{ESFRIDomainDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('esfriDomains').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('esfriDomains').controls.length-1 !== i}">
                                   <ng-select class="uk-width-9-10" id="esfriDomains"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('esfriDomains', i)}"
                                              [items]="sortVocabulariesByName(esfriDomainVocabulary)"
@@ -917,6 +913,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{ESFRIDomainDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('esfriDomains', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{ESFRIDomainDesc.label}}
@@ -1023,7 +1021,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('areasOfActivity').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('areasOfActivity').controls.length-1 !== i}">
                                   <ng-select class="uk-width-9-10" id="areasOfActivity"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('areasOfActivity', i)}"
                                              [items]="sortVocabulariesByName(areasOfActivityVocabulary)"
@@ -1039,6 +1037,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{areasOfActivityDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('areasOfActivity', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{areasOfActivityDesc.label}}
@@ -1055,7 +1055,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('societalGrandChallenges').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('societalGrandChallenges').controls.length-1 !== i}">
                                   <ng-select class="uk-width-9-10" id="societalGrandChallenges"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('societalGrandChallenges', i)}"
                                              [items]="sortVocabulariesByName(societalGrandChallengesVocabulary)"
@@ -1071,6 +1071,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{societalGrandChallengesDesc.label}}" list, please send an
+                                  email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div *ngIf="!disable" class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('societalGrandChallenges', false)">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
