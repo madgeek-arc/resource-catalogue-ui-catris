@@ -464,11 +464,9 @@
                                                    formControlName="scientificDomain">
                                         </ng-select>
                                         <i><small>For suggestions in amending the "{{scientificDomainDesc.label}}" list,
-                                          please send an email to <a
-                                            href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
+                                          please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                       </div>
                                     </div>
-
                                     <div class="uk-margin-bottom">
                                       <label class="uk-form-label uk-text-right" for="{{'scientificSubdomain ' + i}}">
                                         {{scientificSubDomainDesc.label + (scientificSubDomainDesc.mandatory ? ' (*)' : '')}}
@@ -591,7 +589,7 @@
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{targetUsersDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('targetUsers').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('targetUsers').controls.length-1 !== i}">
                                   <ng-select *ngIf="targetUsersVocabulary" class="uk-width-9-10" id="targetUsers"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('targetUsers', i)}"
                                              [items]="sortVocabulariesByName(targetUsersVocabulary)"
@@ -607,6 +605,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{targetUsersDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('targetUsers', targetUsersDesc.mandatory)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{targetUsersDesc.label}}
@@ -621,7 +621,7 @@
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{accessTypeDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('accessTypes').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('accessTypes').controls.length-1 !== i}">
                                   <ng-select *ngIf="accessTypesVocabulary" class="uk-width-9-10" id="accessTypes"
                                              (change)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessTypes', i)}"
@@ -637,6 +637,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{accessTypeDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('accessTypes', accessTypeDesc.mandatory)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{accessTypeDesc.label}}
@@ -651,7 +653,7 @@
                               <div class="uk-form-description uk-margin-top uk-width-9-10">{{accessModeDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('accessModes').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('accessModes').controls.length-1 !== i}">
                                   <ng-select *ngIf="accessTypesVocabulary" class="uk-width-9-10" id="accessModes"
                                              (change)="unsavedChangesPrompt()"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('accessModes', i)}"
@@ -667,6 +669,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{accessModeDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('accessModes', accessModeDesc.mandatory)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add {{accessModeDesc.label}}
@@ -714,7 +718,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let place of getFieldAsFormArray('geographicalAvailabilities').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('geographicalAvailabilities').controls.length-1 !== i}">
                                   <ng-select *ngIf="geographicalVocabulary" class="uk-width-9-10" id="geographicalAvailabilities"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('geographicalAvailabilities', i)}"
                                              [items]="geographicalVocabulary"
@@ -730,6 +734,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{geographicalAvailabilityDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element"
                                      (click)="push('geographicalAvailabilities', geographicalAvailabilityDesc.mandatory)">
@@ -748,7 +754,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('languageAvailabilities').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('languageAvailabilities').controls.length-1 !== i}">
                                   <ng-select *ngIf="languagesVocabulary" class="uk-width-9-10" id="languageAvailabilities"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('languageAvailabilities', i)}"
                                              [items]="languagesVocabulary"
@@ -764,6 +770,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{languageAvailabilitiesDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element"
                                      (click)="push('languageAvailabilities', languageAvailabilitiesDesc.mandatory)">
@@ -785,7 +793,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('resourceGeographicLocations').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('resourceGeographicLocations').controls.length-1 !== i}">
                                   <ng-select *ngIf="geographicalVocabulary" class="uk-width-9-10" id="resourceGeographicLocations"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('resourceGeographicLocations', i)}"
                                              [items]="geographicalVocabulary"
@@ -801,6 +809,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{resourceGeographicLocationsDesc.label}}" list,
+                                  please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element"
                                      (click)="push('resourceGeographicLocations', resourceGeographicLocationsDesc.mandatory)">
@@ -1067,8 +1077,9 @@
                                            clearAllText="Clear"
                                            formControlName="trl">
                                 </ng-select>
-                                <!--<i><small>{{technologyReadinessLevelDesc.desc}}</small></i>-->
                               </div>
+                              <i><small>For suggestions in amending the "{{technologyReadinessLevelDesc.label}}" list,
+                                please send an email to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                             </div>
                             <div class="uk-margin-large-bottom">
                               <label class="uk-form-label uk-text-right" for="lifeCycleStatus">
@@ -1339,7 +1350,7 @@
                                 class="uk-form-description uk-margin-top uk-width-9-10">{{fundingBodyDesc.desc}}</div>
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div *ngFor="let provider of getFieldAsFormArray('fundingBody').controls; let i=index"
-                                     class="uk-margin-bottom">
+                                     [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('fundingBody').controls.length-1 !== i}">
                                   <ng-select *ngIf="fundingBodyVocabulary" class="uk-width-9-10" id="fundingBody"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingBody', i)}"
                                              [items]="sortVocabulariesByName(fundingBodyVocabulary)"
@@ -1355,6 +1366,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{fundingBodyDesc.label}}" list, please send an email
+                                  to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element" (click)="push('fundingBody', fundingBodyDesc.mandatory)">
                                     <i class="fa fa-plus" aria-hidden="true"></i> Add an
@@ -1372,7 +1385,7 @@
                               <div class="uk-form-controls uk-margin-medium-top">
                                 <div
                                   *ngFor="let provider of getFieldAsFormArray('fundingPrograms').controls; let i=index"
-                                  class="uk-margin-bottom">
+                                  [ngClass]="{'uk-margin-bottom': getFieldAsFormArray('fundingPrograms').controls.length-1 !== i}">
                                   <ng-select *ngIf="fundingProgramVocabulary" class="uk-width-9-10" id="fundingPrograms"
                                              [ngClass]="{'uk-form-danger': checkFormArrayValidity('fundingPrograms', i)}"
                                              [items]="sortVocabulariesByName(fundingProgramVocabulary)"
@@ -1388,6 +1401,8 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                   </a>
                                 </div>
+                                <i><small>For suggestions in amending the "{{fundingProgramDesc.label}}" list, please send an email
+                                  to <a href="mailto:{{projectMail}}">{{projectMail}}</a></small></i>
                                 <div class="uk-width-9-10 uk-text-center uk-margin-medium-top">
                                   <a class="add-new-element"
                                      (click)="push('fundingPrograms', fundingProgramDesc.mandatory)">
