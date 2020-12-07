@@ -193,13 +193,16 @@
                         <li><a [routerLink]="['/myFavourites']" routerLinkActive="uk-active">My Favourites</a></li>
 
                         <!-- If user is provider admin and has at least 1 provider -->
-                        <li *ngIf="authenticationService.isProvider() || authenticationService.isAdmin()"><a [routerLink]="['/provider/my']"
-                                                                                                             routerLinkActive="uk-active">My Service Providers</a>
+                        <li *ngIf="authenticationService.isProvider() || authenticationService.isAdmin()">
+                          <a [routerLink]="['/provider/my']" routerLinkActive="uk-active">My Service Providers</a>
                         </li>
 
                         <!-- If user is admin -->
                         <li *ngIf="authenticationService.isAdmin()"><a [routerLink]="['/provider/all']" routerLinkActive="uk-active">View
                           Service Providers</a></li>
+                        <li *ngIf="authenticationService.isAdmin()">
+                          <a [routerLink]="['/provider/resource/all']" routerLinkActive="uk-active">View Services</a>
+                        </li>
 
                         <li><a routerLink="/home" (click)="this.authenticationService.logout()">Log out</a></li>
                       </ul>
