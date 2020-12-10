@@ -170,6 +170,10 @@
                     <div *ngFor="let serviceBundle of services" class="uk-card provider-card uk-margin-medium-top">
                       <div class="uk-card-body" style="padding-bottom: 20px;">
 
+                        <div *ngIf="serviceBundle.active" class="approved">
+                          <div class="uk-card-badge uk-label">Active</div>
+                        </div>
+
                         <div *ngIf="!serviceBundle.active" class="rejected">
                           <div class="uk-card-badge uk-label">Inactive</div>
                         </div>
