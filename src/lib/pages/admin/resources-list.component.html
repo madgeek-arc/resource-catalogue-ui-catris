@@ -40,7 +40,7 @@
               <div class="uk-flex uk-flex-right">
                 <form [formGroup]="dataForm" (ngSubmit)="handleChangeAndResetPage()" class="uk-search uk-search-default" style="width: 250px;">
                   <span uk-search-icon></span>
-                  <input class="uk-search-input" type="search" placeholder="Locate provider..." formControlName="query">
+                  <input class="uk-search-input" type="search" placeholder="Locate {{serviceORresource}}..." formControlName="query">
                 </form>
               </div>
 
@@ -135,7 +135,7 @@
                         <ul class="uk-nav uk-dropdown-nav">
                           <li class="" (click)="DownloadProvidersCSV()"><a>Providers</a></li>
                           <!--<li class="uk-nav-divider"></li>-->
-                          <li class="" (click)="DownloadServicesCSV()"><a>Services</a></li>
+                          <li class="" (click)="DownloadServicesCSV()"><a>{{serviceORresource}}s</a></li>
                         </ul>
                       </div>
                     </div>
