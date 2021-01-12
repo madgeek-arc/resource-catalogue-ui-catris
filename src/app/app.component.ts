@@ -52,6 +52,7 @@ export class AppComponent implements OnInit {
     .set('ESFRITypeDesc', {mandatory: false, label: 'ESFRI Type', placeholder: 'Select ESFRI type...', desc: 'Indicate if/how the SP participates in the current ESFRI Roadmap project or landmark.'})
     .set('merilScientificDomainsDesc', {mandatory: false, label: 'MERIL Scientific Domain', placeholder: 'Select MERIL scientific domain...', desc: 'MERIL scientific domain classification.'})
     .set('merilScientificSubdomainsDesc', {mandatory: false, label: 'MERIL Scientific Subdomain', placeholder: 'Select MERIL scientific subdomain after selecting MERIL scientific domain...', desc: 'MERIL scientific subdomain classification.'})
+    .set('nationalRoadmapsDesc', {mandatory: false, label: 'National Roadmaps', addTitle: 'National Roadmap', placeholder: 'Write national roadmaps...', desc: 'Name the National roadmaps the Provider participates in.'})
     ;
     serviceDescMap
     .set('descriptionDesc', {mandatory: true,  label: 'Description', placeholder: 'Write a description...', desc: 'A high-level description of the Service, its functionalities, access and benefits it offers to users/customers and the main communities of users/customers it serves.'})
