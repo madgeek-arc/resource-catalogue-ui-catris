@@ -43,10 +43,11 @@ export class ServiceProvidersListComponent implements OnInit {
 
   total: number;
   // from = 0;
-  // itemsPerPage = 15;
+  // itemsPerPage = 10;
   currentPage = 1;
   pageTotal: number;
   pages: number[] = [];
+  offset = 2;
 
   statusList = statusList;
   pendingFirstServicePerProvider: any[] = [];
@@ -58,9 +59,9 @@ export class ServiceProvidersListComponent implements OnInit {
   ];
 
   public labels: Array<string> = [
-    `Provider Info: Approved by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `Provider Info: Pending Approval by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`,
-    `Provider Info: Rejected by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `${this.serviceORresource} Info: Pending Submission by Provider`,
-    `${this.serviceORresource} Info: Pending Approval by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`, `${this.serviceORresource} Info: Rejected by ${this.serviceORresource === 'Service' ? 'CPOT' : 'EPOT'}`
+    `Approved Provider`, `Provider submitted application`,
+    `Rejected Provider`, `Approved provider without ${this.serviceORresource}`,
+    `Pending first ${this.serviceORresource} approval `, `Rejected ${this.serviceORresource}`
   ];
 
   constructor(private resourceService: ResourceService,
@@ -201,6 +202,7 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   getProviders() {
+    this.loadingMessage = 'Loading Providers...';
     this.providers = [];
     this.resourceService.getProviderBundles(this.dataForm.get('from').value, this.dataForm.get('quantity').value,
       this.dataForm.get('orderField').value, this.dataForm.get('order').value, this.dataForm.get('query').value,
@@ -213,8 +215,10 @@ export class ServiceProvidersListComponent implements OnInit {
       err => {
         console.log(err);
         this.errorMessage = 'The list could not be retrieved';
+        this.loadingMessage = '';
       },
       () => {
+        this.loadingMessage = '';
         this.providers.forEach(
           p => {
             if ((p.status === 'pending template approval') ||
@@ -306,7 +310,7 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   statusChangeAction() {
-    this.loadingMessage = ' ';
+    this.loadingMessage = '';
     const active = this.pushedApprove && (this.newStatus === 'approved');
     this.serviceProviderService.verifyServiceProvider(this.selectedProvider.id, active, this.adminActionsMap[this.newStatus].statusId)
       .subscribe(
@@ -345,12 +349,28 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   paginationInit() {
+    let addToEndCounter = 0;
+    let addToStartCounter = 0;
     this.pages = [];
-    for (let i = 0; i < Math.ceil(this.total / (this.dataForm.get('quantity').value)); i++) {
-      this.pages.push(i + 1);
-    }
     this.currentPage = (this.dataForm.get('from').value / (this.dataForm.get('quantity').value)) + 1;
     this.pageTotal = Math.ceil(this.total / (this.dataForm.get('quantity').value));
+    for ( let i = (+this.currentPage - this.offset); i < (+this.currentPage + 1 + this.offset); ++i ) {
+      if ( i < 1 ) { addToEndCounter++; }
+      if ( i > this.pageTotal ) { addToStartCounter++; }
+      if ((i >= 1) && (i <= this.pageTotal)) {
+        this.pages.push(i);
+      }
+    }
+    for ( let i = 0; i < addToEndCounter; ++i ) {
+      if (this.pages.length < this.pageTotal) {
+        this.pages.push(this.pages.length + 1);
+      }
+    }
+    for ( let i = 0; i < addToStartCounter; ++i ) {
+      if (this.pages[0] > 1) {
+        this.pages.unshift(this.pages[0] - 1 );
+      }
+    }
   }
 
   goToPage(page: number) {
