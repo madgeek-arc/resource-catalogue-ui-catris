@@ -32,12 +32,12 @@ export class ServiceProviderService {
   }
 
   createNewServiceProvider(newProvider: any) {
-    console.log(`knocking on: ${this.base}/provider`);
+    // console.log(`knocking on: ${this.base}/provider`);
     return this.http.post(this.base + '/provider', newProvider, this.options);
   }
 
   updateServiceProvider(updatedFields: any): Observable<Provider> {
-    console.log(`knocking on: ${this.base}/provider`);
+    // console.log(`knocking on: ${this.base}/provider`);
     return this.http.put<Provider>(this.base + '/provider', updatedFields, this.options);
   }
 
@@ -130,7 +130,7 @@ export class ServiceProviderService {
   }
 
   validateUrl(url: string) {
-    console.log(`knocking on: ${this.base}/provider/validateUrl?urlForValidation=${url}`);
+    // console.log(`knocking on: ${this.base}/provider/validateUrl?urlForValidation=${url}`);
     return this.http.get<boolean>(this.base + `/provider/validateUrl?urlForValidation=${url}`);
   }
 
