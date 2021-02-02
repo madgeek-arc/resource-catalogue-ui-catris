@@ -13,6 +13,7 @@ import {zip} from 'rxjs/internal/observable/zip';
 import {EmailService} from '../../../services/email.service';
 import {Paging} from '../../../domain/paging';
 import {environment} from '../../../../environments/environment';
+import {MatomoTracker} from 'ngx-matomo';
 
 declare var UIkit: any;
 
@@ -22,6 +23,8 @@ declare var UIkit: any;
   styleUrls: ['../landing-page.component.css']
 })
 export class ServiceLandingPageComponent implements OnInit, OnDestroy {
+
+  public projectName = environment.projectName;
 
   serviceORresource = environment.serviceORresource;
 
@@ -43,6 +46,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
   formError = '';
   showForm = false;
   canEditService = false;
+  canAddOrEditService = false;
   placesVocIdArray: string[] = [];
   places: Vocabulary[] = null;
 
@@ -53,6 +57,7 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               public userService: UserService,
               private fb: FormBuilder,
               private providerService: ServiceProviderService,
+              private matomoTracker: MatomoTracker,
               public emailService: EmailService) {
   }
 
@@ -81,6 +86,10 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
             /* check if the current user can edit the service */
             this.canEditService = this.myProviders.some(p => this.richService.service.resourceProviders.some(x => x === p.id));
 
+            if (this.projectName === 'OpenAIRE Catalogue') {
+              this.canAddOrEditService = this.myProviders.some(p => p.id === 'openaire');
+            }
+
             const serviceIDs = (this.richService.service.requiredResources || []).concat(this.richService.service.relatedResources || [])
               .filter((e, i, a) => a.indexOf(e) === i && e !== '');
             if (serviceIDs.length > 0) {
@@ -97,6 +106,9 @@ export class ServiceLandingPageComponent implements OnInit, OnDestroy {
               this.router.go('/404');
             }
             this.errorMessage = 'An error occurred while retrieving data for this service. ' + err.error;
+          },
+          () => {
+            this.matomoTracker.trackEvent('landing page visit', this.serviceId, this.authenticationService.getUserEmail(), 1);
           });
       });
     } else {
