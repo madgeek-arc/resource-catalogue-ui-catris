@@ -836,7 +836,8 @@ export class ServiceFormComponent implements OnInit {
     }
     if (richService.service.publicContacts) {
       for (let i = 0; i < richService.service.publicContacts.length - 1; i++) {
-        this.push('publicContacts', false);
+        this.pushPublicContact();
+        // this.push('publicContacts', false);
       }
     }
     if (richService.service.certifications) {
