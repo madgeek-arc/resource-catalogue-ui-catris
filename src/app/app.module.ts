@@ -40,6 +40,7 @@ import {CatRIsHomeComponent} from './pages/home/home-catris.component';
 import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
 import {FooterComponent} from '../lib/shared/footer/footer.component';
 import {MatomoModule} from 'ngx-matomo';
+import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 
 
 declare var require: any;
@@ -95,6 +96,7 @@ export function highchartsFactory() {
     CookieLawModule,
     MatomoModule,
     AppRoutingModule,
+    LMarkdownEditorModule,
   ],
   providers: [
     {
