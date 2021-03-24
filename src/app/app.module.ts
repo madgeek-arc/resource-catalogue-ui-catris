@@ -41,6 +41,7 @@ import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
 import {FooterComponent} from '../lib/shared/footer/footer.component';
 import {MatomoModule} from 'ngx-matomo';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
+import {MarkdownModule} from 'ngx-markdown';
 
 
 declare var require: any;
@@ -97,6 +98,7 @@ export function highchartsFactory() {
     MatomoModule,
     AppRoutingModule,
     LMarkdownEditorModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {
