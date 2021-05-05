@@ -11,5 +11,6 @@ export const environment = {
   serviceORresource: 'Service',
   hasUserConsent: true,
   privacyPolicyURL: 'https://www.portal.catris.eu/support/privacy-policy',
-  marketplaceBaseURL: ''
+  marketplaceBaseURL: '',
+  showHelpContent: false
 };
