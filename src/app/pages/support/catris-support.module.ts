@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {CatrisSupportRoutingModule} from './catris-support-routing.module';
 import {PrivacyPolicyComponent} from './privacypolicy/privacy-policy.component';
 import {SupportModule} from '../../../lib/pages/support/support.module';
+import {GuidesComponent} from './guides/guides.component';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {SupportModule} from '../../../lib/pages/support/support.module';
     CatrisSupportRoutingModule,
   ],
   declarations: [
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    GuidesComponent
   ],
   providers: []
 })
