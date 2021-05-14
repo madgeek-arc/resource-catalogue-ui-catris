@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {PrivacyPolicyComponent} from './privacypolicy/privacy-policy.component';
+import {GuidesComponent} from './guides/guides.component';
 
 const supportRoutes: Routes = [
   {
@@ -15,6 +16,13 @@ const supportRoutes: Routes = [
         component: PrivacyPolicyComponent,
         data: {
           breadcrumb: 'Privacy Policy'
+        }
+      },
+      {
+        path: 'guides',
+        component: GuidesComponent,
+        data: {
+          breadcrumb: 'Guides and tutorials'
         }
       }
     ]

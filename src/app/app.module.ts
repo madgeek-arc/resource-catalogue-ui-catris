@@ -39,6 +39,10 @@ import {SideElementsComponent} from './shared/sideelements/side-elements.compone
 import {CatRIsHomeComponent} from './pages/home/home-catris.component';
 import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
 import {FooterComponent} from '../lib/shared/footer/footer.component';
+import {MatomoModule} from 'ngx-matomo';
+import {LMarkdownEditorModule} from 'ngx-markdown-editor';
+import {MarkdownModule} from 'ngx-markdown';
+import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
 
 
 declare var require: any;
@@ -78,6 +82,8 @@ export function highchartsFactory() {
     // INDICATORS
     MeasurementsComponent,
     IndicatorFromComponent,
+    // Admin
+    VocabularyRequestsComponent,
   ],
   imports: [
     CommonModule,
@@ -92,7 +98,10 @@ export function highchartsFactory() {
     ChartModule,
     AngularFontAwesomeModule,
     CookieLawModule,
+    MatomoModule,
     AppRoutingModule,
+    LMarkdownEditorModule,
+    MarkdownModule.forRoot(),
   ],
   providers: [
     {

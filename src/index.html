@@ -10,36 +10,11 @@
 
   <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto|Roboto+Condensed" rel="stylesheet">
 
-  <script src="https://cdn.ckeditor.com/4.5.11/full-all/ckeditor.js"></script>
-  <script src="https://cdn.ckeditor.com/4.5.11/full-all/plugins/divarea/plugin.js"></script>
-  <script> CKEDITOR.config.forcePasteAsPlainText = true; </script>
-
   <!-- Jira -->
   <script type="text/javascript"
           src="https://jnpco.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/6wg0xx/b/23/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=3d234ea6">
   </script>
 
-  <!-- Matomo -->
-  <script type="text/javascript">
-    var _paq = _paq || [];
-    // enable the use of navigator.sendBeacon()
-    _paq.push(['alwaysUseSendBeacon']);
-    // tracker methods like "setCustomDimension" should be called before "trackPageView"
-    _paq.push(['trackPageView']);
-    _paq.push(['enableLinkTracking']);
-    (function () {
-      var u = "${MATOMO_HOST}/";
-      _paq.push(['setTrackerUrl', u + 'piwik.php']);
-      _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
-      var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-      g.type = 'text/javascript';
-      g.async = true;
-      g.defer = true;
-      g.src = u + 'piwik.js';
-      s.parentNode.insertBefore(g, s);
-    })();
-  </script>
-  <!-- End Matomo Code -->
 
 </head>
 <body>

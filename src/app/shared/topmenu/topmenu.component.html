@@ -19,6 +19,12 @@
         <div>
           <div class="uk-panel" id="module-0">
             <ul class="uk-nav uk-nav-default">
+              <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">About
+                <ul class="uk-nav-sub">
+                  <li><a href="https://project.catris.eu" target="_blank" routerLinkActive="uk-active">Project Website</a></li>
+<!--                  <li><a href="https://example.com" target="_blank" routerLinkActive="uk-active">Our Team</a></li>-->
+                </ul>
+              </li>
               <li class="uk-nav-header" [routerLinkActive]="['uk-active']">
                 <a [routerLink]="['/search']" routerLinkActive="uk-active" class="uk-offcanvas-close offcanvas-close">Catalogue</a>
               </li>
@@ -32,18 +38,27 @@
               <!--</li>-->
               <li class="uk-nav-header uk-parent" [routerLinkActive]="['uk-active']">Support
                 <ul class="uk-nav-sub">
-                  <!-- For Developers -->
-<!--                  <li><a [routerLink]="['/developers']" routerLinkActive="uk-active"-->
-<!--                         class="uk-offcanvas-close offcanvas-close">For developers</a></li>-->
                   <li><a [routerLink]="['/support/faqs']" routerLinkActive="uk-active"
                          class="uk-offcanvas-close offcanvas-close">FAQs</a></li>
                   <li><a [routerLink]="['/support/privacy-policy']" routerLinkActive="uk-active"
                          class="uk-offcanvas-close offcanvas-close">Privacy policy</a></li>
-                  <li><a href="../../../assets/files/SP%20Registration%20Instructions%20-%20detailed.pdf" target="_blank"
-                         class="uk-offcanvas-close offcanvas-close">Service Provider Registration Instructions</a></li>
-                  <li><a href="../../../assets/files/MERIL%20SP%20Registration%20Instructions%20-%20detailed.pdf" target="_blank"
-                         class="uk-offcanvas-close offcanvas-close">MERIL Provider Registration Instructions</a></li>
-                  <li><a href="https://project.catris.eu/contacts" target="_blank"
+                  <li><a [routerLink]="['/support/guides']" routerLinkActive="uk-active"
+                         class="uk-offcanvas-close offcanvas-close">Guides and tutorials</a></li>
+<!--                  <li><a href="../../../assets/files/1-CatRIS-Portal-Introduction-Tutorial-v3.0-2020-11-27.pdf"-->
+<!--                         target="_blank" class="uk-offcanvas-close offcanvas-close">Introduction tutorial</a></li>-->
+<!--                  <li><a-->
+<!--                    href="../../../assets/files/2-CatRIS-Portal-Provider-and-Service-Onboarding-Process-Tutorial-v3.0-2020-12-08.pdf"-->
+<!--                    target="_blank" class="uk-offcanvas-close offcanvas-close">Provider and Service Onboarding Guide</a>-->
+<!--                  </li>-->
+<!--                  <li><a-->
+<!--                    href="../../../assets/files/3-CatRIS-Portal-Provider-and-Service-Profiles-Tutorial-v3.0-2020-12-07.pdf"-->
+<!--                    target="_blank" class="uk-offcanvas-close offcanvas-close">Provider and Service Profile Guide</a>-->
+<!--                  </li>-->
+<!--                  <li><a href="../../../assets/files/4-CatRIS-Portal-Provider-Dashboard-Tutorial-v3.0-2020-12-07.pdf"-->
+<!--                         target="_blank" class="uk-offcanvas-close offcanvas-close">Provider Dashboard Guide</a></li>-->
+<!--                  <li><a href="../../../assets/files/CatRIS%20Catalogue%20API%20Guide.pdf"-->
+<!--                         target="_blank" class="uk-offcanvas-close offcanvas-close">API Guide</a></li>-->
+                  <li><a href="https://project.catris.eu/contacts" target="_blank" routerLinkActive="uk-active"
                          class="uk-offcanvas-close offcanvas-close">Ask a question</a></li>
                 </ul>
               </li>
@@ -111,32 +126,26 @@
           <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
               <li class="uk-parent" [routerLinkActive]="['uk-active']">
+                <a href="#" class="" aria-expanded="false">
+                  About <img class="uk-margin-small-left" src="../../../assets/images/icons/ic_arrow_down.svg">
+                </a>
+                <div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="about">
+                  <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
+                    <div class="uk-first-column">
+                      <ul class="uk-nav uk-navbar-dropdown-nav">
+                        <li><a href="https://project.catris.eu" target="_blank" routerLinkActive="uk-active">Project Website</a></li>
+<!--                        <li><a href="https://example.com" target="_blank" routerLinkActive="uk-active">Our Team</a></li>-->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="uk-parent" [routerLinkActive]="['uk-active']">
                 <a routerLink="/search" routerLinkActive="uk-active">
                   Catalogue
                 </a>
               </li>
-              <!--<li class="uk-parent" [routerLinkActive]="['uk-active']">-->
-              <!--<a href="#" class="" aria-expanded="false">-->
-              <!--Dashboard <img class="uk-margin-small-left" src="../../../assets/images/icons/ic_arrow_down.svg">-->
-              <!--</a>-->
-              <!--<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="dashboard" (click)="onClick('dashboard')">-->
-              <!--<div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">-->
-              <!--<div class="uk-first-column">-->
-              <!--<ul class="uk-nav uk-navbar-dropdown-nav">-->
-              <!--<li *ngIf="isLoggedIn() && (isProvider() || isAdmin())">-->
-              <!--<a [routerLink]="['/myServiceProviders']" routerLinkActive="uk-active">Providers</a>-->
-              <!--</li>-->
-              <!--</ul>-->
-              <!--</div>-->
-              <!--</div>-->
-              <!--</div>-->
-              <!--</li>-->
-
-              <!--<li class="uk-parent" [routerLinkActive]="['uk-active']">-->
-              <!--<a href="/statistics" routerLinkActive="uk-active">-->
-              <!--Statistics-->
-              <!--</a>-->
-              <!--</li>-->
 
               <li class="uk-parent" [routerLinkActive]="['uk-active']">
                 <a href="#" class="" aria-expanded="false">
@@ -150,14 +159,17 @@
                         <!--                      <li><a [routerLink]="['/developers']" routerLinkActive="uk-active">For developers</a></li>-->
                         <li><a [routerLink]="['/support/faqs']" routerLinkActive="uk-active">FAQs</a></li>
                         <li><a [routerLink]="['/support/privacy-policy']" routerLinkActive="uk-active">Privacy policy</a></li>
-                        <li><a href="../../../assets/files/CatRIS%20Provider%20and%20Service%20Onboarding%20Guide.pdf"
-                               target="_blank">Provider and Service Onboarding Guide</a></li>
-                        <li><a href="../../../assets/files/CatRIS%20Provider%20and%20Service%20Profile%20Guide.pdf"
-                               target="_blank">Provider and Service Profile Guide</a></li>
-                        <li><a href="../../../assets/files/CatRIS%20Provider%20Dashboard%20Guide.pdf"
-                               target="_blank">Provider Dashboard Guide</a></li>
-                        <li><a href="../../../assets/files/CatRIS%20Catalogue%20API%20Guide.pdf"
-                               target="_blank">API Guide</a></li>
+                        <li><a [routerLink]="['/support/guides']" routerLinkActive="uk-active">Guides and tutorials</a></li>
+<!--                        <li><a href="../../../assets/files/1-CatRIS-Portal-Introduction-Tutorial-v3.0-2020-11-27.pdf"-->
+<!--                               target="_blank">Introduction tutorial</a></li>-->
+<!--                        <li><a href="../../../assets/files/2-CatRIS-Portal-Provider-and-Service-Onboarding-Process-Tutorial-v3.0-2020-12-08.pdf"-->
+<!--                               target="_blank">Provider and Service Onboarding Guide</a></li>-->
+<!--                        <li><a href="../../../assets/files/3-CatRIS-Portal-Provider-and-Service-Profiles-Tutorial-v3.0-2020-12-07.pdf"-->
+<!--                               target="_blank">Provider and Service Profile Guide</a></li>-->
+<!--                        <li><a href="../../../assets/files/4-CatRIS-Portal-Provider-Dashboard-Tutorial-v3.0-2020-12-07.pdf"-->
+<!--                               target="_blank">Provider Dashboard Guide</a></li>-->
+<!--                        <li><a href="../../../assets/files/CatRIS%20Catalogue%20API%20Guide.pdf"-->
+<!--                               target="_blank">API Guide</a></li>-->
                         <li><a href="https://project.catris.eu/contacts" target="_blank" routerLinkActive="uk-active">Ask a question</a></li>
                       </ul>
                     </div>
@@ -183,14 +195,13 @@
                   <div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">
                     <div class="uk-first-column">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
-                        <!--TODO:restore before push-->
-                        <!--<li *ngIf="isProvider() || isAdmin()"><a [routerLink]="['dashboard']" routerLinkActive="uk-active">Monitoring Dashboard</a></li>-->
-
                         <!-- If user has logged in -->
                         <li><a [routerLink]="['/provider/add']" routerLinkActive="uk-active">Add New Service
                           Provider</a></li>
 
                         <li><a [routerLink]="['/myFavourites']" routerLinkActive="uk-active">My Favourites</a></li>
+
+                        <li><a [routerLink]="['/recommendations']" routerLinkActive="uk-active">Recommendations</a></li>
 
                         <!-- If user is provider admin and has at least 1 provider -->
                         <li *ngIf="authenticationService.isProvider() || authenticationService.isAdmin()">
@@ -221,56 +232,6 @@
             </ul>
           </div>
 
-          <!--<div class="">-->
-          <!--<ul class="uk-navbar-nav">-->
-          <!--<li *ngIf="isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">-->
-          <!--<a href="#" class="" aria-expanded="false">-->
-          <!--<span> {{getUsername()}} {{getUsersurname()}}-->
-          <!--<span class="uk-margin-small-right uk-icon">-->
-          <!--<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" ratio="1"><circle-->
-          <!--fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4" r="4.4"></circle>-->
-          <!--<path fill="none"-->
-          <!--stroke="#000"-->
-          <!--stroke-width="1.1"-->
-          <!--d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2">-->
-          <!--</path>-->
-          <!--</svg>-->
-          <!--</span>-->
-          <!--</span>-->
-          <!--</a>-->
-          <!--<div class="uk-navbar-dropdown uk-navbar-dropdown-bottom-left" style="top: 80px; left: 106.55px;" id="user" (click)="onClick('support')">-->
-          <!--<div class="uk-navbar-dropdown-grid uk-child-width-1-1 uk-grid uk-grid-stack" uk-grid="">-->
-          <!--<div class="uk-first-column">-->
-          <!--<ul class="uk-nav uk-navbar-dropdown-nav">-->
-          <!--&lt;!&ndash;TODO:restore before push&ndash;&gt;-->
-          <!--&lt;!&ndash;<li *ngIf="isProvider() || isAdmin()"><a [routerLink]="['dashboard']" routerLinkActive="uk-active">Monitoring Dashboard</a></li>&ndash;&gt;-->
-
-          <!--&lt;!&ndash; If user has logged in &ndash;&gt;-->
-          <!--<li><a [routerLink]="['/newServiceProvider']" routerLinkActive="uk-active">Add New Service-->
-          <!--Provider</a></li>-->
-
-          <!--<li><a [routerLink]="['/myFavourites']" routerLinkActive="uk-active">My Favourites</a></li>-->
-
-          <!--&lt;!&ndash; If user is provider admin and has at least 1 provider &ndash;&gt;-->
-          <!--<li *ngIf="isProvider() || isAdmin()"><a [routerLink]="['/myServiceProviders']"-->
-          <!--routerLinkActive="uk-active">My Service Providers</a>-->
-          <!--</li>-->
-
-          <!--&lt;!&ndash; If user is admin &ndash;&gt;-->
-          <!--<li *ngIf="isAdmin()"><a [routerLink]="['/serviceProvidersList']" routerLinkActive="uk-active">View-->
-          <!--Service Providers</a></li>-->
-
-          <!--<li><a routerLink="/home" (click)="this.authenticationService.logout()">Log out</a></li>-->
-          <!--</ul>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</li>-->
-          <!--<li *ngIf="!isLoggedIn()" class="uk-parent" [routerLinkActive]="['uk-active']">-->
-          <!--<a class="loginLink" (click)="goToLoginAAI()">Log In</a>-->
-          <!--</li>-->
-          <!--</ul>-->
-          <!--</div>-->
         </nav>
       </div>
     </div>
