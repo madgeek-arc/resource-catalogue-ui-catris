@@ -25,7 +25,8 @@ import {UserModule} from '../lib/pages/user/user.module';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
-import {StatsComponent} from '../lib/pages/stats/stats.component';
+import {ProvidersStatsComponent} from '../lib/pages/stats/providers-stats.component';
+import {ResourcesStatsComponent} from '../lib/pages/stats/resources-stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
 import {MeasurementsComponent} from '../lib/pages/indicators/measurements.component';
 import {IndicatorFromComponent} from '../lib/pages/indicators/indicator-from.component';
@@ -69,7 +70,8 @@ export function highchartsFactory() {
     HomeComponent,
     CatRIsHomeComponent,
     SearchComponent,
-    StatsComponent,
+    ProvidersStatsComponent,
+    ResourcesStatsComponent,
     ServiceLandingPageComponent,
     // PERSISTENT
     TopMenuComponent,
