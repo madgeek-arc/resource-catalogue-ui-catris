@@ -12,7 +12,6 @@ import { EmailModalComponent } from './email-modal/email-modal.component';
 import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 // import {StarRatingModule} from 'angular-star-rating'; // FIXME: not supported on this angular version
-import {NgxStarRatingComponent} from 'ngx-star-rating';
 import {BreadcrumbsComponent} from './breadcrumbs/breadcrumbs.component';
 import {RouterModule} from '@angular/router';
 import {PendingServicesComponent} from '../pages/provider/dashboard/pendingservices/pending-services.component';
@@ -37,7 +36,6 @@ import {ChartModule} from 'angular2-highcharts';
     SafePipe,
     ValuesPipe,
     ForbiddenPageComponent,
-    NgxStarRatingComponent, // TODO: remove if not needed
     NotFoundPageComponent,
     EmailModalComponent,
     BreadcrumbsComponent,
@@ -55,7 +53,6 @@ import {ChartModule} from 'angular2-highcharts';
     ValuesPipe,
     EmailModalComponent,
     // StarRatingModule, // FIXME: not supported on this angular version
-    NgxStarRatingComponent, // TODO: remove if not needed
     BreadcrumbsComponent,
     PendingServicesComponent,
     PreviewResourceComponent
