@@ -13,7 +13,6 @@ import {ResourceService} from '../lib/services/resource.service';
 import {CanActivateViaPubGuard} from '../lib/services/can-activate-pub-guard.service';
 import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.component';
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from '../lib/services/service-provider.service';
 import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
@@ -98,7 +97,6 @@ export function highchartsFactory() {
     SupportModule,
     UserModule,
     ChartModule,
-    AngularFontAwesomeModule,
     CookieLawModule,
     MatomoModule,
     AppRoutingModule,
