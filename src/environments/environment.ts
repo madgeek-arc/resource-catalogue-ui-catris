@@ -9,6 +9,7 @@ export const environment = {
   MATOMO_SITE: 3,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
+  STATS_ENDPOINT: '',
   API_TOKEN_ENDPOINT: 'https://aai.eosc-portal.eu/catris-api/',
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
