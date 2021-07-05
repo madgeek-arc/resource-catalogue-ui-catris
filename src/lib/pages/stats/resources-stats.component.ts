@@ -5,7 +5,12 @@ import { ResourceService } from '../../services/resource.service';
 import { NavigationService } from '../../services/navigation.service';
 import {Provider} from '../../domain/eic-model';
 import {environment} from '../../../environments/environment';
+import * as Highcharts from 'highcharts';
+import MapModule from 'highcharts/modules/map';
+MapModule(Highcharts);
 
+const mapWorld = require('@highcharts/map-collection/custom/world.geo.json');
+declare var require: any;
 declare var UIkit: any;
 
 
@@ -26,6 +31,8 @@ export class ResourcesStatsComponent implements OnInit {
   public EU: string[];
   public WW: string[];
 
+  Highcharts: typeof Highcharts = Highcharts;
+  chartConstructor = 'mapChart'
   mapDistributionOfServicesOptions: any = null;
   categoriesPerServiceForProvider: any = null;
   domainsPerServiceForProvider: any = null;
@@ -169,8 +176,8 @@ export class ResourcesStatsComponent implements OnInit {
   }
 
   onMapSeriesClick(e) {
-    this.selectedCountryName = e.originalEvent.point.name;
-    this.selectedCountryServices = this.geographicalDistributionMap.get(e.originalEvent.point['hc-key']);
+    this.selectedCountryName = e.point.name;
+    this.selectedCountryServices = this.geographicalDistributionMap.get(e.point.options['hc-key']);
 
     UIkit.modal('#servicesPerCountryModal').show();
   }
@@ -181,12 +188,10 @@ export class ResourcesStatsComponent implements OnInit {
   }
 
   setMapDistributionOfServices(mapData: any) {
-
     if (mapData) {
-
       this.mapDistributionOfServicesOptions = {
         chart: {
-          map: 'custom/world-highres2',
+          map: mapWorld,
           // map: 'custom/world',
           height: (3 / 4 * 100) + '%', // 3:4 ratio
         },
@@ -201,6 +206,16 @@ export class ResourcesStatsComponent implements OnInit {
             [0.5, '#7BB4EB'],
             [1, '#1f3e5b']
           ]
+        },
+
+        plotOptions: {
+          series: {
+            events: {
+              click: function(e) {
+                this.onMapSeriesClick(e);
+              }.bind(this)
+            }
+          }
         },
 
         legend: {
