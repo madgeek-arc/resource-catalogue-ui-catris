@@ -15,8 +15,6 @@ import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.compon
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
 import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from '../lib/services/service-provider.service';
-import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-import {ChartModule} from 'angular2-highcharts';
 import {SupportModule} from '../lib/pages/support/support.module';
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
@@ -44,21 +42,6 @@ import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MarkdownModule} from 'ngx-markdown';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
 
-
-declare var require: any;
-
-export function highchartsFactory() {
-  const hc = require('highcharts');
-  require('highcharts/modules/heatmap')(hc);
-  require('highcharts/modules/map')(hc);
-  require('../lib/assets/js/europe.js')(hc);
-  require('../lib/assets/js/world.js')(hc);
-  require('highcharts/modules/drilldown')(hc);
-  require('highcharts/modules/exporting')(hc);
-  require('highcharts/modules/offline-exporting')(hc);
-  require('highcharts/modules/export-data')(hc);
-  return hc;
-}
 
 @NgModule({
   declarations: [
@@ -96,7 +79,6 @@ export function highchartsFactory() {
     TreeviewModule.forRoot(),
     SupportModule,
     UserModule,
-    ChartModule,
     CookieLawModule,
     MatomoModule,
     AppRoutingModule,
@@ -118,10 +100,6 @@ export function highchartsFactory() {
     UserService,
     ServiceProviderService,
     EmailService,
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
     DatePipe
   ],
   exports: [
