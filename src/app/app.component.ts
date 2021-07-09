@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {providerDescMap, serviceDescMap} from '../lib/pages/provider-resources/services.description';
 import {environment} from '../environments/environment';
-import {MatomoInjector} from 'ngx-matomo-v9';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +12,7 @@ export class AppComponent implements OnInit {
   isLoginOrRegister = false;
   breadcrumbs: string[] = [];
 
-  constructor(public router: Router, private matomoInjector: MatomoInjector) {
-    this.matomoInjector.init(environment.MATOMO_HOST, environment.MATOMO_SITE);
+  constructor(public router: Router) {
   }
 
   ngOnInit() {

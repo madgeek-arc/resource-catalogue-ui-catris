@@ -37,10 +37,11 @@ import {SideElementsComponent} from './shared/sideelements/side-elements.compone
 import {CatRIsHomeComponent} from './pages/home/home-catris.component';
 import {TopMenuComponent} from '../lib/shared/topmenu/topmenu.component';
 import {FooterComponent} from '../lib/shared/footer/footer.component';
-import {MatomoModule} from 'ngx-matomo-v9';
+import {MatomoModule} from 'ngx-matomo';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MarkdownModule} from 'ngx-markdown';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
+import {environment} from '../environments/environment';
 
 
 @NgModule({
@@ -80,7 +81,18 @@ import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-request
     SupportModule,
     UserModule,
     CookieLawModule,
-    MatomoModule,
+    MatomoModule.forRoot({
+      scriptUrl: environment.MATOMO_URL + 'matomo.js',
+      trackers: [
+        {
+          trackerUrl: environment.MATOMO_URL + 'matomo.php',
+          siteId: environment.MATOMO_SITE
+        }
+      ],
+      routeTracking: {
+        enable: true
+      }
+    }),
     AppRoutingModule,
     LMarkdownEditorModule,
     MarkdownModule.forRoot(),

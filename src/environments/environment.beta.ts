@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   beta: true,
-  MATOMO_HOST: 'https://www.portal.catris.eu/matomo',
+  MATOMO_URL: 'https://www.portal.catris.eu/matomo/',
   MATOMO_SITE: 2,
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
