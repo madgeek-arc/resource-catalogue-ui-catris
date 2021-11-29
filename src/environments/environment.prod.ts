@@ -6,6 +6,7 @@ export const environment = {
   FAQ_ENDPOINT: '/faq/api',
   API_ENDPOINT: '/api',
   API_TOKEN_ENDPOINT: 'https://aai.eosc-portal.eu/catris-api/',
+  STATS_ENDPOINT: '',
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
   serviceORresource: 'Service',
