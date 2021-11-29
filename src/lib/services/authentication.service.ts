@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {deleteCookie, getCookie, setCookie} from '../domain/utils';
 import {NavigationService} from './navigation.service';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../shared/tools';
 import {environment} from '../../environments/environment';
 
 import * as moment from 'moment';
@@ -101,6 +101,7 @@ export class AuthenticationService {
     sessionStorage.setItem('redirect_url', redirectUrl);
     // console.log(redirectUrl);
     window.location.href = environment.API_ENDPOINT + '/openid_connect_login';
+    // console.log(window.location.href);
   }
 
   public login() {
@@ -172,7 +173,7 @@ export class AuthenticationService {
 
   isAdmin() {
     if (this.isLoggedIn()) {
-      return this.user.roles !== undefined ? this.user.roles.some(x => x === 'ROLE_ADMIN') : false;
+      return this.user.roles !== undefined ? this.user.roles.some(x => x === 'ROLE_ADMIN' || x === 'ROLE_EPOT') : false;
     }
   }
 }

@@ -11,7 +11,7 @@ import {
   Service,
   ServiceHistory,
   Vocabulary,
-  Type
+  Type, ProviderBundle, InfraService, LoggingInfo
 } from '../domain/eic-model';
 import {BrowseResults} from '../domain/browse-results';
 import {Paging} from '../domain/paging';
@@ -119,7 +119,7 @@ export class ResourceService {
   }
 
   getServices() {
-    return this.http.get(this.base + '/service/by/id/');
+    return this.http.get(this.base + '/service/by/ID/'); // needs capitalized 'ID' after back changes
   }
 
   getService(id: string, version?: string) {
@@ -376,10 +376,13 @@ export class ResourceService {
   //   });
   // }
 
-  getProvidersNames() {
+  getProvidersNames(status?: string) {
     let params = new HttpParams();
     params = params.append('from', '0');
     params = params.append('quantity', '10000');
+    if (status === 'approved provider') {
+      return this.http.get<Paging<Provider>>(this.base + `/provider/all/?status=approved provider`, {params, withCredentials: true});
+    }
     return this.http.get<Paging<Provider>>(this.base + `/provider/all/`, {params, withCredentials: true});
   }
 
@@ -393,7 +396,7 @@ export class ResourceService {
     // return this.getAll("provider");
   }
 
-  getProviderBundles(from: string, quantity: string, orderField: string, order: string, query: string, status: string[]) {
+  getProviderBundles(from: string, quantity: string, orderField: string, order: string, query: string, status: string[], templateStatus: string[], auditState: string[]) {
     let params = new HttpParams();
     params = params.append('from', from);
     params = params.append('quantity', quantity);
@@ -407,11 +410,21 @@ export class ResourceService {
         params = params.append('status', statusValue);
       }
     }
+    if (templateStatus && templateStatus.length > 0) {
+      for (const templateStatusValue of templateStatus) {
+        params = params.append('templateStatus', templateStatusValue);
+      }
+    }
+    if (auditState && auditState.length > 0) {
+      for (const auditValue of auditState) {
+        params = params.append('auditState', auditValue);
+      }
+    }
     return this.http.get(this.base + `/provider/bundle/all`, {params});
     // return this.getAll("provider");
   }
 
-  getResourceBundles(from: string, quantity: string, orderField: string, order: string, query: string, active: string, resource_organisation: string[]) {
+  getResourceBundles(from: string, quantity: string, orderField: string, order: string, query: string, active: string, resource_organisation: string[], status: string[], auditState: string[]) {
     let params = new HttpParams();
     params = params.append('from', from);
     params = params.append('quantity', quantity);
@@ -421,6 +434,11 @@ export class ResourceService {
     if (query && query !== '') {
       params = params.append('query', query);
     }
+    if (status && status.length > 0) {
+      for (const statusValue of status) {
+        params = params.append('status', statusValue);
+      }
+    }
     if (active && active !== '') {
       params = params.append('active', active);
     }
@@ -429,12 +447,26 @@ export class ResourceService {
         params = params.append('resource_organisation', providerValue);
       }
     }
+    if (auditState && auditState.length > 0) {
+      for (const auditValue of auditState) {
+        params = params.append('auditState', auditValue);
+      }
+    }
     return this.http.get(this.base + `/service/adminPage/all`, {params});
     // return this.getAll("provider");
   }
 
   getMyServiceProviders() {
     return this.http.get<Provider[]>(this.base + '/provider/getMyServiceProviders');
+  }
+
+  getRandomResources(quantity: string) {
+    return this.http.get<InfraService[]>(this.base + `/resource/randomResources?quantity=${quantity}`, this.options);
+  }
+
+  getSharedServicesByProvider(id: string, from: string, quantity: string, order: string, orderField: string) {
+    return this.http.get<Paging<InfraService>>(this.base +
+      `/resource/getSharedResources/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}`);
   }
 
   getEU() {
@@ -460,17 +492,17 @@ export class ResourceService {
     return places;
   }
 
-  uploadService(service: Service, shouldPut: boolean) {
+  uploadService(service: Service, shouldPut: boolean, comment: string) {
     // console.log(JSON.stringify(service));
     // console.log(`knocking on: ${this.base}/service`);
-    return this.http[shouldPut ? 'put' : 'post']<Service>(this.base + '/service', service, this.options);
+    return this.http[shouldPut ? 'put' : 'post']<Service>(this.base + `/service?comment=${comment}`, service, this.options);
   }
 
   uploadServiceWithMeasurements(service: Service, measurements: Measurement[]) {
     return this.http.put<Service>(this.base + '/service/serviceWithMeasurements', {service, measurements}, this.options);
   }
 
-  uploadPendingService(service: Service, shouldPut: boolean) {
+  uploadPendingService(service: Service, shouldPut: boolean, comment: string) {
     return this.http.put<Service>(this.base + '/pendingService/transform/resource', service, this.options);
   }
 
@@ -490,8 +522,32 @@ export class ResourceService {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/service/history/${serviceId}/`);
   }
 
+  getServiceLoggingInfoHistory(serviceId: string) {
+    return this.http.get<Paging<LoggingInfo>>(this.base + `/resource/loggingInfoHistory/${serviceId}/`);
+  }
+
   getInfo() {
     return this.http.get<Info>(this.base + `/info/all`);
+  }
+
+  auditResource(id: string, action: string, comment: string) {
+    return this.http.patch(this.base + `/resource/auditResource/${id}?actionType=${action}&comment=${comment}`, this.options);
+  }
+
+  verifyResource(id: string, active: boolean, status: string) {
+    return this.http.patch(this.base + `/resource/verifyResource/${id}?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  getServiceTemplate(id: string) {  // gets oldest pending resource of the provider
+    return this.http.get<Service[]>(this.base + `/resource/getServiceTemplate/${id}`);
+  }
+
+  sendEmailForOutdatedResource(id: string) {
+    return this.http.get(this.base + `/resource/sendEmailForOutdatedResource/${id}`);
+  }
+
+  moveResourceToProvider(resourceId: string, providerId: string, comment: string) {
+    return this.http.post(this.base + `/resource/changeProvider?resourceId=${resourceId}&newProvider=${providerId}&comment=${comment}`, this.options);
   }
 
   public handleError(error: HttpErrorResponse) {

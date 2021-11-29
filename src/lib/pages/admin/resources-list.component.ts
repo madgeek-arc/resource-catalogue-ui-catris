@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ResourceService} from '../../services/resource.service';
 import {ServiceProviderService} from '../../services/service-provider.service';
-import {statusChangeMap, statusList} from '../../domain/service-provider-status-list';
-import {InfraService, ProviderBundle} from '../../domain/eic-model';
+import {resourceStatusChangeMap, statusList} from '../../domain/resource-status-list';
+import {InfraService, LoggingInfo, Provider, ProviderBundle, Type, Vocabulary} from '../../domain/eic-model';
 import {environment} from '../../../environments/environment';
 import {mergeMap} from 'rxjs/operators';
 import {AuthenticationService} from '../../services/authentication.service';
@@ -11,6 +11,9 @@ import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {URLParameter} from '../../domain/url-parameter';
 import {NavigationService} from '../../services/navigation.service';
 import {PremiumSortFacetsPipe} from '../../shared/pipes/premium-sort.pipe';
+import {statusChangeMap} from '../../domain/service-provider-status-list';
+import {zip} from 'rxjs';
+import {Paging} from '../../domain/paging';
 
 declare var UIkit: any;
 
@@ -29,12 +32,19 @@ export class ResourcesListComponent implements OnInit {
     quantity: '10',
     from: '0',
     active: '',
-    resource_organisation: new FormArray([])
+    resource_organisation: new FormArray([]),
+    auditState: new FormArray([]),
+    status: new FormArray([]),
   };
 
   dataForm: FormGroup;
 
   urlParams: URLParameter[] = [];
+
+  commentAuditControl = new FormControl();
+  showSideAuditForm = false;
+  showMainAuditForm = false;
+  initLatestAuditInfo: LoggingInfo =  {date: '', userEmail: '', userFullName: '', userRole: '', type: '', comment: '', actionType: ''};
 
   errorMessage: string;
   loadingMessage = '';
@@ -44,6 +54,7 @@ export class ResourcesListComponent implements OnInit {
   providersTotal: number;
 
   services: InfraService[] = [];
+  servicesForAudit: InfraService[] = [];
   selectedService: InfraService;
   facets: any;
   searchFacet = '';
@@ -57,6 +68,37 @@ export class ResourcesListComponent implements OnInit {
   offset = 2;
 
   pendingFirstServicePerProvider: any[] = [];
+  serviceTemplatePerProvider: any[] = [];
+
+  providersFormPrepare = {
+    resourceOrganisation: ''
+  };
+  providersDropdownForm: FormGroup;
+  providersPage: Paging<Provider>;
+  commentMoveControl = new FormControl();
+
+  statusList = statusList;
+  adminActionsMap = resourceStatusChangeMap;
+
+  public auditStates: Array<string> = [
+    'Valid', 'Not Audited', 'Invalid and updated', 'Invalid and not updated'
+  ];
+
+  public auditLabels: Array<string> = [
+    'Valid', 'Not Audited', 'Invalid and updated', 'Invalid and not updated'
+  ];
+
+  @ViewChildren("auditCheckboxes") auditCheckboxes: QueryList<ElementRef>;
+
+  public statuses: Array<string> = [
+    'approved resource', 'pending resource', 'rejected resource'
+  ];
+
+  public labels: Array<string> = [
+    `Approved`, `Pending`, `Rejected`
+  ];
+
+  @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
 
   constructor(private resourceService: ResourceService,
               private serviceProviderService: ServiceProviderService,
@@ -69,17 +111,35 @@ export class ResourcesListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN')) {
+    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN' || x === 'ROLE_EPOT')) {
       this.router.navigateByUrl('/home');
     } else {
       this.dataForm = this.fb.group(this.formPrepare);
+      this.providersDropdownForm = this.fb.group(this.providersFormPrepare);
 
       this.urlParams = [];
       this.route.queryParams
         .subscribe(params => {
 
+            let foundStatus = false;
+            let foundState = false;
+
             for (const i in params) {
-              if (i === 'resource_organisation') {
+              if (i === 'status') {
+
+                if (this.dataForm.get('status').value.length === 0) {
+                  const formArrayNew: FormArray = this.dataForm.get('status') as FormArray;
+                  // formArrayNew = this.fb.array([]);
+
+                  for (const status of params[i].split(',')) {
+                    if (status !== '') {
+                      formArrayNew.push(new FormControl(status));
+                    }
+                  }
+                }
+
+                foundStatus = true;
+              } else if (i === 'resource_organisation') {
 
                 if (this.dataForm.get('resource_organisation').value.length === 0) {
                   const formArrayNew: FormArray = this.dataForm.get('resource_organisation') as FormArray;
@@ -90,9 +150,33 @@ export class ResourcesListComponent implements OnInit {
                     }
                   }
                 }
+              } else if (i === 'auditState') {
+
+                if (this.dataForm.get('auditState').value.length === 0) {
+                  const formArrayNew: FormArray = this.dataForm.get('auditState') as FormArray;
+                  // formArrayNew = this.fb.array([]);
+
+                  for (const auditState of params[i].split(',')) {
+                    if (auditState !== '') {
+                      formArrayNew.push(new FormControl(auditState));
+                    }
+                  }
+                }
+
+                foundState = true;
               } else {
                 this.dataForm.get(i).setValue(params[i]);
               }
+            }
+
+            // if no status in URL, check all statuses by default
+            if (!foundStatus) {
+              const formArray: FormArray = this.dataForm.get('status') as FormArray;
+              // formArray = this.fb.array([]);
+
+              this.statuses.forEach(status => {
+                formArray.push(new FormControl(status));
+              });
             }
 
             for (const i in this.dataForm.controls) {
@@ -110,7 +194,23 @@ export class ResourcesListComponent implements OnInit {
           },
           error => this.errorMessage = <any>error
         );
+
+      this.resourceService.getProvidersNames('approved').subscribe(suc => {
+          this.providersPage = <Paging<Provider>>suc;
+        },
+        error => {
+          this.errorMessage = 'Something went bad while getting the data for page initialization. ' + JSON.stringify(error.error.error);
+        },
+        () => {
+          this.providersPage.results.sort((a, b) => 0 - (a.name > b.name ? -1 : 1));
+          // console.log(this.providersPage.results);
+        }
+      );
     }
+  }
+
+  isStatusChecked(value: string) {
+    return this.dataForm.get('status').value.includes(value);
   }
 
   handleChange() {
@@ -148,6 +248,34 @@ export class ResourcesListComponent implements OnInit {
     // this.getServices();
   }
 
+  onSelectionChange(event: any, formControlName: string) {
+
+    const formArray: FormArray = this.dataForm.get(formControlName) as FormArray;
+
+    if (event.target.checked) {
+      // Add a new control in the arrayForm
+      formArray.push(new FormControl(event.target.value));
+    } else {
+      // find the unselected element
+      let i = 0;
+      formArray.controls.forEach((ctrl: FormControl) => {
+        if (ctrl.value === event.target.value) {
+          // Remove the unselected element from the arrayForm
+          formArray.removeAt(i);
+          return;
+        }
+
+        i++;
+      });
+    }
+
+    this.handleChangeAndResetPage();
+  }
+
+  isAuditStateChecked(value: string) {
+    return this.dataForm.get('auditState').value.includes(value);
+  }
+
   handleChangeAndResetPage() {
     this.dataForm.get('from').setValue(0);
     this.handleChange();
@@ -155,7 +283,7 @@ export class ResourcesListComponent implements OnInit {
 
   getProviders() {
     this.providers = [];
-    this.resourceService.getProviderBundles('0', '1000', 'name', 'ASC', '', []).subscribe(
+    this.resourceService.getProviderBundles('0', '1000', 'name', 'ASC', '', [], [], []).subscribe(
       res => {
         this.providers = res['results'];
         this.providersTotal = res['total'];
@@ -165,6 +293,19 @@ export class ResourcesListComponent implements OnInit {
         this.errorMessage = 'The list could not be retrieved';
       },
       () => {
+        this.providers.forEach(
+          p => {
+            if (p.templateStatus === 'pending template') {
+              this.resourceService.getServiceTemplate(p.id).subscribe(
+                res => {
+                  if (res) {
+                    this.serviceTemplatePerProvider.push({providerId: p.id, serviceId: JSON.parse(JSON.stringify(res)).id});
+                  }
+                }
+              );
+            }
+          }
+        );
       }
     );
   }
@@ -174,12 +315,36 @@ export class ResourcesListComponent implements OnInit {
     this.services = [];
     this.resourceService.getResourceBundles(this.dataForm.get('from').value, this.dataForm.get('quantity').value,
       this.dataForm.get('orderField').value, this.dataForm.get('order').value, this.dataForm.get('query').value,
-      this.dataForm.get('active').value, this.dataForm.get('resource_organisation').value).subscribe(
+      this.dataForm.get('active').value, this.dataForm.get('resource_organisation').value,
+      this.dataForm.get('status').value, this.dataForm.get('auditState').value).subscribe(
       res => {
         this.services = res['results'];
         this.facets = res['facets'];
         this.total = res['total'];
         this.paginationInit();
+      },
+      err => {
+        console.log(err);
+        this.errorMessage = 'The list could not be retrieved';
+        this.loadingMessage = '';
+      },
+      () => {
+        this.loadingMessage = '';
+      }
+    );
+  }
+
+  getRandomResources(quantity: string) {
+    this.loadingMessage = 'Loading ' + quantity + ' random ' + this.serviceORresource + 's...';
+    this.servicesForAudit = [];
+    this.resourceService.getRandomResources(quantity).subscribe(
+      res => {
+        this.servicesForAudit = res['results'];
+        // this.services = res['results'];
+        // this.facets = res['facets'];
+        // this.total = res['total'];
+        // this.total = +quantity;
+        // this.paginationInit();
       },
       err => {
         console.log(err);
@@ -293,6 +458,21 @@ export class ResourcesListComponent implements OnInit {
     }
   }
 
+  showSendMailModal(resource: InfraService) {
+    this.selectedService = resource;
+    if (this.selectedService) {
+      UIkit.modal('#sendMailModal').show();
+    }
+  }
+
+  showMoveResourceModal(resource: InfraService) {
+    this.commentMoveControl.reset();
+    this.selectedService = resource;
+    if (this.selectedService) {
+      UIkit.modal('#moveResourceModal').show();
+    }
+  }
+
   deleteService(id: string) {
     // UIkit.modal('#spinnerModal').show();
     this.resourceService.deleteService(id).subscribe(
@@ -327,6 +507,90 @@ export class ResourcesListComponent implements OnInit {
     );
   }
 
+  templateAction(id, active, status) {
+    this.loadingMessage = '';
+    UIkit.modal('#spinnerModal').show();
+    const templateId = this.serviceTemplatePerProvider.filter(x => x.providerId === id)[0].serviceId;
+    this.resourceService.verifyResource(templateId, active, status).subscribe(
+      res => {
+        this.getProviders();
+      },
+      err => {
+        UIkit.modal('#spinnerModal').hide();
+        console.log(err);
+      },
+      () => {
+        UIkit.modal('#spinnerModal').hide();
+        // TODO: refresh page
+      }
+    );
+  }
+
+  moveResourceToProvider(resourceId, providerId) {
+    UIkit.modal('#spinnerModal').show();
+    this.resourceService.moveResourceToProvider(resourceId, providerId, this.commentMoveControl.value).subscribe(
+      res => {},
+      error => {
+        // console.log(error);
+        UIkit.modal('#spinnerModal').hide();
+        this.errorMessage = 'Something went bad. ' + error.error ;
+        this.getServices();
+      },
+      () => {
+        // this.getServices();
+        UIkit.modal('#spinnerModal').hide();
+        window.location.reload();
+      }
+    );
+  }
+
+  showAuditForm(view: string, resource: InfraService) {
+    this.commentAuditControl.reset();
+    this.selectedService = resource;
+    if (view === 'side') {
+      this.showSideAuditForm = true;
+    } else if (view === 'main') {
+      this.showMainAuditForm = true;
+    }
+  }
+
+  resetAuditView() {
+    this.showSideAuditForm = false;
+    this.showMainAuditForm = false;
+    this.commentAuditControl.reset();
+  }
+
+  auditResourceAction(action: string) {
+    this.resourceService.auditResource(this.selectedService.id, action, this.commentAuditControl.value)
+      .subscribe(
+        res => {
+          if (!this.showSideAuditForm) {
+            this.getServices();
+          }
+        },
+        err => { console.log(err); },
+        () => {
+          this.servicesForAudit.forEach(
+            s => {
+              if (s.id === this.selectedService.id) {
+                s.latestAuditInfo = this.initLatestAuditInfo;
+                s.latestAuditInfo.date = Date.now().toString();
+                s.latestAuditInfo.actionType = action;
+              }
+            }
+          );
+          this.resetAuditView();
+        }
+      );
+  }
+
+  sendMailForUpdate(id: string) {
+    this.resourceService.sendEmailForOutdatedResource(id).subscribe(
+      res => {},
+      err => { console.log(err); }
+    );
+  }
+
   hasCreatedFirstService(id: string) {
     return this.pendingFirstServicePerProvider.some(x => x.providerId === id);
   }
@@ -335,12 +599,16 @@ export class ResourcesListComponent implements OnInit {
     if (this.hasCreatedFirstService(id)) {
       return '/service/' + this.pendingFirstServicePerProvider.filter(x => x.providerId === id)[0].serviceId;
     } else {
-      return '/provider/' + id + '/add-resource-template';
+      return '/provider/' + id + '/add-first-resource';
     }
   }
 
   getLinkToEditFirstService(id: string) {
     return '/edit/' + this.pendingFirstServicePerProvider.filter(x => x.providerId === id)[0].serviceId;
+  }
+
+  editResourceInNewTab(providerId, resourceId) {
+    window.open(`/provider/${providerId}/resource/update/${resourceId}`, '_blank');
   }
 
   paginationInit() {
@@ -396,5 +664,19 @@ export class ResourcesListComponent implements OnInit {
 
   DownloadServicesCSV() {
     window.open(this.url + '/exportToCSV/services', '_blank');
+  }
+
+  getProviderNameWithId(id: string) {
+    return this.providersPage.results.find( x => x.id === id )?.name;
+  }
+
+  getProviderNamesWithIds(idsArray: string[]) {
+    let namesArray = [];
+    if (idsArray) {
+      for (let i=0; i<idsArray.length; i++) {
+        namesArray.push(this.providersPage.results.find( x => x.id == idsArray[i] )?.name);
+      }
+    }
+    return namesArray;
   }
 }

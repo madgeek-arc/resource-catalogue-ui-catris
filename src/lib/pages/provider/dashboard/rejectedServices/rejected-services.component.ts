@@ -11,11 +11,11 @@ import {environment} from '../../../../../environments/environment';
 declare var UIkit: any;
 
 @Component({
-  selector: 'app-pending-services',
-  templateUrl: './pending-services.component.html',
+  selector: 'app-rejected-services',
+  templateUrl: './rejected-services.component.html',
 })
 
-export class PendingServicesComponent implements OnInit {
+export class RejectedServicesComponent implements OnInit {
 
   serviceORresource = environment.serviceORresource;
 
@@ -49,19 +49,8 @@ export class PendingServicesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // this.path = this.route.snapshot.routeConfig.path;
     this.path = window.location.pathname;
-    // console.log('this.path --> ', this.path);
-    // console.log('window.location.pathname --> ', window.location.pathname);
-
-    if (this.path.includes('dashboard')) {
-      this.providerId = this.route.parent.snapshot.paramMap.get('provider');
-    } else {
-      this.providerId = this.route.snapshot.paramMap.get('providerId');
-    }
-    // console.log('this.path: ', this.path);
-    // this.providerId = this.route.parent.snapshot.paramMap.get('provider');
-    // console.log('this.providerId: ', this.providerId);
+    this.providerId = this.route.snapshot.paramMap.get('providerId');
 
     this.getProvider();
 
@@ -82,7 +71,7 @@ export class PendingServicesComponent implements OnInit {
           }
 
           // this.handleChange();
-          this.getPendingServices();
+          this.getRejectedServices();
         },
         error => this.errorMessage = <any>error
       );
@@ -90,7 +79,7 @@ export class PendingServicesComponent implements OnInit {
   }
 
   navigate(id: string) {
-    this.router.navigate([`/provider/` + this.providerId + `/draft-resource/update/`, id]);
+    this.router.navigate([`/provider/` + this.providerId + `/resource/update/`, id]);
   }
 
   getProvider() {
@@ -103,8 +92,8 @@ export class PendingServicesComponent implements OnInit {
     );
   }
 
-  getPendingServices() {
-    this.providerService.getDraftServicesByProvider(this.providerId, this.dataForm.get('from').value,
+  getRejectedServices() {
+    this.providerService.getRejectedServicesOfProvider(this.providerId, this.dataForm.get('from').value,
       this.itemsPerPage + '', 'ASC', 'name')
       .subscribe(res => {
           this.providerServices = res;
@@ -113,7 +102,10 @@ export class PendingServicesComponent implements OnInit {
         },
         err => {
           this.errorMessage = 'An error occurred while retrieving the services of this provider. ' + err.error;
-        }
+        },
+        () => {
+        // console.log(this.providerServices)
+      }
       );
   }
 
@@ -130,10 +122,10 @@ export class PendingServicesComponent implements OnInit {
         // console.log(error);
         // UIkit.modal('#spinnerModal').hide();
         this.errorMessage = 'Something went bad. ' + error.error ;
-        this.getPendingServices();
+        this.getRejectedServices();
       },
       () => {
-        this.getPendingServices();
+        this.getRejectedServices();
         // UIkit.modal('#spinnerModal').hide();
       }
     );
@@ -152,11 +144,12 @@ export class PendingServicesComponent implements OnInit {
       }
     }
 
-    if (this.path.includes('/provider/draft-resources')) {
-      this.router.navigate([`/provider/draft-resources/` + this.providerId], {queryParams: map});
-    } else {
-      this.router.navigate([`/dashboard/` + this.providerId + `/draft-resources`], {queryParams: map});
+    if (this.path.includes('/provider/rejected-resources')) {
+      this.router.navigate([`/provider/rejected-resources/` + this.providerId], {queryParams: map});
     }
+    // else {
+    //   this.router.navigate([`/dashboard/` + this.providerId + `/rejected-resources`], {queryParams: map});
+    // }
     // this.getPendingServices();
   }
 

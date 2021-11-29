@@ -1,7 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AuthenticationService} from './authentication.service';
-import {InfraService, Provider, ProviderBundle, ProviderRequest, Service, ServiceHistory, VocabularyCuration} from '../domain/eic-model';
+import {
+  InfraService,
+  LoggingInfo,
+  Provider,
+  ProviderBundle,
+  ProviderRequest,
+  Service,
+  ServiceHistory,
+  VocabularyCuration
+} from '../domain/eic-model';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {Paging} from '../domain/paging';
@@ -31,22 +40,26 @@ export class ServiceProviderService {
     return url;
   }
 
-  createNewServiceProvider(newProvider: any) {
+  createNewServiceProvider(newProvider: any, comment: string) {
     // console.log(`knocking on: ${this.base}/provider`);
     return this.http.post(this.base + '/provider', newProvider, this.options);
   }
 
-  updateServiceProvider(updatedFields: any): Observable<Provider> {
-    // console.log(`knocking on: ${this.base}/provider`);
-    return this.http.put<Provider>(this.base + '/provider', updatedFields, this.options);
+  updateServiceProvider(updatedFields: any, comment: string): Observable<Provider> {
+    console.log(`knocking on: ${this.base}/provider`);
+    return this.http.put<Provider>(this.base + `/provider?comment=${comment}`, updatedFields, this.options);
   }
 
-  updateAndPublishPendingProvider(updatedFields: any): Observable<Provider> {
+  updateAndPublishPendingProvider(updatedFields: any, comment: string): Observable<Provider> {
     return this.http.put<Provider>(this.base + '/pendingProvider/transform/active', updatedFields, this.options);
   }
 
   verifyServiceProvider(id: string, active: boolean, status: string) {
     return this.http.patch(this.base + `/provider/verifyProvider/${id}?active=${active}&status=${status}`, {}, this.options);
+  }
+
+  auditProvider(id: string, action: string, comment: string) {
+    return this.http.patch(this.base + `/provider/auditProvider/${id}?actionType=${action}&comment=${comment}`, this.options);
   }
 
   requestProviderDeletion(id: string) {
@@ -65,6 +78,10 @@ export class ServiceProviderService {
     return this.http.get<ProviderBundle[]>(this.base + '/provider/getMyServiceProviders', this.options);
   }
 
+  getRandomProviders(quantity: string) {
+    return this.http.get<ProviderBundle[]>(this.base + `/provider/randomProviders?quantity=${quantity}`, this.options);
+  }
+
   getServiceProviderBundleById(id: string) {
     return this.http.get<ProviderBundle>(this.base + `/provider/bundle/${id}`, this.options);
   }
@@ -77,30 +94,40 @@ export class ServiceProviderService {
     return this.http.get<Provider>(this.base + `/pendingProvider/provider/${id}`, this.options);
   }
 
-  getServicesOfProvider(id: string, from: string, quantity: string, order: string, orderField: string, active: string, query?: string) {
+  getServicesOfProvider(id: string, from: string, quantity: string, order: string, orderField: string, active: string, status?: string, query?: string) {
     if (!query) { query = ''; }
+    if (!status) { status = 'approved resource,pending resource,rejected resource'; }
     if (active === 'statusAll') {
       return this.http.get<Paging<InfraService>>(this.base +
-        `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&query=${query}`);
+        `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&status=${status}&query=${query}`);
     }
     return this.http.get<Paging<InfraService>>(this.base +
-      `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&active=${active}&query=${query}`);
+      `/service/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}&active=${active}&status=${status}&query=${query}`);
   }
 
-  getPendingServicesOfProvider(id: string) {
+  getPendingServicesOfProvider(id: string) {  // we use new /resource/getServiceTemplate/${id} instead TODO: rename front & back! - gets INACTIVE services
     return this.http.get<Service[]>(this.base + `/provider/services/pending/${id}`);
   }
 
-  getPendingServicesByProvider(id: string, from: string, quantity: string, order: string, orderField: string) {
+  getDraftServicesByProvider(id: string, from: string, quantity: string, order: string, orderField: string) {
     return this.http.get<Paging<InfraService>>(this.base +
       `/pendingService/byProvider/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}`);
   }
 
-  publishService(id: string, version: string, active: boolean) {
+  getRejectedServicesOfProvider(id: string, from: string, quantity: string, order: string, orderField: string) {
+    return this.http.get<Paging<InfraService>>(this.base +
+      `/provider/services/rejected/${id}?from=${from}&quantity=${quantity}&order=${order}&orderField=${orderField}`);
+  }
+
+  publishService(id: string, version: string, active: boolean) { // toggles active/inactive service
     if (version === null) {
       return this.http.patch(this.base + `/service/publish/${id}?active=${active}`, this.options);
     }
-    return this.http.patch(this.base + `/service/publish/${id}?active=${active}&version=${version}`, this.options);
+    return this.http.patch(this.base + `/service/publish/${id}?active=${active}&version=${version}`, this.options); // copy for provider without version
+  }
+
+  publishProvider(id: string, active: boolean) { // toggles active/inactive provider TODO: check
+    return this.http.patch(this.base + `/provider/publish/${id}?active=${active}`, this.options);
   }
 
   temporarySaveProvider(provider: Provider, providerExists: boolean) {
@@ -175,6 +202,10 @@ export class ServiceProviderService {
 
   getProviderHistory(providerId: string) {
     return this.http.get<Paging<ServiceHistory>>(this.base + `/provider/history/${providerId}/`);
+  }
+
+  getProviderLoggingInfoHistory(providerId: string) {
+    return this.http.get<Paging<LoggingInfo>>(this.base + `/provider/loggingInfoHistory/${providerId}/`);
   }
 
 }

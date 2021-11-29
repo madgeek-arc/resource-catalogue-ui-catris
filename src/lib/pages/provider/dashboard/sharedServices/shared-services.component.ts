@@ -11,11 +11,11 @@ import {environment} from '../../../../../environments/environment';
 declare var UIkit: any;
 
 @Component({
-  selector: 'app-pending-services',
-  templateUrl: './pending-services.component.html',
+  selector: 'app-shared-services',
+  templateUrl: './shared-services.component.html',
 })
 
-export class PendingServicesComponent implements OnInit {
+export class SharedServicesComponent implements OnInit {
 
   serviceORresource = environment.serviceORresource;
 
@@ -45,7 +45,7 @@ export class PendingServicesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private providerService: ServiceProviderService,
-    private service: ResourceService
+    private resourceService: ResourceService
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export class PendingServicesComponent implements OnInit {
           }
 
           // this.handleChange();
-          this.getPendingServices();
+          this.getSharedServices();
         },
         error => this.errorMessage = <any>error
       );
@@ -90,7 +90,7 @@ export class PendingServicesComponent implements OnInit {
   }
 
   navigate(id: string) {
-    this.router.navigate([`/provider/` + this.providerId + `/draft-resource/update/`, id]);
+    this.router.navigate([`/dashboard/${this.providerId}/shared-resource-dashboard/`, id]);
   }
 
   getProvider() {
@@ -103,8 +103,8 @@ export class PendingServicesComponent implements OnInit {
     );
   }
 
-  getPendingServices() {
-    this.providerService.getDraftServicesByProvider(this.providerId, this.dataForm.get('from').value,
+  getSharedServices() {
+    this.resourceService.getSharedServicesByProvider(this.providerId, this.dataForm.get('from').value,
       this.itemsPerPage + '', 'ASC', 'name')
       .subscribe(res => {
           this.providerServices = res;
@@ -115,28 +115,6 @@ export class PendingServicesComponent implements OnInit {
           this.errorMessage = 'An error occurred while retrieving the services of this provider. ' + err.error;
         }
       );
-  }
-
-  setSelectedService(service: InfraService) {
-    this.selectedService = service;
-    UIkit.modal('#actionModal').show();
-  }
-
-  deleteService(id: string) {
-    // UIkit.modal('#spinnerModal').show();
-    this.service.deletePendingService(id).subscribe(
-      res => {},
-      error => {
-        // console.log(error);
-        // UIkit.modal('#spinnerModal').hide();
-        this.errorMessage = 'Something went bad. ' + error.error ;
-        this.getPendingServices();
-      },
-      () => {
-        this.getPendingServices();
-        // UIkit.modal('#spinnerModal').hide();
-      }
-    );
   }
 
   handleChange() {
@@ -152,10 +130,10 @@ export class PendingServicesComponent implements OnInit {
       }
     }
 
-    if (this.path.includes('/provider/draft-resources')) {
-      this.router.navigate([`/provider/draft-resources/` + this.providerId], {queryParams: map});
+    if (this.path.includes('/provider/shared-resources')) {
+      this.router.navigate([`/provider/shared-resources/` + this.providerId], {queryParams: map});
     } else {
-      this.router.navigate([`/dashboard/` + this.providerId + `/draft-resources`], {queryParams: map});
+      this.router.navigate([`/dashboard/` + this.providerId + `/shared-resources`], {queryParams: map});
     }
     // this.getPendingServices();
   }
