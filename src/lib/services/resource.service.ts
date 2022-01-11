@@ -533,7 +533,7 @@ export class ResourceService {
   auditResource(id: string, action: string, comment: string) {
     return this.http.patch(this.base + `/resource/auditResource/${id}?actionType=${action}&comment=${comment}`, this.options);
   }
-
+  
   verifyResource(id: string, active: boolean, status: string) {
     return this.http.patch(this.base + `/resource/verifyResource/${id}?active=${active}&status=${status}`, {}, this.options);
   }

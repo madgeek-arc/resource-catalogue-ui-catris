@@ -1157,6 +1157,7 @@ a[class*="wk-"]:hover {
   /*border-bottom: none;*/
 /*}*/
 
+
 /* ========================
         Audit overlay
  ========================== */
@@ -1253,4 +1254,3 @@ a[class*="wk-"]:hover {
 .uk-label-gray {
   background-color: #bbbbbb !important;
 }
-
