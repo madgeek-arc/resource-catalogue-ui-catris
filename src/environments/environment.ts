@@ -11,7 +11,6 @@ export const environment = {
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
   STATS_ENDPOINT: '',
   API_TOKEN_ENDPOINT: 'https://aai.eosc-portal.eu/catris-api/',
-  STATS_ENDPOINT: '',
   projectName: 'CatRIS',
   projectMail: 'support@catris.eu',
   serviceORresource: 'Service',
