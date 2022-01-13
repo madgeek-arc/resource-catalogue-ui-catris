@@ -533,22 +533,6 @@ export class ResourceService {
   auditResource(id: string, action: string, comment: string) {
     return this.http.patch(this.base + `/resource/auditResource/${id}?actionType=${action}&comment=${comment}`, this.options);
   }
-  
-  verifyResource(id: string, active: boolean, status: string) {
-    return this.http.patch(this.base + `/resource/verifyResource/${id}?active=${active}&status=${status}`, {}, this.options);
-  }
-
-  getServiceTemplate(id: string) {  // gets oldest pending resource of the provider
-    return this.http.get<Service[]>(this.base + `/resource/getServiceTemplate/${id}`);
-  }
-
-  sendEmailForOutdatedResource(id: string) {
-    return this.http.get(this.base + `/resource/sendEmailForOutdatedResource/${id}`);
-  }
-
-  moveResourceToProvider(resourceId: string, providerId: string, comment: string) {
-    return this.http.post(this.base + `/resource/changeProvider?resourceId=${resourceId}&newProvider=${providerId}&comment=${comment}`, this.options);
-  }
 
   verifyResource(id: string, active: boolean, status: string) {
     return this.http.patch(this.base + `/resource/verifyResource/${id}?active=${active}&status=${status}`, {}, this.options);
