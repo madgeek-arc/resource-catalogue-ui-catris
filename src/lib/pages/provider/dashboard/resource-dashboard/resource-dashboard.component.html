@@ -9,13 +9,13 @@
         <ul>
 
           <li [routerLinkActive]="['current_section']" #stats="routerLinkActive">
-            <a [routerLink]="['/resource-dashboard/' + providerId + '/' + resourceId + '/stats']">
+            <a [routerLink]="['/dashboard/' + providerId + '/resource-dashboard/' + resourceId + '/stats']">
               <img src="{{stats.isActive ? 'lib/assets/images/new-icons/stats-active.svg' : 'lib/assets/images/new-icons/stats.svg'}}" class="uk-margin-small-right">
               Statistics
             </a>
           </li>
           <li [routerLinkActive]="['current_section']" #services="routerLinkActive">
-            <a [routerLink]="['/resource-dashboard/' + providerId + '/' + resourceId + '/history']">
+            <a [routerLink]="['/dashboard/' + providerId + '/resource-dashboard/' + resourceId + '/history']">
               <img src="{{services.isActive ? 'lib/assets/images/new-icons/history-active.svg' : 'lib/assets/images/new-icons/history.svg'}}" class="uk-margin-small-right">
               Update History
             </a>
@@ -41,6 +41,12 @@
               View in Catalogue
             </a>
           </li>
+          <li>
+            <a [routerLink]="['/dashboard/' + providerId + '/stats/']">
+              <img src="lib/assets/images/new-icons/stats.svg" class="uk-margin-small-right">
+              Back to Provider Dashboard
+            </a>
+          </li>
 
         </ul>
       </div>
@@ -48,7 +54,7 @@
     </aside><!-- main sidebar end -->
 
     <div id="page_content">
-      <app-breadcrumbs></app-breadcrumbs>
+      <app-dashboard-breadcrumbs></app-dashboard-breadcrumbs>
       <router-outlet></router-outlet>
     </div>
   </div>

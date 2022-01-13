@@ -7,6 +7,7 @@ export class Bundle<T> implements Identifiable {
   metadata: Metadata;
   active: boolean;
   status: string;
+  templateStatus: string;
   loggingInfo: LoggingInfo[];
   latestAuditInfo: LoggingInfo;
   latestOnboardingInfo: LoggingInfo;
@@ -66,6 +67,7 @@ export class InfraService extends Bundle<Service> {
 export class LoggingInfo {
   date: string;
   userEmail: string;
+  userFullName: string;
   userRole: string;
   type: string;
   comment: string;

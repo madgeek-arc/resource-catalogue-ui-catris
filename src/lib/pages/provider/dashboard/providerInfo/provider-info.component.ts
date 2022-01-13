@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Provider, ProviderBundle, ProviderRequest, Type, Vocabulary} from '../../../../domain/eic-model';
 import {ActivatedRoute} from '@angular/router';
-import {isNullOrUndefined} from 'util';
+import {isNullOrUndefined} from '../../../../shared/tools';
 import {ServiceProviderService} from '../../../../services/service-provider.service';
 import {ResourceService} from '../../../../services/resource.service';
 
@@ -90,7 +90,7 @@ export class ProviderInfoComponent implements OnInit {
   }
 
   getNameFromVocabulary(vocabulary: Vocabulary[], id: string) {
-    if (id) {
+    if (vocabulary && id) {
       return vocabulary.find(x => x.id === id).name;
     }
   }

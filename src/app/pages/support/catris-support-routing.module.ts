@@ -9,7 +9,7 @@ const supportRoutes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: '../../../lib/pages/support/support.module#SupportModule'
+        loadChildren: () => import('../../../lib/pages/support/support.module').then(m => m.SupportModule)
       },
       {
         path: 'privacy-policy',

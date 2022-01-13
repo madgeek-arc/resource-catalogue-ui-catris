@@ -6,6 +6,7 @@ import {ProviderStatsComponent} from './providerStats/provider-stats.component';
 import {ProviderInfoComponent} from './providerInfo/provider-info.component';
 import {ServicesComponent} from './services/services.component';
 import {PendingServicesComponent} from './pendingservices/pending-services.component';
+import {SharedServicesComponent} from "./sharedServices/shared-services.component";
 import {MessagesComponent} from './messages/messages.component';
 import {ServiceStatsComponent} from './resource-dashboard/service-stats.component';
 import {ResourceDashboardModule} from './resource-dashboard/resource-dashboard.module';
@@ -25,7 +26,7 @@ const providerDashboardRoutes: Routes = [
     children : [
       {
         path: '',
-        redirectTo: 'stats',
+        redirectTo: 'history',
         pathMatch: 'full',
         data: {
           isResource: false
@@ -40,11 +41,17 @@ const providerDashboardRoutes: Routes = [
       },
       {
         path: 'history',
-        component: ProviderHistoryComponent
+        component: ProviderHistoryComponent,
+        data: {
+          isResource: false
+        }
       },
       {
         path: 'fullHistory',
-        component: ProviderFullHistoryComponent
+        component: ProviderFullHistoryComponent,
+        data: {
+          isResource: false
+        }
       },
       {
         path: 'info',
@@ -63,6 +70,13 @@ const providerDashboardRoutes: Routes = [
       {
         path: 'draft-resources',
         component: PendingServicesComponent,
+        data: {
+          isResource: false
+        }
+      },
+      {
+        path: 'shared-resources',
+        component: SharedServicesComponent,
         data: {
           isResource: false
         }

@@ -13,11 +13,8 @@ import {ResourceService} from '../lib/services/resource.service';
 import {CanActivateViaPubGuard} from '../lib/services/can-activate-pub-guard.service';
 import {BreadcrumbsComponent} from '../lib/shared/breadcrumbs/breadcrumbs.component';
 import {FeedbackComponent} from '../lib/shared/feedback/feedback.component';
-import {AngularFontAwesomeModule} from 'angular-font-awesome';
 import {ReusableComponentsModule} from '../lib/shared/reusablecomponents/reusable-components.module';
 import {ServiceProviderService} from '../lib/services/service-provider.service';
-import {HighchartsStatic} from 'angular2-highcharts/dist/HighchartsService';
-import {ChartModule} from 'angular2-highcharts';
 import {SupportModule} from '../lib/pages/support/support.module';
 import {UserService} from '../lib/services/user.service';
 import {ComparisonService} from '../lib/services/comparison.service';
@@ -25,6 +22,8 @@ import {UserModule} from '../lib/pages/user/user.module';
 import {ServiceLandingPageComponent} from '../lib/pages/landingpages/service/service-landing-page.component';
 import {BrowseCategoriesComponent} from '../lib/pages/browsecategories/browse-categories.component';
 import {SearchComponent} from '../lib/pages/search/search.component';
+import {ProvidersStatsComponent} from '../lib/pages/stats/providers-stats.component';
+import {ResourcesStatsComponent} from '../lib/pages/stats/resources-stats.component';
 import {CompareServicesComponent} from '../lib/pages/compare/compare-services.component';
 import {MeasurementsComponent} from '../lib/pages/indicators/measurements.component';
 import {IndicatorFromComponent} from '../lib/pages/indicators/indicator-from.component';
@@ -42,22 +41,8 @@ import {MatomoModule} from 'ngx-matomo';
 import {LMarkdownEditorModule} from 'ngx-markdown-editor';
 import {MarkdownModule} from 'ngx-markdown';
 import {VocabularyRequestsComponent} from '../lib/pages/admin/vocabulary-requests.component';
+import {environment} from '../environments/environment';
 
-
-declare var require: any;
-
-export function highchartsFactory() {
-  const hc = require('highcharts');
-  require('highcharts/modules/heatmap')(hc);
-  require('highcharts/modules/map')(hc);
-  require('../lib/assets/js/europe.js')(hc);
-  require('../lib/assets/js/world.js')(hc);
-  require('highcharts/modules/drilldown')(hc);
-  require('highcharts/modules/exporting')(hc);
-  require('highcharts/modules/offline-exporting')(hc);
-  require('highcharts/modules/export-data')(hc);
-  return hc;
-}
 
 @NgModule({
   declarations: [
@@ -68,6 +53,8 @@ export function highchartsFactory() {
     HomeComponent,
     CatRIsHomeComponent,
     SearchComponent,
+    ProvidersStatsComponent,
+    ResourcesStatsComponent,
     ServiceLandingPageComponent,
     // PERSISTENT
     TopMenuComponent,
@@ -93,10 +80,19 @@ export function highchartsFactory() {
     TreeviewModule.forRoot(),
     SupportModule,
     UserModule,
-    ChartModule,
-    AngularFontAwesomeModule,
     CookieLawModule,
-    MatomoModule,
+    MatomoModule.forRoot({
+      scriptUrl: environment.MATOMO_URL + 'matomo.js',
+      trackers: [
+        {
+          trackerUrl: environment.MATOMO_URL + 'matomo.php',
+          siteId: environment.MATOMO_SITE
+        }
+      ],
+      routeTracking: {
+        enable: true
+      }
+    }),
     AppRoutingModule,
     LMarkdownEditorModule,
     MarkdownModule.forRoot(),
@@ -116,10 +112,6 @@ export function highchartsFactory() {
     UserService,
     ServiceProviderService,
     EmailService,
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
     DatePipe
   ],
   exports: [

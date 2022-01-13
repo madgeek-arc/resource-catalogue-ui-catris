@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   beta: false,
-  MATOMO_HOST: '',
-  MATOMO_SITE: 3,
+  MATOMO_URL: 'https://www.portal.catris.eu/matomo/',
+  MATOMO_SITE: 2,
   FAQ_ENDPOINT: 'https://dl105.madgik.di.uoa.gr/faq/api',
   API_ENDPOINT: '/eic-registry', // to change the end point go to proxy.conf.json file
   STATS_ENDPOINT: '',
@@ -27,4 +27,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

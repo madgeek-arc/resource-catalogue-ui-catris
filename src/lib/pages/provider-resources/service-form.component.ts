@@ -8,10 +8,10 @@ import * as sd from './services.description';
 import {Provider, RichService, Service, Type, Vocabulary} from '../../domain/eic-model';
 import {Paging} from '../../domain/paging';
 import {urlAsyncValidator, UrlValidator, URLValidator} from '../../shared/validators/generic.validator';
-import {zip} from 'rxjs/internal/observable/zip';
+import {zip} from 'rxjs';
 import {PremiumSortPipe} from '../../shared/pipes/premium-sort.pipe';
 import {environment} from '../../../environments/environment';
-import BitSet from 'bitset/bitset';
+import BitSet from 'bitset';
 import {ActivatedRoute} from '@angular/router';
 import {ServiceProviderService} from '../../services/service-provider.service';
 
@@ -238,6 +238,7 @@ export class ServiceFormComponent implements OnInit {
   requiredResources: any;
   relatedResources: any;
   vocabularies: Map<string, Vocabulary[]> = null;
+  subVocabularies: Map<string, Vocabulary[]> = null;
   premiumSort = new PremiumSortPipe();
   resourceService: ResourceService = this.injector.get(ResourceService);
 
@@ -356,7 +357,7 @@ export class ServiceFormComponent implements OnInit {
 
   ngOnInit() {
     zip(
-      this.resourceService.getProvidersNames(),
+      this.resourceService.getProvidersNames('approved'),
       this.resourceService.getAllVocabulariesByType(),
       this.resourceService.getServices()
     ).subscribe(suc => {
@@ -391,6 +392,9 @@ export class ServiceFormComponent implements OnInit {
         this.premiumSort.transform(this.geographicalVocabulary, ['Europe', 'Worldwide']);
         this.premiumSort.transform(this.languagesVocabulary, ['English']);
         this.providersPage.results.sort((a, b) => 0 - (a.name > b.name ? -1 : 1));
+
+        let voc: Vocabulary[] = this.vocabularies[Type.SUBCATEGORY].concat(this.vocabularies[Type.SCIENTIFIC_SUBDOMAIN]);
+        this.subVocabularies = this.groupByKey(voc, 'parentId');
 
         // fixme: should simplify if-else statement but route.snapshot.paramMap is empty for aire
         if (this.projectName === 'OpenAIRE Catalogue') {
@@ -878,6 +882,43 @@ export class ServiceFormComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  checkForDuplicates(formControlName, group?) {
+    if (group === 'scientificDomains') {
+      for (let i = 0; i < this.scientificDomainArray.controls.length; i++) {
+        for (let j = 0; j <  this.scientificDomainArray.controls.length; j++) {
+          if (i !== j && this.scientificDomainArray.controls[i].get('scientificDomain').value === this.scientificDomainArray.controls[j].get('scientificDomain').value ) {
+            if (this.scientificDomainArray.controls[i].get('scientificSubdomain').value === this.scientificDomainArray.controls[j].get('scientificSubdomain').value) {
+              this.showNotification();
+              return;
+            }
+          }
+        }
+      }
+    } else if (group === 'categories') {
+      for (let i = 0; i < this.categoryArray.controls.length; i++) {
+        for (let j = 0; j <  this.categoryArray.controls.length; j++) {
+          if (i !== j && this.categoryArray.controls[i].get('category').value === this.categoryArray.controls[j].get('category').value ) {
+            if (this.categoryArray.controls[i].get('subcategory').value === this.categoryArray.controls[j].get('subcategory').value) {
+              this.showNotification();
+              return;
+            }
+          }
+        }
+      }
+    } else {
+      if (this.serviceForm.get(formControlName).value.length > 1) {
+        for (let i = 0; i < this.serviceForm.get(formControlName).value.length; i++) {
+          for (let j = 0; j < this.serviceForm.get(formControlName).value.length; j++) {
+            if (i !== j && this.serviceForm.get(formControlName).value[i] === this.serviceForm.get(formControlName).value[j]) {
+              this.showNotification();
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
   /** BitSets -->**/
   /** TODO: maybe timeout can be removed with subject **/
   handleBitSets(tabNum: number, bitIndex: number, formControlName: string): void {
@@ -1073,6 +1114,16 @@ export class ServiceFormComponent implements OnInit {
     UIkit.modal('#modal-preview').show();
   }
 
+  showNotification() {
+    UIkit.notification({
+      // message: `Please remove duplicate entries for ${label}.`,
+      message: 'Please remove duplicate entries.',
+      status: 'danger',
+      pos: 'top-center',
+      timeout: 7000
+    });
+  }
+
   /** <--Modals **/
 
   submitSuggestion(entryValueName, vocabulary, parent) {
@@ -1090,6 +1141,15 @@ export class ServiceFormComponent implements OnInit {
         }
       );
     }
+  }
+
+  groupByKey(array, key) {
+    return array.reduce((hash, obj) => {
+      if (obj[key] === undefined) {
+        return hash;
+      }
+      return Object.assign(hash, {[obj[key]]: (hash[obj[key]] || []).concat(obj)});
+    }, {});
   }
 
 }

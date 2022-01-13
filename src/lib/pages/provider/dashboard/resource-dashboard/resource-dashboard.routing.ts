@@ -9,11 +9,11 @@ import {environment} from '../../../../../environments/environment';
 
 const resourceDashboardRoutes: Routes = [
   {
-    path: ':providerId/:resourceId',
+    path: ':resourceId',
     component: ResourceDashboardComponent,
     canActivate: [CanActivateViaAuthGuard],
     data: {
-      breadcrumb: environment.serviceORresource + ' dashboard'
+      breadcrumb: environment.serviceORresource + ' Dashboard'
       // breadcrumb: 'My Service Providers',
       // link: '/provider/my'
     },

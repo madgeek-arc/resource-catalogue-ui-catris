@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/c
 import {ResourceService} from '../../services/resource.service';
 import {ServiceProviderService} from '../../services/service-provider.service';
 import {statusChangeMap, statusList} from '../../domain/service-provider-status-list';
-import {Provider, ProviderBundle, Service, Type, Vocabulary} from '../../domain/eic-model';
+import {LoggingInfo, Provider, ProviderBundle, Service, Type, Vocabulary} from '../../domain/eic-model';
 import {environment} from '../../../environments/environment';
 import {mergeMap} from 'rxjs/operators';
 import {AuthenticationService} from '../../services/authentication.service';
@@ -10,7 +10,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {URLParameter} from '../../domain/url-parameter';
 import {Paging} from '../../domain/paging';
-import {zip} from 'rxjs/internal/observable/zip';
+import {getLocaleDateFormat} from '@angular/common';
+import {zip} from 'rxjs';
 
 declare var UIkit: any;
 
@@ -22,7 +23,6 @@ export class ServiceProvidersListComponent implements OnInit {
   url = environment.API_ENDPOINT;
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
-  production = environment.production;
 
   formPrepare = {
     query: '',
@@ -31,6 +31,8 @@ export class ServiceProvidersListComponent implements OnInit {
     quantity: '10',
     from: '0',
     status: new FormArray([]),
+    templateStatus: new FormArray([]),
+    auditState: new FormArray([])
   };
 
   dataForm: FormGroup;
@@ -38,15 +40,20 @@ export class ServiceProvidersListComponent implements OnInit {
   urlParams: URLParameter[] = [];
 
   commentControl = new FormControl();
-  auditingProviderId: string;
+  // auditingProviderId: string;
+  showSideAuditForm = false;
+  showMainAuditForm = false;
+  initLatestAuditInfo: LoggingInfo =  {date: '', userEmail: '', userFullName: '', userRole: '', type: '', comment: '', actionType: ''};
 
   errorMessage: string;
   loadingMessage = '';
 
   providers: ProviderBundle[] = [];
+  providersForAudit: ProviderBundle[] = [];
   selectedProvider: ProviderBundle;
   newStatus: string;
   pushedApprove: boolean;
+  verify: boolean;
 
   total: number;
   // from = 0;
@@ -56,8 +63,9 @@ export class ServiceProvidersListComponent implements OnInit {
   pages: number[] = [];
   offset = 2;
 
+  serviceTemplatePerProvider: any[] = [];
+
   statusList = statusList;
-  pendingFirstServicePerProvider: any[] = [];
   adminActionsMap = statusChangeMap;
 
   providersPage: Paging<Provider>;
@@ -84,18 +92,17 @@ export class ServiceProvidersListComponent implements OnInit {
   public languagesVocIdArray: string[] = [];
   public statusesVocabulary: Vocabulary[] = null;
 
-  public statuses: Array<string> = [
-    'approved', 'pending initial approval', 'rejected',
-    'pending template submission', 'pending template approval', 'rejected template'
-  ];
+  public auditStates: Array<string> = ['Valid', 'Not Audited', 'Invalid and updated', 'Invalid and not updated'];
+  public auditLabels: Array<string> = ['Valid', 'Not Audited', 'Invalid and updated', 'Invalid and not updated'];
+  @ViewChildren("auditCheckboxes") auditCheckboxes: QueryList<ElementRef>;
 
-  public labels: Array<string> = [
-    `Approved Provider`, `Provider submitted application`,
-    `Rejected Provider`, `Approved provider without ${this.serviceORresource}`,
-    `Pending first ${this.serviceORresource} approval `, `Rejected ${this.serviceORresource}`
-  ];
-
+  public statuses: Array<string> = ['approved provider', 'pending provider', 'rejected provider'];
+  public labels: Array<string> = ['Approved', 'Pending', 'Rejected'];
   @ViewChildren("checkboxes") checkboxes: QueryList<ElementRef>;
+
+  public templateStatuses: Array<string> = ['approved template', 'pending template', 'rejected template', 'no template status'];
+  public templateLabels: Array<string> = ['Approved', 'Pending', 'Rejected', 'No Status'];
+  @ViewChildren("templateCheckboxes") templateCheckboxes: QueryList<ElementRef>;
 
   constructor(private resourceService: ResourceService,
               private serviceProviderService: ServiceProviderService,
@@ -107,7 +114,7 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN')) {
+    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN' || x === 'ROLE_EPOT')) {
       this.router.navigateByUrl('/home');
     } else {
       this.dataForm = this.fb.group(this.formPrepare);
@@ -117,9 +124,11 @@ export class ServiceProvidersListComponent implements OnInit {
         .subscribe(params => {
 
             let foundStatus = false;
+            let foundTemplateStatus = false;
+            let foundState = false;
+
             for (const i in params) {
               if (i === 'status') {
-
                 if (this.dataForm.get('status').value.length === 0) {
                   const formArrayNew: FormArray = this.dataForm.get('status') as FormArray;
                   // formArrayNew = this.fb.array([]);
@@ -130,8 +139,32 @@ export class ServiceProvidersListComponent implements OnInit {
                     }
                   }
                 }
-
                 foundStatus = true;
+              } else if (i === 'templateStatus') {
+                if (this.dataForm.get('templateStatus').value.length === 0) {
+                  const formArrayNew: FormArray = this.dataForm.get('templateStatus') as FormArray;
+                  // formArrayNew = this.fb.array([]);
+
+                  for (const templateStatus of params[i].split(',')) {
+                    if (templateStatus !== '') {
+                      formArrayNew.push(new FormControl(templateStatus));
+                    }
+                  }
+                }
+                foundTemplateStatus = true;
+              } else if (i === 'auditState') {
+
+                if (this.dataForm.get('auditState').value.length === 0) {
+                  const formArrayNew: FormArray = this.dataForm.get('auditState') as FormArray;
+                  // formArrayNew = this.fb.array([]);
+
+                  for (const auditState of params[i].split(',')) {
+                    if (auditState !== '') {
+                      formArrayNew.push(new FormControl(auditState));
+                    }
+                  }
+                }
+                foundState = true;
               } else {
                 this.dataForm.get(i).setValue(params[i]);
               }
@@ -140,10 +173,14 @@ export class ServiceProvidersListComponent implements OnInit {
             // if no status in URL, check all statuses by default
             if (!foundStatus) {
               const formArray: FormArray = this.dataForm.get('status') as FormArray;
-              // formArray = this.fb.array([]);
-
               this.statuses.forEach(status => {
                 formArray.push(new FormControl(status));
+              });
+            }
+            if (!foundTemplateStatus) {
+              const formArray: FormArray = this.dataForm.get('templateStatus') as FormArray;
+              this.templateStatuses.forEach(templateStatus => {
+                formArray.push(new FormControl(templateStatus));
               });
             }
 
@@ -195,9 +232,9 @@ export class ServiceProvidersListComponent implements OnInit {
     );
   }
 
-  onStatusSelectionChange(event: any) {
+  onSelectionChange(event: any, formControlName: string) {
 
-    const formArray: FormArray = this.dataForm.get('status') as FormArray;
+    const formArray: FormArray = this.dataForm.get(formControlName) as FormArray;
 
     if (event.target.checked) {
       // Add a new control in the arrayForm
@@ -219,8 +256,16 @@ export class ServiceProvidersListComponent implements OnInit {
     this.handleChangeAndResetPage();
   }
 
+  isAuditStateChecked(value: string) {
+    return this.dataForm.get('auditState').value.includes(value);
+  }
+
   isStatusChecked(value: string) {
     return this.dataForm.get('status').value.includes(value);
+  }
+
+  isTemplateStatusChecked(value: string) {
+    return this.dataForm.get('templateStatus').value.includes(value);
   }
 
   handleChange() {
@@ -267,7 +312,7 @@ export class ServiceProvidersListComponent implements OnInit {
     this.providers = [];
     this.resourceService.getProviderBundles(this.dataForm.get('from').value, this.dataForm.get('quantity').value,
       this.dataForm.get('orderField').value, this.dataForm.get('order').value, this.dataForm.get('query').value,
-      this.dataForm.get('status').value).subscribe(
+      this.dataForm.get('status').value, this.dataForm.get('templateStatus').value, this.dataForm.get('auditState').value).subscribe(
       res => {
         this.providers = res['results'];
         this.total = res['total'];
@@ -282,12 +327,12 @@ export class ServiceProvidersListComponent implements OnInit {
         this.loadingMessage = '';
         this.providers.forEach(
           p => {
-            if ((p.status === 'pending template approval') ||
-              (p.status === 'rejected template')) {
-              this.serviceProviderService.getPendingServicesOfProvider(p.id).subscribe(
+            // if ((p.templateStatus === 'pending template') || (p.templateStatus === 'rejected template')) {
+            if (p.templateStatus === 'pending template') {
+              this.resourceService.getServiceTemplate(p.id).subscribe(
                 res => {
-                  if (res && (res.length > 0)) {
-                    this.pendingFirstServicePerProvider.push({providerId: p.id, serviceId: res[0].id});
+                  if (res) {
+                    this.serviceTemplatePerProvider.push({providerId: p.id, serviceId: JSON.parse(JSON.stringify(res)).id});
                   }
                 }
               );
@@ -299,14 +344,14 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   getRandomProviders(quantity: string) {
-    this.loadingMessage = 'Loading Providers...';
-    this.providers = [];
+    this.loadingMessage = 'Loading ' + quantity + ' random Providers...';
+    this.providersForAudit = [];
     this.serviceProviderService.getRandomProviders(quantity).subscribe(
       res => {
-        this.providers = res['results'];
-        this.total = res['total'];
+        this.providersForAudit = res['results'];
+        // this.total = res['total'];
         // this.total = +quantity;
-        this.paginationInit();
+        // this.paginationInit();
       },
       err => {
         console.log(err);
@@ -315,14 +360,14 @@ export class ServiceProvidersListComponent implements OnInit {
       },
       () => {
         this.loadingMessage = '';
-        this.providers.forEach(
+        this.providersForAudit.forEach(
           p => {
-            if ((p.status === 'pending template approval') ||
-              (p.status === 'rejected template')) {
-              this.serviceProviderService.getPendingServicesOfProvider(p.id).subscribe(
+            // if ((p.templateStatus === 'pending template') || (p.templateStatus === 'rejected template')) {
+            if (p.templateStatus === 'pending template') {
+              this.resourceService.getServiceTemplate(p.id).subscribe(
                 res => {
-                  if (res && (res.length > 0)) {
-                    this.pendingFirstServicePerProvider.push({providerId: p.id, serviceId: res[0].id});
+                  if (res) {
+                    this.serviceTemplatePerProvider.push({providerId: p.id, serviceId: JSON.parse(JSON.stringify(res)).id});
                   }
                 }
               );
@@ -339,10 +384,10 @@ export class ServiceProvidersListComponent implements OnInit {
   }
 
   updateSelectedProvider() {
-    if (this.selectedProvider && (this.selectedProvider.status !== 'approved')) {
+    if (this.selectedProvider && (this.selectedProvider.status !== 'approved provider')) {
       const i = this.statusList.indexOf(this.selectedProvider.status);
       let active = false;
-      if (this.statusList[i + 1] === 'approved') {
+      if (this.statusList[i + 1] === 'approved provider') {
         active = true;
       }
       const updatedFields = Object.assign({
@@ -396,10 +441,11 @@ export class ServiceProvidersListComponent implements OnInit {
       );
   }
 
-  showActionModal(provider: ProviderBundle, newStatus: string, pushedApprove: boolean) {
+  showActionModal(provider: ProviderBundle, newStatus: string, pushedApprove: boolean, verify: boolean) {
     this.selectedProvider = provider;
     this.newStatus = newStatus;
     this.pushedApprove = pushedApprove;
+    this.verify = verify;
     if (this.selectedProvider) {
       UIkit.modal('#actionModal').show();
     }
@@ -407,61 +453,122 @@ export class ServiceProvidersListComponent implements OnInit {
 
   statusChangeAction() {
     this.loadingMessage = '';
-    const active = this.pushedApprove && (this.newStatus === 'approved');
-    this.serviceProviderService.verifyServiceProvider(this.selectedProvider.id, active, this.adminActionsMap[this.newStatus].statusId)
-      .subscribe(
+    const active = this.pushedApprove && (this.newStatus === 'approved provider');
+    if(this.verify){ //use verify method
+      this.serviceProviderService.verifyServiceProvider(this.selectedProvider.id, active, this.adminActionsMap[this.newStatus].statusId)
+        .subscribe(
+          res => {
+            /*this.providers = [];
+            this.providers = res;*/
+            UIkit.modal('#actionModal').hide();
+            this.getProviders();
+          },
+          err => {
+            UIkit.modal('#actionModal').hide();
+            this.loadingMessage = '';
+            console.log(err);
+          },
+          () => {
+            this.loadingMessage = '';
+          }
+        );
+    } else { //use publish method
+      this.serviceProviderService.publishProvider(this.selectedProvider.id, active)
+        .subscribe(
+          res => {
+            /*this.providers = [];
+            this.providers = res;*/
+            UIkit.modal('#actionModal').hide();
+            this.getProviders();
+          },
+          err => {
+            UIkit.modal('#actionModal').hide();
+            this.loadingMessage = '';
+            console.log(err);
+          },
+          () => {
+            this.loadingMessage = '';
+          }
+        );
+    }
+  }
+
+  templateAction(id, active, status) {
+    this.loadingMessage = '';
+    UIkit.modal('#spinnerModal').show();
+    const templateId = this.serviceTemplatePerProvider.filter(x => x.providerId === id)[0].serviceId;
+    this.resourceService.verifyResource(templateId, active, status).subscribe(
         res => {
-          /*this.providers = [];
-          this.providers = res;*/
-          // console.log(res);
-          UIkit.modal('#actionModal').hide();
           this.getProviders();
         },
         err => {
-          UIkit.modal('#actionModal').hide();
-          this.loadingMessage = '';
+          UIkit.modal('#spinnerModal').hide();
           console.log(err);
         },
         () => {
-          this.loadingMessage = '';
+          UIkit.modal('#spinnerModal').hide();
         }
       );
   }
 
-  showAuditModal(action: string, provider: ProviderBundle) {
+  showAuditForm(view: string, provider: ProviderBundle) {
+    this.commentControl.reset();
     this.selectedProvider = provider;
-    if (action === 'VALID') {
-      UIkit.modal('#validateModal').show();
-    } else if (action === 'INVALID') {
-        UIkit.modal('#invalidateModal').show();
-      }
+    if (view === 'side') {
+      this.showSideAuditForm = true;
+    } else if (view === 'main') {
+      this.showMainAuditForm = true;
+    }
+  }
+
+  resetAuditView() {
+    this.showSideAuditForm = false;
+    this.showMainAuditForm = false;
+    this.commentControl.reset();
   }
 
   auditProviderAction(action: string) {
     this.serviceProviderService.auditProvider(this.selectedProvider.id, action, this.commentControl.value)
       .subscribe(
         res => {
-          this.getProviders();
+          if (!this.showSideAuditForm) {
+            this.getProviders();
+          }
         },
         err => { console.log(err); },
-        () => {}
+        () => {
+          this.providersForAudit.forEach(
+            p => {
+              if (p.id === this.selectedProvider.id) {
+                p.latestAuditInfo = this.initLatestAuditInfo;
+                p.latestAuditInfo.date = Date.now().toString();
+                p.latestAuditInfo.actionType = action;
+              }
+            }
+          );
+          this.resetAuditView();
+        }
       );
   }
 
   hasCreatedFirstService(id: string) {
-    return this.pendingFirstServicePerProvider.some(x => x.providerId === id);
+    return this.serviceTemplatePerProvider.some(x => x.providerId === id);
   }
 
   getLinkToFirstService(id: string) {
     if (this.hasCreatedFirstService(id)) {
-      return '/service/' + this.pendingFirstServicePerProvider.filter(x => x.providerId === id)[0].serviceId;
+      return '/service/' + this.serviceTemplatePerProvider.filter(x => x.providerId === id)[0].serviceId;
     } else {
-      return '/provider/' + id + '/add-resource-template';
+      return '/provider/' + id + '/add-first-resource';
     }
   }
 
   getLinkToEditFirstService(id: string) {
-    return '/provider/' + id + '/resource/update/' + this.pendingFirstServicePerProvider.filter(x => x.providerId === id)[0].serviceId;
+    return '/provider/' + id + '/resource/update/' + this.serviceTemplatePerProvider.filter(x => x.providerId === id)[0].serviceId;
+  }
+
+  editProviderInNewTab(providerId) {
+    window.open(`/provider/update/${providerId}`, '_blank');
   }
 
   paginationInit() {
@@ -511,21 +618,34 @@ export class ServiceProvidersListComponent implements OnInit {
     }
   }
 
-  checkAll(check: boolean) {
-
-    const formArray: FormArray = this.dataForm.get('status') as FormArray;
-    if (check){
-      formArray.controls.length = 0;
-      for (let i = 0; i < this.statuses.length; i++) {
-        formArray.push(new FormControl(this.statuses[i]));
+  checkAll(check: boolean, name: string) {
+    if (name === 'statuses') {
+      const formArray: FormArray = this.dataForm.get('status') as FormArray;
+      if (check) {
+        formArray.controls.length = 0;
+        for (let i = 0; i < this.statuses.length; i++) {
+          formArray.push(new FormControl(this.statuses[i]));
+        }
+      } else {
+        while (formArray.controls.length > 0 ) {
+          formArray.removeAt(0);
+        }
       }
-    } else {
-      while (formArray.controls.length > 0 ) {
-        formArray.removeAt(0);
+    } else if (name === 'templateStatuses') {
+      const formArray: FormArray = this.dataForm.get('templateStatus') as FormArray;
+      console.log('in');
+      if (check) {
+        formArray.controls.length = 0;
+        for (let i = 0; i < this.templateStatuses.length; i++) {
+          formArray.push(new FormControl(this.templateStatuses[i]));
+        }
+      } else {
+        while (formArray.controls.length > 0 ) {
+          formArray.removeAt(0);
+        }
       }
     }
     this.handleChangeAndResetPage();
-
   }
 
   DownloadProvidersCSV() {
@@ -538,7 +658,7 @@ export class ServiceProvidersListComponent implements OnInit {
 
   openPreviewModal(providerBundleId) {
     if (this.hasCreatedFirstService(providerBundleId)) {
-      const resourceId = this.pendingFirstServicePerProvider.filter(x => x.providerId === providerBundleId)[0].serviceId;
+      const resourceId = this.serviceTemplatePerProvider.filter(x => x.providerId === providerBundleId)[0].serviceId;
       this.resourceService.getService(resourceId).subscribe(
         res => { this.resourceToPreview = res; },
         error => console.log(error),

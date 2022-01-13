@@ -63,7 +63,7 @@ export class VocabularyRequestsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN')) {
+    if (!this.authenticationService.getUserProperty('roles').some(x => x === 'ROLE_ADMIN' || x === 'ROLE_EPOT')) {
       this.router.navigateByUrl('/home');
     } else {
       this.dataForm = this.fb.group(this.formPrepare);
@@ -306,7 +306,7 @@ export class VocabularyRequestsComponent implements OnInit {
   }
 
   viewMoreModal(curation: VocabularyCuration) {
-    console.log(curation.vocabularyEntryRequests);
+    // console.log(curation.vocabularyEntryRequests);
     this.selectedCuration = curation;
     this.selectedVocabularyEntryRequests = curation.vocabularyEntryRequests;
     if (this.selectedVocabularyEntryRequests) {

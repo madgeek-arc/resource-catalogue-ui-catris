@@ -26,12 +26,14 @@ export class ServicesComponent implements OnInit {
     order: 'ASC',
     orderField: 'name',
     query: '',
-    active: 'statusAll'
+    active: 'statusAll',
+    status: ''
   };
 
   dataForm: FormGroup;
 
   errorMessage = '';
+  toggleLoading = false;
   urlParams: URLParameter[] = [];
   providerId;
   providerBundle: ProviderBundle;
@@ -84,8 +86,7 @@ export class ServicesComponent implements OnInit {
   }
 
   navigate(id: string) {
-    this.router.navigate([`/resource-dashboard/${this.providerId}`, id]);
-    // this.router.navigate([`/resource-dashboard/${this.providerId}/resource/dashboard`, id]);
+    this.router.navigate([`/dashboard/${this.providerId}/resource-dashboard/`, id]);
   }
 
   useAsTemplate(id: string) {
@@ -103,25 +104,31 @@ export class ServicesComponent implements OnInit {
   }
 
   toggleService(providerService: InfraService) {
-    UIkit.modal('#spinnerModal').show();
+    if (providerService.status === 'pending resource' || providerService.status === 'rejected resource') {
+      this.errorMessage = `You cannot activate a ${providerService.status}.`;
+      window.scrollTo(0, 0);
+      return;
+    }
+    this.toggleLoading = true;
     this.providerService.publishService(providerService.id, providerService.service.version, !providerService.active).subscribe(
       res => {},
       error => {
         this.errorMessage = 'Something went bad. ' + error.error ;
         this.getServices();
-        UIkit.modal('#spinnerModal').hide();
+        this.toggleLoading = false;
         // console.log(error);
       },
       () => {
         this.getServices();
-        UIkit.modal('#spinnerModal').hide();
+        this.toggleLoading = false;
       }
     );
   }
 
   getServices() {
     this.providerService.getServicesOfProvider(this.providerId, this.dataForm.get('from').value, this.dataForm.get('quantity').value,
-      this.dataForm.get('order').value, this.dataForm.get('orderField').value, this.dataForm.get('active').value, this.dataForm.get('query').value)
+      this.dataForm.get('order').value, this.dataForm.get('orderField').value,
+      this.dataForm.get('active').value, this.dataForm.get('status').value, this.dataForm.get('query').value)
       .subscribe(res => {
           this.providerServices = res;
           this.total = res['total'];

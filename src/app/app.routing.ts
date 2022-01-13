@@ -56,23 +56,32 @@ const appRoutes: Routes = [
 
   {
     path: 'provider',
-    loadChildren: '../lib/pages/provider/provider.module#ProviderModule',
-    canActivate: [CanActivateViaAuthGuard]
-  },
-  {
-    path: 'dashboard',
-    loadChildren: '../lib/pages/provider/dashboard/provider-dashboard.module#ProviderDashboardModule',
+    loadChildren: () => import('../lib/pages/provider/provider.module').then(m => m.ProviderModule),
     canActivate: [CanActivateViaAuthGuard]
   },
   {
     path: 'resource-dashboard',
-    loadChildren: '../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module#ResourceDashboardModule',
+    loadChildren: () => import('../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
     canActivate: [CanActivateViaAuthGuard]
   },
-
+  {
+    path: 'dashboard/:providerId/resource-dashboard',
+    loadChildren: () => import('../lib/pages/provider/dashboard/resource-dashboard/resource-dashboard.module').then(m => m.ResourceDashboardModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
+  {
+    path: 'dashboard/:providerId/shared-resource-dashboard',
+    loadChildren: () => import('../lib/pages/provider/dashboard/resource-dashboard/shared-resource-dashboard.module').then(m => m.SharedResourceDashboardModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('../lib/pages/provider/dashboard/provider-dashboard.module').then(m => m.ProviderDashboardModule),
+    canActivate: [CanActivateViaAuthGuard]
+  },
   {
     path: 'support',
-    loadChildren: './pages/support/catris-support.module#CatrisSupportModule'
+    loadChildren: () => import('./pages/support/catris-support.module').then(m => m.CatrisSupportModule)
   },
 
   {
@@ -135,7 +144,7 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' })
   ],
   declarations: [],
   exports: [RouterModule]
