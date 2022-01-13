@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ResourceService } from '../../services/resource.service';
 import { NavigationService } from '../../services/navigation.service';
@@ -12,7 +11,6 @@ MapModule(Highcharts);
 
 const mapWorld = require('@highcharts/map-collection/custom/world.geo.json');
 declare var require: any;
-
 declare var UIkit: any;
 
 
@@ -40,7 +38,6 @@ export class ResourcesStatsComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartConstructor = 'mapChart'
   mapDistributionOfServicesOptions: any = null;
-
 
   selectedCountryName: string = null;
   selectedCountryServices: any = null;
@@ -195,7 +192,6 @@ export class ResourcesStatsComponent implements OnInit {
   onMapSeriesClick(e) {
     this.selectedCountryName = e.point.name;
     this.selectedCountryServices = this.geographicalDistributionMap.get(e.point.options['hc-key']);
-
 
     UIkit.modal('#servicesPerCountryModal').show();
   }

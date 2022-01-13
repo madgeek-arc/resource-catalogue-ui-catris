@@ -23,7 +23,6 @@ export class ServiceProvidersListComponent implements OnInit {
   url = environment.API_ENDPOINT;
   serviceORresource = environment.serviceORresource;
   projectName = environment.projectName;
-  production = environment.production;
 
   formPrepare = {
     query: '',
@@ -41,7 +40,6 @@ export class ServiceProvidersListComponent implements OnInit {
   urlParams: URLParameter[] = [];
 
   commentControl = new FormControl();
-
   // auditingProviderId: string;
   showSideAuditForm = false;
   showMainAuditForm = false;
@@ -55,6 +53,7 @@ export class ServiceProvidersListComponent implements OnInit {
   selectedProvider: ProviderBundle;
   newStatus: string;
   pushedApprove: boolean;
+  verify: boolean;
 
   total: number;
   // from = 0;
@@ -442,10 +441,11 @@ export class ServiceProvidersListComponent implements OnInit {
       );
   }
 
-  showActionModal(provider: ProviderBundle, newStatus: string, pushedApprove: boolean) {
+  showActionModal(provider: ProviderBundle, newStatus: string, pushedApprove: boolean, verify: boolean) {
     this.selectedProvider = provider;
     this.newStatus = newStatus;
     this.pushedApprove = pushedApprove;
+    this.verify = verify;
     if (this.selectedProvider) {
       UIkit.modal('#actionModal').show();
     }
@@ -454,24 +454,43 @@ export class ServiceProvidersListComponent implements OnInit {
   statusChangeAction() {
     this.loadingMessage = '';
     const active = this.pushedApprove && (this.newStatus === 'approved provider');
-    this.serviceProviderService.verifyServiceProvider(this.selectedProvider.id, active, this.adminActionsMap[this.newStatus].statusId)
-      .subscribe(
-        res => {
-          /*this.providers = [];
-          this.providers = res;*/
-          // console.log(res);
-          UIkit.modal('#actionModal').hide();
-          this.getProviders();
-        },
-        err => {
-          UIkit.modal('#actionModal').hide();
-          this.loadingMessage = '';
-          console.log(err);
-        },
-        () => {
-          this.loadingMessage = '';
-        }
-      );
+    if(this.verify){ //use verify method
+      this.serviceProviderService.verifyServiceProvider(this.selectedProvider.id, active, this.adminActionsMap[this.newStatus].statusId)
+        .subscribe(
+          res => {
+            /*this.providers = [];
+            this.providers = res;*/
+            UIkit.modal('#actionModal').hide();
+            this.getProviders();
+          },
+          err => {
+            UIkit.modal('#actionModal').hide();
+            this.loadingMessage = '';
+            console.log(err);
+          },
+          () => {
+            this.loadingMessage = '';
+          }
+        );
+    } else { //use publish method
+      this.serviceProviderService.publishProvider(this.selectedProvider.id, active)
+        .subscribe(
+          res => {
+            /*this.providers = [];
+            this.providers = res;*/
+            UIkit.modal('#actionModal').hide();
+            this.getProviders();
+          },
+          err => {
+            UIkit.modal('#actionModal').hide();
+            this.loadingMessage = '';
+            console.log(err);
+          },
+          () => {
+            this.loadingMessage = '';
+          }
+        );
+    }
   }
 
   templateAction(id, active, status) {
